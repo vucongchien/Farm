@@ -24,7 +24,7 @@ public class Main extends ApplicationAdapter {
         stage = new Stage(new FitViewport(640, 480));
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-        Window window = new Window("Example screen", skin, "border");
+        Window window = new Window("adu screen", skin, "border");
         window.defaults().pad(4f);
         window.add("This is a simple Scene2D view.").row();
         final TextButton button = new TextButton("Click me!", skin);
