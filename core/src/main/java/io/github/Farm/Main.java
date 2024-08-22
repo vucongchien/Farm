@@ -5,30 +5,38 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private Texture image;
+    private PlayerController player;
+    private PlayerRenderer playerRenderer;
+
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        player=new PlayerController(new Vector2(100,200),100,100);
+        playerRenderer = new PlayerRenderer(player, "menu.png");
+        batch=new SpriteBatch();
     }
 
     @Override
     public void render() {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+
+        player.update(deltaTime);
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.begin();
-        batch.draw(image, 140, 210);
+        playerRenderer.render(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-        image.dispose();
+        playerRenderer.dispose();
     }
 }
