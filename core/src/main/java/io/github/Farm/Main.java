@@ -18,7 +18,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         player=new PlayerController(new Vector2(100,200),100,100);
-        playerRenderer = new PlayerRenderer(player, "menu.png");
+        playerRenderer = new PlayerRenderer(player, "menu.png","W_walk.png","S_walk.png","A_walk.png","D_walk.png",3,1,0.2f);
         batch=new SpriteBatch();
     }
 
