@@ -1,41 +1,55 @@
 package io.github.Farm;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlayerRenderer {
-    private PlayerImageManager imageManager;
     private PlayerController player;
-
+    private Animation<TextureRegion> currentAnimation;
+    private PlayerImageManager imageManager;
     private float stateTime;
+    private int size;  // Kích thước nhân vật
 
-
-    public PlayerRenderer(PlayerController player, String idleTexturePath, String walkUpSheetPath, String walkDownSheetPath,
-                          String walkLeftSheetPath, String walkRightSheetPath, int frameCols, int frameRows, float frameDuration) {
+    public PlayerRenderer(PlayerController player, String idleUpSheetPath, String idleDownSheetPath,
+                          String idleLeftSheetPath, String idleRightSheetPath,
+                          String walkUpSheetPath, String walkDownSheetPath,
+                          String walkLeftSheetPath, String walkRightSheetPath,
+                          int frameCols, int frameRows, float frameDuration, int initialSize) {
         this.player = player;
-        this.imageManager = new PlayerImageManager(idleTexturePath, walkUpSheetPath, walkDownSheetPath, walkLeftSheetPath, walkRightSheetPath, frameCols, frameRows, frameDuration);
-        this.stateTime = 0f;
+        this.size = initialSize;  // Kích thước khởi tạo của nhân vật
+
+        // Khởi tạo quản lý hình ảnh nhân vật
+        imageManager = new PlayerImageManager(idleUpSheetPath, idleDownSheetPath, idleLeftSheetPath, idleRightSheetPath,
+            walkUpSheetPath, walkDownSheetPath, walkLeftSheetPath, walkRightSheetPath,
+            frameCols, frameRows, frameDuration);
+        currentAnimation = imageManager.getIdleAnimation("d_idle");
+        stateTime = 0f;
     }
 
     public void render(SpriteBatch batch) {
-        Vector2 position = player.getPosition();
-        float size = player.getSize();
         stateTime += player.getDeltaTime();
+        updateAnimation();
 
-        TextureRegion currentFrame;
-
-        if (player.isWalking()) {
-            String direction = player.getDirection(); // "up", "down", "left", "right"
-            Animation<TextureRegion> animation = imageManager.getWalkAnimation(direction);
-            currentFrame = animation.getKeyFrame(stateTime, true);
-        } else {
-            currentFrame = new TextureRegion(imageManager.getIdleTexture());
-        }
+        TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+        Vector2 position = player.getPosition();
 
         batch.draw(currentFrame, position.x, position.y, size, size);
+    }
+
+    private void updateAnimation() {
+        // Cập nhật animation dựa trên trạng thái của nhân vật
+        String direction = player.getDirection();
+        if (player.isWalking()) {
+            currentAnimation = imageManager.getWalkAnimation(direction);
+        } else {
+            currentAnimation = imageManager.getIdleAnimation(direction);
+        }
+    }
+
+    public void setSize(int newSize) {
+        this.size = newSize;  // Cập nhật kích thước nhân vật
     }
 
     public void dispose() {
