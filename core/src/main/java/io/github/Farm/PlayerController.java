@@ -4,150 +4,82 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class PlayerController {
-    private Vector2 position;  // Vị trí của nhân vật
-    private float speed;       // Tốc độ di chuyển của nhân vật
-    private boolean facingRight = true;  // Hướng mà nhân vật đang đối diện (phải hoặc trái)
-    private float size;        // Kích thước của nhân vật
-    private PlayerActType direction;  // Hướng di chuyển hiện tại của nhân vật
-    private PlayerActType lastDirection;  // Hướng di chuyển cuối cùng
+    private Vector2 position;
+    private float speed;
+    private boolean facingRight = true;
+    private PlayerActType direction = PlayerActType.d_idle;
+    private Queue<PlayerActType> inputQueue = new LinkedList<>();
 
-    private Set<PlayerActType> activeDirections = new HashSet<>();  // Tập hợp các hướng đang được nhấn
-
-    public PlayerController(Vector2 startPosition, float speed, float size) {
+    public PlayerController(Vector2 startPosition, float speed) {
         this.position = startPosition;
         this.speed = speed;
-        this.size = size;
-        this.direction = PlayerActType.d_idle;  // Mặc định nhân vật ở trạng thái đứng yên
-        this.lastDirection = PlayerActType.d_idle; // Mặc định hướng di chuyển cuối cùng là xuống
     }
 
     public Vector2 getPosition() {
         return position;
     }
 
-    public float getSize() {
-        return size;
-    }
-
     public void update(float deltaTime) {
         handleInput();
         moveCharacter(deltaTime);
-        updateDirection();
     }
 
     private void handleInput() {
-        activeDirections.clear();
+        inputQueue.clear();
 
-        boolean upPressed = Gdx.input.isKeyPressed(Input.Keys.W);
-        boolean downPressed = Gdx.input.isKeyPressed(Input.Keys.S);
-        boolean leftPressed = Gdx.input.isKeyPressed(Input.Keys.A);
-        boolean rightPressed = Gdx.input.isKeyPressed(Input.Keys.D);
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) inputQueue.add(PlayerActType.up);
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) inputQueue.add(PlayerActType.down);
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) inputQueue.add(PlayerActType.left);
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) inputQueue.add(PlayerActType.right);
 
-        if (upPressed && !downPressed) {
-            activeDirections.add(PlayerActType.up);
+        if (!inputQueue.isEmpty()) {
+            direction = inputQueue.peek();
+            facingRight = direction == PlayerActType.right;
+        } else {
+            direction = getIdleDirection();
         }
-        if (downPressed && !upPressed) {
-            activeDirections.add(PlayerActType.down);
-        }
-        if (leftPressed && !rightPressed) {
-            activeDirections.add(PlayerActType.left);
-        }
-        if (rightPressed && !leftPressed) {
-            activeDirections.add(PlayerActType.right);
-        }
+    }
 
-        // Determine the facing direction and update the last direction
-        if (activeDirections.contains(PlayerActType.left)) {
-            facingRight = false;
-            lastDirection = PlayerActType.left;
-        } else if (activeDirections.contains(PlayerActType.right)) {
-            facingRight = true;
-            lastDirection = PlayerActType.right;
-        } else if (activeDirections.contains(PlayerActType.up)) {
-            lastDirection = PlayerActType.up;
-        } else if (activeDirections.contains(PlayerActType.down)) {
-            lastDirection = PlayerActType.down;
+    private PlayerActType getIdleDirection() {
+        switch (direction) {
+            case up: return PlayerActType.u_idle;
+            case down: return PlayerActType.d_idle;
+            case left: return PlayerActType.l_idle;
+            case right: return PlayerActType.r_idle;
+            default: return PlayerActType.d_idle;
         }
     }
 
     private void moveCharacter(float deltaTime) {
         Vector2 movement = new Vector2();
 
-        if (activeDirections.contains(PlayerActType.up)) {
-            movement.y += 1;
-        }
-        if (activeDirections.contains(PlayerActType.down)) {
-            movement.y -= 1;
-        }
-        if (activeDirections.contains(PlayerActType.left)) {
-            movement.x -= 1;
-        }
-        if (activeDirections.contains(PlayerActType.right)) {
-            movement.x += 1;
+        switch (direction) {
+            case up: movement.y = 1; break;
+            case down: movement.y = -1; break;
+            case left: movement.x = -1; break;
+            case right: movement.x = 1; break;
+            default: return; // Không di chuyển nếu ở trạng thái idle
         }
 
-        // Normalize to ensure diagonal movement isn't faster
-        if (movement.len() > 0) {
-            movement.nor();
-        }
-
-        // Update position with speed and delta time
         position.add(movement.scl(speed * deltaTime));
     }
 
-    private void updateDirection() {
-        if (activeDirections.isEmpty()) {
-            // Set the idle direction based on the last moving direction
-            switch (lastDirection) {
-                case up:
-                    direction = PlayerActType.u_idle;
-                    break;
-                case down:
-                    direction = PlayerActType.d_idle;
-                    break;
-                case left:
-                    direction = PlayerActType.l_idle;
-                    break;
-                case right:
-                    direction = PlayerActType.r_idle;
-                    break;
-                default:
-                    direction = PlayerActType.d_idle; // Mặc định đứng yên xuống nếu không rõ hướng trước đó
-                    break;
-            }
-        } else {
-            if (activeDirections.contains(PlayerActType.up)) {
-                direction = PlayerActType.up;
-            } else if (activeDirections.contains(PlayerActType.down)) {
-                direction = PlayerActType.down;
-            } else if (activeDirections.contains(PlayerActType.left)) {
-                direction = PlayerActType.left;
-            } else if (activeDirections.contains(PlayerActType.right)) {
-                direction = PlayerActType.right;
-            }
-        }
-    }
-
     public boolean isWalking() {
-        // Kiểm tra xem nhân vật có đang di chuyển hay không
         return direction != PlayerActType.d_idle && direction != PlayerActType.u_idle
             && direction != PlayerActType.l_idle && direction != PlayerActType.r_idle;
     }
 
     public String getDirection() {
-        // Trả về hướng di chuyển hiện tại dưới dạng chuỗi
         return direction.toString();
     }
 
     public boolean isFacingRight() {
-        // Kiểm tra nhân vật có đang đối mặt về phía bên phải hay không
         return facingRight;
     }
-
     public float getDeltaTime() {
         return Gdx.graphics.getDeltaTime();
     }

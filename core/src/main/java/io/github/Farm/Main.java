@@ -14,7 +14,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         // Khởi tạo
-        player = new PlayerController(new Vector2(100, 200), 200, 64);
+        player = new PlayerController(new Vector2(100, 200), 200);
         playerRenderer = new PlayerRenderer(player,
             "W_idle.png", "S_idle.png", "A_idle.png", "D_idle.png",
             "W_walk.png", "S_walk.png", "A_walk.png", "D_walk.png",
