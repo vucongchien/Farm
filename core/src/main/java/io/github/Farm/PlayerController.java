@@ -12,6 +12,7 @@ public class PlayerController {
     private float speed;
     private boolean facingRight = true;
     private PlayerActType direction = PlayerActType.d_idle;
+    private PlayerActType lastDirection = PlayerActType.d_idle;
     private Queue<PlayerActType> inputQueue = new LinkedList<>();
 
     public PlayerController(Vector2 startPosition, float speed) {
@@ -38,6 +39,7 @@ public class PlayerController {
 
         if (!inputQueue.isEmpty()) {
             direction = inputQueue.peek();
+            lastDirection = direction;
             facingRight = direction == PlayerActType.right;
         } else {
             direction = getIdleDirection();
@@ -45,7 +47,7 @@ public class PlayerController {
     }
 
     private PlayerActType getIdleDirection() {
-        switch (direction) {
+        switch (lastDirection) {
             case up: return PlayerActType.u_idle;
             case down: return PlayerActType.d_idle;
             case left: return PlayerActType.l_idle;
