@@ -12,7 +12,7 @@ public class AssentPaths {
     public static final String Player_W_walk="Player_animation/W_walk.png";
 
     //tile map
-    public static final String map="D:\\Java_oop\\Farm\\assets\\tile_map\\map.tmx";
+    public static final String map="tile_map/map.tmx";
 
     //
 

@@ -6,21 +6,23 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private PlayerController player;
     private PlayerRenderer playerRenderer;
 
+
     private OrthographicCamera camera;
-    private Map map;
+    private Gamemap map;
 
     @Override
     public void create() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        // Khởi tạo
         player = new PlayerController(new Vector2(100, 200), 200);
         playerRenderer = new PlayerRenderer(player,
             AssentPaths.Player_W_idle, AssentPaths.Player_S_idle, AssentPaths.Player_A_idle, AssentPaths.Player_D_idle,
@@ -29,8 +31,9 @@ public class Main extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
-        map = new Map();
+        map = new Gamemap();
         map.create(AssentPaths.map);
+        player.setMap(map);
         map.setCamera(camera);
     }
 
@@ -38,17 +41,19 @@ public class Main extends ApplicationAdapter {
     public void render() {
         float deltaTime = Gdx.graphics.getDeltaTime();
         player.update(deltaTime);
-
+        camera.setToOrtho(false, 500, 282);
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
         camera.update();
-
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        map.render();
 
+//      map.velayerdau();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         playerRenderer.render(batch);
+        map.render();
         batch.end();
+
+        player.plow(map);
     }
 
     @Override

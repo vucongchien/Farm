@@ -3,7 +3,6 @@ package io.github.Farm;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.math.Vector2;
 
 public class PlayerRenderer {
     private final PlayerController player;
@@ -23,6 +22,7 @@ public class PlayerRenderer {
             walkUpSheetPath, walkDownSheetPath, walkLeftSheetPath, walkRightSheetPath, frameCols, frameRows, frameDuration);
         this.currentAnimation = imageManager.getIdleAnimation("d_idle");
     }
+
 
     public void render(SpriteBatch batch) {
         stateTime += player.getDeltaTime();
