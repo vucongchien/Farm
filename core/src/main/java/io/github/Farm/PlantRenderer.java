@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class Plant {
+public class PlantRenderer {
     private Vector2 position;
     private PlantType type;
     private PlantStage stage;
@@ -25,10 +25,10 @@ public class Plant {
     private float stateTime;
 
 
-    private float width = 64f;
-    private float height = 64f;
+    private float width = 16f;
+    private float height = 16f;
 
-    public Plant(Vector2 position, PlantType type) {
+    public PlantRenderer(Vector2 position, PlantType type) {
         this.position = position;
         this.type = type;
         this.stage = PlantStage.SEED;

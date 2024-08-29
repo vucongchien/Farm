@@ -14,7 +14,7 @@ public class Main extends ApplicationAdapter {
     private OrthographicCamera camera;
     private Map map;
 
-    private Plant potato;
+    private PlantRenderer potato;
 
     @Override
     public void create() {
@@ -35,7 +35,7 @@ public class Main extends ApplicationAdapter {
         map.setCamera(camera);
 
         // Khởi tạo cây Tomato với hình ảnh cho các giai đoạn phát triển
-        potato = new Plant(new Vector2(100, 200), PlantType.POTATO);
+        potato = new PlantRenderer(new Vector2(100, 200), PlantType.POTATO);
     }
 
     @Override
