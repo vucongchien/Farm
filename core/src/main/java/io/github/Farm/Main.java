@@ -11,9 +11,10 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private PlayerController player;
     private PlayerRenderer playerRenderer;
-
     private OrthographicCamera camera;
     private Map map;
+
+    private Plant potato;
 
     @Override
     public void create() {
@@ -32,12 +33,16 @@ public class Main extends ApplicationAdapter {
         map = new Map();
         map.create(AssentPaths.map);
         map.setCamera(camera);
+
+        // Khởi tạo cây Tomato với hình ảnh cho các giai đoạn phát triển
+        potato = new Plant(new Vector2(100, 200), PlantType.POTATO);
     }
 
     @Override
     public void render() {
         float deltaTime = Gdx.graphics.getDeltaTime();
         player.update(deltaTime);
+        potato.update(deltaTime);
 
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
         camera.update();
@@ -47,6 +52,7 @@ public class Main extends ApplicationAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        potato.render(batch);
         playerRenderer.render(batch);
         batch.end();
     }
