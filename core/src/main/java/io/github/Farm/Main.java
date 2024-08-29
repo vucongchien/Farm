@@ -19,6 +19,8 @@ public class Main extends ApplicationAdapter {
     private OrthographicCamera camera;
     private Gamemap map;
 
+    private PlantRenderer potato;
+
     @Override
     public void create() {
         camera = new OrthographicCamera();
@@ -35,6 +37,9 @@ public class Main extends ApplicationAdapter {
         map.create(AssentPaths.map);
         player.setMap(map);
         map.setCamera(camera);
+
+        // Khởi tạo cây Tomato với hình ảnh cho các giai đoạn phát triển
+        potato = new PlantRenderer(new Vector2(100, 200), PlantType.POTATO);
     }
 
     @Override
@@ -42,6 +47,8 @@ public class Main extends ApplicationAdapter {
         float deltaTime = Gdx.graphics.getDeltaTime();
         player.update(deltaTime);
         camera.setToOrtho(false, 500, 282);
+        potato.update(deltaTime);
+
         camera.position.set(player.getPosition().x, player.getPosition().y, 0);
         camera.update();
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
@@ -49,6 +56,7 @@ public class Main extends ApplicationAdapter {
 //      map.velayerdau();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        potato.render(batch);
         playerRenderer.render(batch);
         map.render();
         batch.end();
