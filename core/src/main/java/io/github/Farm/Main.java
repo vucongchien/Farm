@@ -29,7 +29,7 @@ public class Main extends ApplicationAdapter {
         playerRenderer = new PlayerRenderer(player,
             AssentPaths.Player_W_idle, AssentPaths.Player_S_idle, AssentPaths.Player_A_idle, AssentPaths.Player_D_idle,
             AssentPaths.Player_W_walk, AssentPaths.Player_S_walk, AssentPaths.Player_A_walk, AssentPaths.Player_D_walk,
-            3, 1, 0.2f, 64);
+            3, 1, 0.2f, 16);
 
         batch = new SpriteBatch();
 

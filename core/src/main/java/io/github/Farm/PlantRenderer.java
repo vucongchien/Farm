@@ -70,6 +70,7 @@ public class PlantRenderer {
                 break;
             case YOUNG:
                 stage = PlantStage.MATURE;
+                break;
             case MATURE:
                 stage = PlantStage.HARVESTED;
                 isHarvestable = true;
