@@ -32,7 +32,7 @@ public class Main extends ApplicationAdapter {
             3, 1, 0.2f, 16);
 
         batch = new SpriteBatch();
-
+        //lkajflkajf
         map = new Gamemap();
         map.create(AssentPaths.map);
         player.setMap(map);
