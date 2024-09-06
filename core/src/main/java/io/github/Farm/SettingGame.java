@@ -25,7 +25,7 @@ public class SettingGame {
 
     public SettingGame() {
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\font_ingame\\KaushanScript-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 36; // Kích thước chữ lớn hơn
 //        parameter.color = Color.BLACK; // Màu đen
@@ -39,11 +39,11 @@ public class SettingGame {
         layout = new GlyphLayout();
         options = new String[]{"Continue", "Sound", "Exit"};
         selectedOption = 0;
-        panelBackground = new Texture("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\Setting\\table.png"); // Hình nền của bảng (nếu có)
-        settingsIcon = new Texture("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\Setting\\barsHorizontal.png"); // Icon cài đặt
+        panelBackground = new Texture("Setting/table.png"); // Hình nền của bảng (nếu có)
+        settingsIcon = new Texture("Setting/barsHorizontal.png"); // Icon cài đặt
 
         // Khởi tạo âm thanh di chuyển
-        moveSound = Gdx.audio.newSound(Gdx.files.internal("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\soundgame\\sound_movebuttonmenu.wav"));
+        moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
 
     }
 

@@ -25,7 +25,7 @@ public class MainMenu {
 
     public MainMenu() {
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\font_ingame\\KaushanScript-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 36; // Kích thước chữ lớn hơn
 //        parameter.color = Color.BLACK; // Màu đen
@@ -34,7 +34,7 @@ public class MainMenu {
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
 
-        this.background = new Texture(Gdx.files.internal("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\tile_map\\NaUX7.png")); // Khởi tạo background
+        this.background = new Texture(Gdx.files.internal("tile_map/NaUX7.png")); // Khởi tạo background
         this.menuItems = new String[] {"Start Game", "Options", "Exit"};
         this.selectedIndex = 0;
         this.isMenuActive = true; // Mặc định menu đang hoạt động
@@ -51,9 +51,9 @@ public class MainMenu {
         // Thêm khoảng cách giữa các mục menu
         totalMenuHeight += (menuItems.length - 1) * itemSpacing; // Tổng chiều cao của menu cộng với khoảng cách giữa các mục
         // Khởi tạo âm thanh di chuyển
-        moveSound = Gdx.audio.newSound(Gdx.files.internal("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\soundgame\\sound_movebuttonmenu.wav"));
+        moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
         moveSound.play();
-        SoundEnter = Gdx.audio.newSound(Gdx.files.internal("C:\\Users\\Admin\\IdeaProjects\\Farm\\assets\\soundgame\\sound_enterbutton.wav"));
+        SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
     }
 
     public void render(SpriteBatch batch) {
