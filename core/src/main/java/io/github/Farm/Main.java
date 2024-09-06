@@ -14,7 +14,10 @@ public class Main extends ApplicationAdapter {
 
 
     private OrthographicCamera camera;
-    private Map map;
+    private Gamemap map;
+    private MainMenu mainMenu; // Thêm biến MainMenu
+    private SettingGame settingGame; // Thêm biến SettingGame
+    private boolean isInGame;
 
     @Override
     public void create() {
@@ -34,23 +37,52 @@ public class Main extends ApplicationAdapter {
         map.create(AssentPaths.map);
         player.setMap(map);
         map.setCamera(camera);
+        // Khởi tạo mainMenu và settingGame
+        mainMenu = new MainMenu();
+        settingGame = new SettingGame();
     }
 
     @Override
     public void render() {
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        player.update(deltaTime);
 
-        camera.position.set(player.getPosition().x, player.getPosition().y, 0);
-        camera.update();
+        if (mainMenu.isMenuActive()) {
+            mainMenu.handleInput(); // Xử lý sự kiện đầu vào cho menu
+            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f); // Xóa màn hình với màu nền
+            batch.setProjectionMatrix(camera.combined); // Thiết lập ma trận chiếu cho SpriteBatch
+            mainMenu.render(batch); // Vẽ menu
+        } else {
+            // Xử lý đầu vào và render cho SettingGame
+            settingGame.handleInput();
 
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        map.render();
+            if (settingGame.isActive()) {
+                // Khi SettingGame đang hoạt động, tạm dừng game
+                ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+                map.render();
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        playerRenderer.render(batch);
-        batch.end();
+                batch.setProjectionMatrix(camera.combined);
+                batch.begin();
+                playerRenderer.render(batch); // Vẫn vẽ nhân vật nhưng không cho phép điều khiển
+                batch.end();
+
+                settingGame.render(batch); // Vẽ bảng cài đặt lên trên game
+            } else {
+                // Khi SettingGame không hoạt động, game chạy bình thường
+                float deltaTime = Gdx.graphics.getDeltaTime();
+                player.update(deltaTime);
+                player.plow(map);
+
+                camera.position.set(player.getPosition().x, player.getPosition().y, 0);
+                camera.update();
+
+                ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+                map.render();
+
+                batch.setProjectionMatrix(camera.combined);
+                batch.begin();
+                playerRenderer.render(batch);
+                batch.end();
+            }
+        }
     }
 
 
