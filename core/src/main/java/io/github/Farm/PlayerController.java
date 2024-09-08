@@ -124,23 +124,5 @@ public class PlayerController {
     public float getDeltaTime() {
         return Gdx.graphics.getDeltaTime();
     }
-    public void plow(Gamemap map) {
-        if (Gdx.input.isKeyPressed(Input.Keys.F)) {
-            TiledMap tiledMap = map.getTiledMap();
-            TiledMapTileLayer doi = (TiledMapTileLayer) tiledMap.getLayers().get("dat");
-            TiledMapTileLayer hoan = (TiledMapTileLayer) tiledMap.getLayers().get("bandau");
-            float tileWidth = doi.getTileWidth();
-            float tileHeight = doi.getTileHeight();
-            int tileX = (int) (position.x / tileWidth)+2;
-            int tileY = (int) (position.y / tileHeight)+1;
-
-            Cell cellToCopy = doi.getCell(tileX, tileY);
-            if (cellToCopy != null) {
-                Cell tmp = new Cell();
-                tmp.setTile(cellToCopy.getTile());
-                hoan.setCell(tileX, tileY, tmp);
-            }
-        }
-    }
 }
 

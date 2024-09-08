@@ -12,9 +12,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private PlayerController player;
+    private hoatdong player;
     private PlayerRenderer playerRenderer;
-
+//    private hoatdong con;
 
     private OrthographicCamera camera;
     private Gamemap map;
@@ -23,9 +23,10 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
+        Gdx.graphics.setWindowedMode(1920, 1080);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        player = new PlayerController(new Vector2(100, 200), 200);
+        player = new hoatdong(new Vector2(100, 200), 200);
         playerRenderer = new PlayerRenderer(player,
             AssentPaths.Player_W_idle, AssentPaths.Player_S_idle, AssentPaths.Player_A_idle, AssentPaths.Player_D_idle,
             AssentPaths.Player_W_walk, AssentPaths.Player_S_walk, AssentPaths.Player_A_walk, AssentPaths.Player_D_walk,
@@ -56,11 +57,12 @@ public class Main extends ApplicationAdapter {
 //      map.velayerdau();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        batch.setColor(1f, 1f, 1f, 1f);
         potato.render(batch);
         playerRenderer.render(batch);
         map.render();
         batch.end();
-
+        player.laycitri(batch,map);
         player.plow(map);
     }
 
