@@ -19,10 +19,12 @@ public class PlayerRenderer {
     }
 
     public void render(SpriteBatch batch) {
+        batch.begin();
         stateTime += player.getDeltaTime();
         updateAnimation();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
         batch.draw(frame, player.getPosition().x, player.getPosition().y, size, size);
+        batch.end();
     }
 
     private void updateAnimation() {

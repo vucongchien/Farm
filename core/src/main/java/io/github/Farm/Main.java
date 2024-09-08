@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.Farm.UI.Selecbox;
+import io.github.Farm.UI.TimeCoolDown;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.player.PlayerRenderer;
@@ -27,6 +28,7 @@ public class Main extends ApplicationAdapter {
     private boolean isInGame;
 
     private Selecbox selecbox;
+    private TimeCoolDown timeCoolDownBar;
 
     @Override
     public void create() {
@@ -34,18 +36,16 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        //khoi tao map
+
+//--------------------------------khoi tao map
         map = new Gamemap();
         map.create(AssentPaths.map);
-        // Khởi tạo player
+
+
+// -------------------------------Khởi tạo player
         player = new hoatdong(new Vector2(100, 200), 200,map);
         playerImageManager=new PlayerImageManager();
         playerRenderer = new PlayerRenderer(player, playerImageManager,  64);
-
-
-
-
-
 
 
         batch = new SpriteBatch();
@@ -64,36 +64,34 @@ public class Main extends ApplicationAdapter {
             batch.setProjectionMatrix(camera.combined);
             mainMenu.render(batch); // Vẽ menu
         } else {
-            // Xử lý đầu vào và render cho SettingGame
+
             settingGame.handleInput();
 
             if (settingGame.isActive()) {
-                // Khi SettingGame đang hoạt động, tạm dừng game
                 ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
                 map.render();
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
-                playerRenderer.render(batch); // Vẫn vẽ nhân vật nhưng không cho phép điều khiển
+                playerRenderer.render(batch);
                 batch.end();
                 settingGame.render(batch);
             } else {
-                // Khi SettingGame không hoạt động, game chạy bình thường
                 float deltaTime = Gdx.graphics.getDeltaTime();
                 player.update(deltaTime);
-
                 camera.position.set(player.getPosition().x, player.getPosition().y, 0);
                 camera.update();
-
                 ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
                 map.render();
-
                 batch.setProjectionMatrix(camera.combined);
-                batch.begin();
 
+                
+
+//--------------------------cho player
                 playerRenderer.render(batch);
-
-                batch.end();
                 selecbox=new Selecbox(player.getPosition(),batch,map);
+                if(player.isPlowing()) {
+                    timeCoolDownBar = new TimeCoolDown(player.getPosition(), player.getStartPlow(), player.getTimeToPlow(), batch, map);
+                }
             }
         }
     }

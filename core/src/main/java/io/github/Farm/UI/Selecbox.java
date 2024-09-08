@@ -29,13 +29,13 @@ public class Selecbox {
 
         if (cell != null) {
             batch.begin();
-            // Top-left corner
+
             batch.draw(selectionBoxTextures[0], tileX * tileWidth-1, tileY * tileHeight + tileHeight-2, tileWidth / 4, tileHeight / 4);
-            // Top-right corner
+
             batch.draw(selectionBoxTextures[1], (tileX + 1) * tileWidth - tileWidth / 4+1, tileY * tileHeight + tileHeight-2, tileWidth / 4, tileHeight / 4);
-            // Bottom-left corner
+
             batch.draw(selectionBoxTextures[2], tileX * tileWidth-1, tileY * tileHeight-1, tileWidth / 4, tileHeight / 4);
-            // Bottom-right corner
+
             batch.draw(selectionBoxTextures[3], (tileX + 1) * tileWidth - tileWidth / 4+1, tileY * tileHeight-1, tileWidth / 4, tileHeight / 4);
 
             batch.end();
