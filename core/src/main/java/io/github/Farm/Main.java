@@ -9,12 +9,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.player.PlayerRenderer;
-
+import io.github.Farm.player.hoatdong;
 
 
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private PlayerController player;
+    private hoatdong player;
     private PlayerRenderer playerRenderer;
     private PlayerImageManager playerImageManager;
 
@@ -31,15 +31,16 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        //khoi tao map
+        map = new Gamemap();
+        map.create(AssentPaths.map);
         // Khởi tạo player
-        player = new PlayerController(new Vector2(100, 200), 200);
+        player = new hoatdong(new Vector2(100, 200), 200,map);
         playerImageManager=new PlayerImageManager();
         playerRenderer = new PlayerRenderer(player, playerImageManager,  64);
 
         batch = new SpriteBatch();
-        //lkajflkajf
-        map = new Gamemap();
-        map.create(AssentPaths.map);
+
 
         map.setCamera(camera);
         mainMenu = new MainMenu();
@@ -63,12 +64,10 @@ public class Main extends ApplicationAdapter {
                 // Khi SettingGame đang hoạt động, tạm dừng game
                 ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
                 map.render();
-
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 playerRenderer.render(batch); // Vẫn vẽ nhân vật nhưng không cho phép điều khiển
                 batch.end();
-
                 settingGame.render(batch);
             } else {
                 // Khi SettingGame không hoạt động, game chạy bình thường
@@ -83,8 +82,11 @@ public class Main extends ApplicationAdapter {
 
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
+
                 playerRenderer.render(batch);
+
                 batch.end();
+                player.laycitri(batch,map);
             }
         }
     }

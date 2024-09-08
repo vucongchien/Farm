@@ -3,6 +3,7 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import io.github.Farm.Gamemap;
 
 public class PlayerController {
     private Vector2 position;
@@ -10,10 +11,12 @@ public class PlayerController {
     private PlayerState currentState = PlayerState.IDLE_RIGHT;
     private PlayerState lastState = PlayerState.IDLE_RIGHT;
     private boolean shoveling = false;
+    private Gamemap map;
 
-    public PlayerController(Vector2 startPosition, float speed) {
+    public PlayerController(Vector2 startPosition, float speed,Gamemap map) {
         this.position = startPosition;
         this.speed = speed;
+        this.map=map;
     }
 
     public Vector2 getPosition() {
@@ -105,5 +108,9 @@ public class PlayerController {
 
     public float getDeltaTime() {
         return Gdx.graphics.getDeltaTime();
+    }
+
+    public Gamemap getMap(){
+        return map;
     }
 }
