@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.github.Farm.UI.Selecbox;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.player.PlayerRenderer;
@@ -21,9 +22,11 @@ public class Main extends ApplicationAdapter {
 
     private OrthographicCamera camera;
     private Gamemap map;
-    private MainMenu mainMenu; // Thêm biến MainMenu
-    private SettingGame settingGame; // Thêm biến SettingGame
+    private MainMenu mainMenu;
+    private SettingGame settingGame;
     private boolean isInGame;
+
+    private Selecbox selecbox;
 
     @Override
     public void create() {
@@ -39,9 +42,13 @@ public class Main extends ApplicationAdapter {
         playerImageManager=new PlayerImageManager();
         playerRenderer = new PlayerRenderer(player, playerImageManager,  64);
 
+
+
+
+
+
+
         batch = new SpriteBatch();
-
-
         map.setCamera(camera);
         mainMenu = new MainMenu();
         settingGame = new SettingGame();
@@ -86,7 +93,7 @@ public class Main extends ApplicationAdapter {
                 playerRenderer.render(batch);
 
                 batch.end();
-                player.laycitri(batch,map);
+                selecbox=new Selecbox(player.getPosition(),batch,map);
             }
         }
     }
@@ -99,5 +106,6 @@ public class Main extends ApplicationAdapter {
         map.dispose();
         mainMenu.dispose();
         settingGame.dispose();
+
     }
 }
