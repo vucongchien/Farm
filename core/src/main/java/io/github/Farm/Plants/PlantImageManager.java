@@ -1,4 +1,4 @@
-package io.github.Farm;
+package io.github.Farm.Plants;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;

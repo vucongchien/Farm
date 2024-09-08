@@ -6,11 +6,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.github.Farm.player.PlayerController;
+import io.github.Farm.player.PlayerImageManager;
+import io.github.Farm.player.PlayerRenderer;
+
+
 
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private PlayerController player;
     private PlayerRenderer playerRenderer;
+    private PlayerImageManager playerImageManager;
 
 
     private OrthographicCamera camera;
@@ -24,20 +30,17 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        // Khởi tạo
+        // Khởi tạo player
         player = new PlayerController(new Vector2(100, 200), 200);
-        playerRenderer = new PlayerRenderer(player,
-            AssentPaths.Player_W_idle, AssentPaths.Player_S_idle, AssentPaths.Player_A_idle, AssentPaths.Player_D_idle,
-            AssentPaths.Player_W_walk, AssentPaths.Player_S_walk, AssentPaths.Player_A_walk, AssentPaths.Player_D_walk,
-            3, 1, 0.2f, 16);
+        playerImageManager=new PlayerImageManager();
+        playerRenderer = new PlayerRenderer(player, playerImageManager,  64);
 
         batch = new SpriteBatch();
-        //lkajflkajf
+
         map = new Gamemap();
         map.create(AssentPaths.map);
-        player.setMap(map);
+
         map.setCamera(camera);
-        // Khởi tạo mainMenu và settingGame
         mainMenu = new MainMenu();
         settingGame = new SettingGame();
     }
@@ -45,10 +48,11 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
 
+        camera.setToOrtho(false,500,282);
         if (mainMenu.isMenuActive()) {
-            mainMenu.handleInput(); // Xử lý sự kiện đầu vào cho menu
-            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f); // Xóa màn hình với màu nền
-            batch.setProjectionMatrix(camera.combined); // Thiết lập ma trận chiếu cho SpriteBatch
+            mainMenu.handleInput();
+            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+            batch.setProjectionMatrix(camera.combined);
             mainMenu.render(batch); // Vẽ menu
         } else {
             // Xử lý đầu vào và render cho SettingGame
@@ -64,12 +68,11 @@ public class Main extends ApplicationAdapter {
                 playerRenderer.render(batch); // Vẫn vẽ nhân vật nhưng không cho phép điều khiển
                 batch.end();
 
-                settingGame.render(batch); // Vẽ bảng cài đặt lên trên game
+                settingGame.render(batch);
             } else {
                 // Khi SettingGame không hoạt động, game chạy bình thường
                 float deltaTime = Gdx.graphics.getDeltaTime();
                 player.update(deltaTime);
-                player.plow(map);
 
                 camera.position.set(player.getPosition().x, player.getPosition().y, 0);
                 camera.update();
@@ -91,7 +94,7 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         playerRenderer.dispose();
         map.dispose();
-        mainMenu.dispose(); // Gọi phương thức dispose của MainMenu
-        settingGame.dispose(); // Gọi phương thức dispose của SettingGame
+        mainMenu.dispose();
+        settingGame.dispose();
     }
 }
