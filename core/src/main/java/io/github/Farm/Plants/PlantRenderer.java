@@ -1,4 +1,4 @@
-package io.github.Farm;
+package io.github.Farm.Plants;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

@@ -24,9 +24,7 @@ public class Gamemap {
         mapRenderer.setView(camera);
         mapRenderer.render();
     }
-//     public void velayerdau(){
-//        mapRenderer.render(new int[]{0,1,2,3,4});
-//    }
+
 
     public void setCamera(OrthographicCamera camera) {
         this.camera = camera;

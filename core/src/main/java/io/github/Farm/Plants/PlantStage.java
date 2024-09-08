@@ -1,4 +1,4 @@
-package io.github.Farm;
+package io.github.Farm.Plants;
 
 public enum PlantStage {
     SEED,
