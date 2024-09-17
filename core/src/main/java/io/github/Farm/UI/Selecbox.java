@@ -11,13 +11,16 @@ import io.github.Farm.Gamemap;
 public class Selecbox {
     private TextureRegion[] selectionBoxTextures;
 
-    public Selecbox(Vector2 position, SpriteBatch batch, Gamemap map){
+    public Selecbox(){
         selectionBoxTextures = new TextureRegion[4];
         selectionBoxTextures[0] = new TextureRegion(new Texture("UI/selectbox_tl.png"));
         selectionBoxTextures[1] = new TextureRegion(new Texture("UI/selectbox_tr.png"));
         selectionBoxTextures[2] = new TextureRegion(new Texture("UI/selectbox_bl.png"));
         selectionBoxTextures[3] = new TextureRegion(new Texture("UI/selectbox_br.png"));
 
+
+    }
+    public void render(Vector2 position, SpriteBatch batch, Gamemap map){
         TiledMap tiledMap = map.getTiledMap();
         TiledMapTileLayer lay = (TiledMapTileLayer) tiledMap.getLayers().get("bandau");
 

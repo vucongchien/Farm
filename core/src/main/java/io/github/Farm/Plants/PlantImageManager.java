@@ -1,69 +1,40 @@
 package io.github.Farm.Plants;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
 
 public class PlantImageManager {
-    private Animation<TextureRegion> seedAnimation;
-    private Animation<TextureRegion> sproutAnimation;
-    private Animation<TextureRegion> youngAnimation;
-    private Animation<TextureRegion> matureAnimation;
-    private Animation<TextureRegion> harvestedAnimation;
-    private Animation<TextureRegion> witherAnimation;
+    private Texture seedTexture;
+    private Texture sproutTexture;
+    private Texture youngTexture;
+    private Texture matureTexture;
+    private Texture harvestedTexture;
 
     public PlantImageManager(PlantType type) {
-        String basePath = "Plant/" + type.toString() + "/";
+        String basePath = "Crops/" + type.toString() ;
 
-        seedAnimation = createAnimation(basePath, "seed", 1);
-        sproutAnimation = createAnimation(basePath, "sprout", 3);
-        youngAnimation = createAnimation(basePath, "young", 3);
-        matureAnimation = createAnimation(basePath, "mature", 3);
-        harvestedAnimation = createAnimation(basePath, "harvested", 3);
-        witherAnimation = createAnimation(basePath, "wither", 3);
+        seedTexture = new Texture(basePath + "_00.png");
+        sproutTexture = new Texture(basePath + "_01.png");
+        youngTexture = new Texture(basePath + "_02.png");
+        matureTexture = new Texture(basePath + "_03.png");
+        harvestedTexture = new Texture(basePath + "_04.png");
     }
 
-    private Animation<TextureRegion> createAnimation(String basePath, String stageName, int frameCount) {
-        Array<TextureRegion> frames = new Array<>();
-        for (int i = 1; i <= frameCount; i++) {
-            Texture texture = new Texture(basePath + stageName + "_" + i + ".png");
-
-            frames.add(new TextureRegion(texture));
-        }
-        return new Animation<TextureRegion>(0.2f, frames, Animation.PlayMode.LOOP);
-    }
-
-    public Animation<TextureRegion> getAnimation(PlantStage stage) {
+    public Texture getTexture(PlantStage stage) {
         switch (stage) {
-            case SEED: return seedAnimation;
-            case SPROUT: return sproutAnimation;
-            case YOUNG: return youngAnimation;
-            case MATURE: return matureAnimation;
-            case HARVESTED: return harvestedAnimation;
-            case WITHER: return witherAnimation;
-            default: return seedAnimation;
+            case SEED: return seedTexture;
+            case SPROUT: return sproutTexture;
+            case YOUNG: return youngTexture;
+            case MATURE: return matureTexture;
+            case HARVESTED: return harvestedTexture;
+            default: return seedTexture;
         }
     }
 
     public void dispose() {
-        for (TextureRegion region : seedAnimation.getKeyFrames()) {
-            region.getTexture().dispose();
-        }
-        for (TextureRegion region : sproutAnimation.getKeyFrames()) {
-            region.getTexture().dispose();
-        }
-        for (TextureRegion region : youngAnimation.getKeyFrames()) {
-            region.getTexture().dispose();
-        }
-        for (TextureRegion region : matureAnimation.getKeyFrames()) {
-            region.getTexture().dispose();
-        }
-        for (TextureRegion region : harvestedAnimation.getKeyFrames()) {
-            region.getTexture().dispose();
-        }
-        for(TextureRegion region : witherAnimation.getKeyFrames()){
-            region.getTexture().dispose();
-        }
+        seedTexture.dispose();
+        sproutTexture.dispose();
+        youngTexture.dispose();
+        matureTexture.dispose();
+        harvestedTexture.dispose();
     }
 }

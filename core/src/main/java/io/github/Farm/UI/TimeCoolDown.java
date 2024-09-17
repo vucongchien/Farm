@@ -14,8 +14,8 @@ public class TimeCoolDown {
     private Vector2 position;
 
 
-    public TimeCoolDown(Vector2 position, float Time, float TimeMax, SpriteBatch batch,Gamemap map){
-        this.position=position;
+
+    public TimeCoolDown(){
 
         GreenBar=new TextureRegion[7];
         GreenBar[0] =new TextureRegion(new Texture("UI/greenbar_00.png"));
@@ -25,9 +25,10 @@ public class TimeCoolDown {
         GreenBar[4] =new TextureRegion(new Texture("UI/greenbar_04.png"));
         GreenBar[5] =new TextureRegion(new Texture("UI/greenbar_05.png"));
         GreenBar[6] =new TextureRegion(new Texture("UI/greenbar_06.png"));
-
+    }
+    public void render(SpriteBatch batch,Vector2 position, float Time, float TimeMax, Gamemap map){
+        this.position=position;
         TimeToChangeState=TimeMax/7;
-
         TiledMap tiledMap = map.getTiledMap();
         TiledMapTileLayer lay = (TiledMapTileLayer) tiledMap.getLayers().get("bandau");
 
@@ -45,7 +46,6 @@ public class TimeCoolDown {
             batch.draw(GreenBar[index],tileX * tileWidth+tileWidth*1/4,tileY * tileHeight+tileHeight*3/2 ,tileWidth / 2, tileHeight / 4);
             batch.end();
         }
-
     }
 
 
