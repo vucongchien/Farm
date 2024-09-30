@@ -1,19 +1,18 @@
 package io.github.Farm.player.lam_lai_file;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Renderer.RenderableEntity;
 import io.github.Farm.UI.Inventory;
 import io.github.Farm.player.Collider;
-import io.github.Farm.player.PlayerState;
-import io.github.Farm.player.lam_lai_file.PLAYER_STAGE.IdleState;
-import io.github.Farm.player.lam_lai_file.PLAYER_STAGE.PlayerStateManager;
-import io.github.Farm.player.lam_lai_file.PLAYER_STAGE.PlayerStateee;
-import io.github.Farm.player.lam_lai_file.PLAYER_STAGE.WalkState;
+import io.github.Farm.player.lam_lai_file.PLAYER_STATE.*;
 
 public class PlayerCotrollerr implements Collider, Disposable {
     private Vector2 position;
@@ -23,6 +22,7 @@ public class PlayerCotrollerr implements Collider, Disposable {
     private boolean isFacingRight = true;
     private boolean isOpenInventory = false;
     private boolean isFishing=false;
+    private boolean isSwim=false;
 
     //fishing
     private float TimeStartFish=0f;
@@ -38,6 +38,7 @@ public class PlayerCotrollerr implements Collider, Disposable {
 
     //collider
     private Rectangle collider;
+    private ShapeRenderer shapeRenderer;
 
     public PlayerCotrollerr(Vector2 startPosition, float speed, World world,
                             MapInteractionHandler mapInteractionHandler, PlantManager plantManager) {
@@ -51,6 +52,7 @@ public class PlayerCotrollerr implements Collider, Disposable {
 
         this.inventory = new Inventory();
         this.collider=new Rectangle(position.x,position.y,16,16);
+        this.shapeRenderer=new ShapeRenderer();
     }
 
     private Body createBody(Vector2 startPosition, World world) {
@@ -74,21 +76,33 @@ public class PlayerCotrollerr implements Collider, Disposable {
     }
 
     public void update(float deltaTime) {
-        //updatePlayerState(deltaTime);
+        //state
+        updatePlayerState(deltaTime);
+
+
+        //update may bien tao lao
+
+        collider.setPosition(isFacingRight ? position.x + 5 : position.x - 20, position.y - 5);
+
+
+        //----------------all input
+
+
+        //move
         Vector2 movement = inputHandler.handleMovementInput();
-        if(movement.x!=0){
-            stateManager.changeState(this, new WalkState(isFacingRight ? "RIGHT" : "LEFT"));
-        }
-        stateManager.updateState(this,deltaTime);
+        stateManager.updateState(this, deltaTime);
 
         movementHandler.moveCharacter(movement, 1500f);  // Ví dụ về tốc độ
         position.set(movementHandler.getPosition());
         this.positionInMap = new Vector2(
-            isFacingRight ? (int) (position.x / 16) +1 : (int) (position.x / 16) -1,
+            isFacingRight ? (int) (position.x / 16) + 1 : (int) (position.x / 16) - 1,
             (int) (position.y / 16)
         );
 
-        collisionHandler.checkCollisions(collider);
+        //logic swim
+        if (isSwim) return;
+
+        collisionHandler.checkCollisions(this);
 
         if (inputHandler.isPlowing()) {
             collisionHandler.handlePlowing(positionInMap);
@@ -98,6 +112,7 @@ public class PlayerCotrollerr implements Collider, Disposable {
             isOpenInventory = !isOpenInventory;
         }
 
+
     }
 
     public void changeState(PlayerStateee newState) {
@@ -105,17 +120,61 @@ public class PlayerCotrollerr implements Collider, Disposable {
     }
 
     public void setCurrentState(String state) {
-        // Cập nhật trạng thái hiện tại của người chơi
     }
     public void updatePlayerState(float deltaTime){
-        String LeftOrRight;
         Vector2 movement = inputHandler.handleMovementInput();
-
         if(movement.x>0)        { isFacingRight=true; }
         else if(movement.x<0)   { isFacingRight=false;}
-        LeftOrRight=isFacingRight?"RIGHT":"LEFT";
+        String direction = isFacingRight ? "RIGHT" : "LEFT";
+
+        //check swim
+        Vector2 positionCheckSwim= new Vector2((int) (position.x / 16) ,(int) (position.y / 16));
+        if(collisionHandler.getMapInteractionHandler().checkTile(positionCheckSwim,"water")){
+            stateManager.changeState(this,new SwimState(direction));
+            isSwim=true;
+            return;
+        }
+        else isSwim=false;
 
 
+        if (inputHandler.isCasting()&&!isFishing)
+        {
+            if (collisionHandler.isPlayerCanFish(collider))
+            {
+                isFishing = true;
+                stateManager.changeState(this, new CastingState(direction));
+            }
+            else
+            {
+                System.out.println("del duoc cau ca dume m");
+            }
+        }
+        else if (inputHandler.isWatering())
+        {
+            stateManager.changeState(this,new WaterState(direction));
+        }
+        else if (inputHandler.isHitting())
+        {
+            stateManager.changeState(this,new HitState(direction));
+        }
+        else if (inputHandler.isPlowing())
+        {
+            stateManager.changeState(this,new DigState(direction));
+        }
+        else if (inputHandler.isMoving())
+        {
+            stateManager.changeState(this, new WalkState(direction));
+        }
+        else if(!isFishing)
+        {
+            stateManager.changeState(this, new IdleState(direction));
+        }
+
+
+        //is fishing
+        if(!stateManager.getCurrentStateName().matches("^(WAITING_|CASTING_|CAUGHT_).*")){
+            isFishing=false;
+        }
 
 
 
@@ -154,18 +213,22 @@ public class PlayerCotrollerr implements Collider, Disposable {
 
     @Override
     public void dispose() {
+        shapeRenderer.dispose();
         movementHandler.getWorld().destroyBody(movementHandler.getBody());
     }
 
     @Override
     public Rectangle getCollider() {
-        return null;
+        return collider;
     }
 
     @Override
     public void onCollision(Collider other) {
 
     }
+
+
+
     public float getDeltaTime() {
         return Gdx.graphics.getDeltaTime();
     }
@@ -220,4 +283,6 @@ public class PlayerCotrollerr implements Collider, Disposable {
     public Vector2 getPositionInMap() {
         return positionInMap;
     }
+
+
 }

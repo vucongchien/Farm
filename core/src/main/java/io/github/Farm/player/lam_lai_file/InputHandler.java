@@ -37,6 +37,10 @@ public class InputHandler {
 
     }
 
+    public boolean isMoving(){
+        return handleMovementInput().x!=0||handleMovementInput().y!=0;
+    }
+
     public boolean isWatering() {
         return Gdx.input.isKeyPressed(Input.Keys.R);
     }

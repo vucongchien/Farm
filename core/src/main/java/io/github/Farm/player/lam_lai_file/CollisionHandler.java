@@ -8,12 +8,11 @@ import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.Plants.PlantType;
 import io.github.Farm.player.Collider;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /// chiu trach nhiem tuong tac giua nhan vat voi map ///
-
-
-
-
-
 public class CollisionHandler implements Collider {
     private PlantManager plantManager;
     private MapInteractionHandler mapInteractionHandler;
@@ -23,12 +22,28 @@ public class CollisionHandler implements Collider {
         this.mapInteractionHandler = mapInteractionHandler;
     }
 
-    public void checkCollisions(Rectangle playerCollider) {
-        for (PlantRenderer plant : plantManager.getPlants()) {
-            if (playerCollider.overlaps(plant.getCollider())) {
-                plant.onCollision( this);
+    public void checkCollisions(PlayerCotrollerr playerCotrollerr) {
+        //check collision plant va player
+
+        Iterator<PlantRenderer> iterator = plantManager.getPlants().iterator();
+        while (iterator.hasNext()){
+            PlantRenderer plant=iterator.next();
+            if (playerCotrollerr.getCollider().overlaps(plant.getCollider())) {
+                plant.onCollision( playerCotrollerr);
+//                //Hit
+//                if(playerCotrollerr.getCurrentState().startsWith("HIT_")) {
+//                    iterator.remove();
+//                }
+                //water
+                if(playerCotrollerr.getCurrentState().startsWith("WATER_")){
+                    plant.water();
+                }
+
+
+
             }
         }
+        //check nhieu cai khac o day--
     }
 
     public void handlePlowing(Vector2 positionInMap) {
@@ -39,6 +54,19 @@ public class CollisionHandler implements Collider {
         mapInteractionHandler.plantSeed(positionInMap);
     }
 
+    public boolean isPlayerCanFish(Rectangle playerCollider){
+        ArrayList<Rectangle> canFishRectangles = mapInteractionHandler.getCanFishZoneLayer();
+
+        for (Rectangle canFishRect : canFishRectangles) {
+            if (playerCollider.overlaps(canFishRect)) {
+                System.out.println("dc cau ca");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public Rectangle getCollider() {
         return null;
@@ -47,5 +75,13 @@ public class CollisionHandler implements Collider {
     @Override
     public void onCollision(Collider other) {
 
+    }
+
+    public MapInteractionHandler getMapInteractionHandler() {
+        return mapInteractionHandler;
+    }
+
+    public PlantManager getPlantManager() {
+        return plantManager;
     }
 }

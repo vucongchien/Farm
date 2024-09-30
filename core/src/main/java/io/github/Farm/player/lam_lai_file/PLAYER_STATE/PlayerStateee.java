@@ -1,4 +1,4 @@
-package io.github.Farm.player.lam_lai_file.PLAYER_STAGE;
+package io.github.Farm.player.lam_lai_file.PLAYER_STATE;
 
 import io.github.Farm.player.lam_lai_file.PlayerCotrollerr;
 

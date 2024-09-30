@@ -15,8 +15,8 @@ public class PlantManager {
         plants = new ArrayList<>();
     }
 
-    public void addPlant(PlantRenderer plant) {
-        plants.add(plant);
+    public void addPlant(Vector2 position, PlantType type) {
+        plants.add(new PlantRenderer(position,type));
     }
 
     public String getPlantAtPosition(Vector2 positionInMap) {
@@ -33,6 +33,17 @@ public class PlantManager {
         plants.remove(index);
     }
 
+    public void removePlantAtPosition(Vector2 position) {
+        Iterator<PlantRenderer> iterator = plants.iterator();
+        while (iterator.hasNext()) {
+            PlantRenderer plant = iterator.next();
+            if (plant.getPosition().epsilonEquals(position, 0.1f)) {
+                iterator.remove();
+                break;
+            }
+        }
+    }
+
     public void update(float deltaTime) {
         for (PlantRenderer plant : plants) {
             plant.update(deltaTime);
@@ -42,12 +53,14 @@ public class PlantManager {
     public void render(SpriteBatch batch, Camera camera) {
 
         for (PlantRenderer plant : plants) {
-            plant.render(batch,camera);
+            plant.render(batch);
         }
     }
 
     public List<PlantRenderer> getPlants() {
         return plants;
     }
+
+
 }
 

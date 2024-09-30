@@ -201,9 +201,8 @@ public class PlayerController implements Collider,Disposable {
                     currentState=PlayerState.valueOf("DOING_"+lastState.name().split("_")[1]);
 
                     Vector2 plantPosition = new Vector2(positionInMap.x, positionInMap.y);
-                    PlantRenderer newPlant = new PlantRenderer(plantPosition, plantType);
                     mapInteractionHandler.plantSeed(positionInMap);
-                    plantManager.addPlant(newPlant);
+                    plantManager.addPlant(plantPosition,plantType);
 
                     selectedSlot.decreaseQuantity(1);
                 }

@@ -58,5 +58,7 @@ public class MapManager {
         }
     }
 
-
+    public TiledMap getTiledMap() {
+        return map;
+    }
 }
