@@ -1,4 +1,4 @@
-package io.github.Farm.player;
+package io.github.Farm.player.PLAYER_STATE;
 
 public enum PlayerState {
     IDLE_LEFT, IDLE_RIGHT,

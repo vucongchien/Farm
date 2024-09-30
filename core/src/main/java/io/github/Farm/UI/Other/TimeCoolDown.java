@@ -1,4 +1,4 @@
-package io.github.Farm.UI;
+package io.github.Farm.UI.Other;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.Gamemap;
 
 public class TimeCoolDown {
     private TextureRegion[] GreenBar;

@@ -1,14 +1,13 @@
-package io.github.Farm.player.lam_lai_file;
+package io.github.Farm.player;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.player.Collider;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -22,20 +21,20 @@ public class CollisionHandler implements Collider {
         this.mapInteractionHandler = mapInteractionHandler;
     }
 
-    public void checkCollisions(PlayerCotrollerr playerCotrollerr) {
+    public void checkCollisions(PlayerController playerController) {
         //check collision plant va player
 
         Iterator<PlantRenderer> iterator = plantManager.getPlants().iterator();
         while (iterator.hasNext()){
             PlantRenderer plant=iterator.next();
-            if (playerCotrollerr.getCollider().overlaps(plant.getCollider())) {
-                plant.onCollision( playerCotrollerr);
+            if (playerController.getCollider().overlaps(plant.getCollider())) {
+                plant.onCollision(playerController);
 //                //Hit
 //                if(playerCotrollerr.getCurrentState().startsWith("HIT_")) {
 //                    iterator.remove();
 //                }
                 //water
-                if(playerCotrollerr.getCurrentState().startsWith("WATER_")){
+                if(playerController.getCurrentState().startsWith("WATER_")){
                     plant.water();
                 }
 

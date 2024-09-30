@@ -1,17 +1,17 @@
-package io.github.Farm.player.lam_lai_file.PLAYER_STATE;
+package io.github.Farm.player.PLAYER_STATE;
 
-import io.github.Farm.player.lam_lai_file.PlayerCotrollerr;
+import io.github.Farm.player.PlayerController;
 
 public class PlayerStateManager {
-    private PlayerStateee currentState;
-    private PlayerStateee preState;
+    private InterfacePlayerState currentState;
+    private InterfacePlayerState preState;
 
-    public PlayerStateManager(PlayerStateee initialState) {
+    public PlayerStateManager(InterfacePlayerState initialState) {
         this.currentState = initialState;
         this.preState=initialState;
     }
 
-    public void changeState(PlayerCotrollerr player, PlayerStateee newState) {
+    public void changeState(PlayerController player, InterfacePlayerState newState) {
         if (!currentState.getStateName().equals(preState.getStateName()) ) {
             preState=currentState;
             currentState.exit(player);
@@ -21,7 +21,7 @@ public class PlayerStateManager {
         currentState.enter(player);
     }
 
-    public void updateState(PlayerCotrollerr player, float deltaTime) {
+    public void updateState(PlayerController player, float deltaTime) {
         if (currentState != null) {
             currentState.update(player, deltaTime);
         }

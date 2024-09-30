@@ -1,4 +1,4 @@
-package io.github.Farm.player.lam_lai_file;
+package io.github.Farm.player;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;

@@ -5,11 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
-import io.github.Farm.Renderer.RenderableEntity;
-import io.github.Farm.UI.SelectionBox;
-import io.github.Farm.player.Collider;
-import io.github.Farm.player.lam_lai_file.PlayerCotrollerr;
-import io.github.Farm.player.old.PlayerController;
+import io.github.Farm.Interface.RenderableEntity;
+import io.github.Farm.Interface.Collider;
+import io.github.Farm.player.PlayerController;
 
 public class PlantRenderer implements Collider, RenderableEntity {
     private Vector2 position;
@@ -150,8 +148,8 @@ public class PlantRenderer implements Collider, RenderableEntity {
 
 
         }
-        if(other instanceof PlayerCotrollerr){
-            PlayerCotrollerr playerCotrollerr=(PlayerCotrollerr) other;
+        if(other instanceof PlayerController){
+            PlayerController playerController =(PlayerController) other;
             UI_DrawSelectionBox=true;
         }
     }

@@ -1,4 +1,4 @@
-package io.github.Farm.Renderer;
+package io.github.Farm.Interface;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

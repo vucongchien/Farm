@@ -1,12 +1,12 @@
-package io.github.Farm.player.lam_lai_file.PLAYER_STATE;
+package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.Gdx;
 import io.github.Farm.Plants.PlantRenderer;
-import io.github.Farm.player.lam_lai_file.PlayerCotrollerr;
+import io.github.Farm.player.PlayerController;
 
 import java.util.Iterator;
 
-public class HitState implements PlayerStateee{
+public class HitState implements InterfacePlayerState {
     private String direction;
     private static float startHit=0f;
     private float timeToHit=0.3f;
@@ -15,12 +15,12 @@ public class HitState implements PlayerStateee{
         this.direction=direction;
     }
     @Override
-    public void enter(PlayerCotrollerr player) {
+    public void enter(PlayerController player) {
         player.setCurrentState("HIT_"+direction);
     }
 
     @Override
-    public void update(PlayerCotrollerr player, float deltaTime) {
+    public void update(PlayerController player, float deltaTime) {
         //check plant
         startHit+= Gdx.graphics.getDeltaTime();
         if(startHit>=timeToHit){
@@ -33,7 +33,7 @@ public class HitState implements PlayerStateee{
 
     }
 
-    public void hitSomeThing(PlayerCotrollerr player){
+    public void hitSomeThing(PlayerController player){
         Iterator<PlantRenderer> iterator = player.getCollisionHandler().getPlantManager().getPlants().iterator();
         while (iterator.hasNext()) {
             PlantRenderer plant = iterator.next();
@@ -45,7 +45,7 @@ public class HitState implements PlayerStateee{
     }
 
     @Override
-    public void exit(PlayerCotrollerr player) {
+    public void exit(PlayerController player) {
         startHit=0;
     }
 

@@ -1,8 +1,8 @@
-package io.github.Farm.player.lam_lai_file.PLAYER_STATE;
+package io.github.Farm.player.PLAYER_STATE;
 
-import io.github.Farm.player.lam_lai_file.PlayerCotrollerr;
+import io.github.Farm.player.PlayerController;
 
-public class CastingState implements PlayerStateee{
+public class CastingState implements InterfacePlayerState {
     private String direction;
     private float Time=0f;
 
@@ -11,12 +11,12 @@ public class CastingState implements PlayerStateee{
     }
 
     @Override
-    public void enter(PlayerCotrollerr player) {
+    public void enter(PlayerController player) {
         player.setCurrentState("CASTING_" + direction);
     }
 
     @Override
-    public void update(PlayerCotrollerr player, float deltaTime) {
+    public void update(PlayerController player, float deltaTime) {
         if(Time<=0.4f){
             Time+= deltaTime;
             return;
@@ -26,7 +26,7 @@ public class CastingState implements PlayerStateee{
     }
 
     @Override
-    public void exit(PlayerCotrollerr player) {
+    public void exit(PlayerController player) {
     }
 
     @Override

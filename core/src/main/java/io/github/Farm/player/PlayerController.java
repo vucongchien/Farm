@@ -1,20 +1,20 @@
-package io.github.Farm.player.lam_lai_file;
+package io.github.Farm.player;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
+import io.github.Farm.PLAYER_STATE.*;
 import io.github.Farm.Plants.PlantManager;
-import io.github.Farm.Renderer.RenderableEntity;
-import io.github.Farm.UI.Inventory;
-import io.github.Farm.player.Collider;
+import io.github.Farm.UI.Inventory.Inventory;
+import io.github.Farm.player.PLAYER_STATE.*;
 import io.github.Farm.player.lam_lai_file.PLAYER_STATE.*;
 
-public class PlayerCotrollerr implements Collider, Disposable {
+public class PlayerController implements Collider, Disposable {
     private Vector2 position;
     private Vector2 positionInMap;
 //    private PlayerState currentState = PlayerState.IDLE_RIGHT;
@@ -40,7 +40,7 @@ public class PlayerCotrollerr implements Collider, Disposable {
     private Rectangle collider;
     private ShapeRenderer shapeRenderer;
 
-    public PlayerCotrollerr(Vector2 startPosition, float speed, World world,
+    public PlayerController(Vector2 startPosition, float speed, World world,
                             MapInteractionHandler mapInteractionHandler, PlantManager plantManager) {
         this.position=startPosition;
         this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
@@ -92,7 +92,7 @@ public class PlayerCotrollerr implements Collider, Disposable {
         Vector2 movement = inputHandler.handleMovementInput();
         stateManager.updateState(this, deltaTime);
 
-        movementHandler.moveCharacter(movement, 1500f);  // Ví dụ về tốc độ
+        movementHandler.moveCharacter(movement, 150f);  // Ví dụ về tốc độ
         position.set(movementHandler.getPosition());
         this.positionInMap = new Vector2(
             isFacingRight ? (int) (position.x / 16) + 1 : (int) (position.x / 16) - 1,
@@ -112,10 +112,13 @@ public class PlayerCotrollerr implements Collider, Disposable {
             isOpenInventory = !isOpenInventory;
         }
 
+        Vector2 velocity = movementHandler.getBody().getLinearVelocity();
+        System.out.println("Current Velocity: " + velocity);
+
 
     }
 
-    public void changeState(PlayerStateee newState) {
+    public void changeState(InterfacePlayerState newState) {
         stateManager.changeState(this, newState);
     }
 
