@@ -1,9 +1,9 @@
-package io.github.Farm.player.lam_lai_file;
+package io.github.Farm.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.UI.Inventory;
+import io.github.Farm.UI.Inventory.Inventory;
 
 public class InputHandler {
 
@@ -21,7 +21,7 @@ public class InputHandler {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             movement.x = 1;
         }
-        return movement.len() > 1 ? movement.nor() : movement;
+        return movement.len() > 1 ? (movement.nor()) : movement;
     }
 
     public boolean isPlowing() {

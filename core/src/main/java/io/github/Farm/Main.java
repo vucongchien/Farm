@@ -19,11 +19,9 @@ import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
-import io.github.Farm.player.lam_lai_file.PlayerCotrollerr;
-import io.github.Farm.player.lam_lai_file.PlayerRender;
-import io.github.Farm.player.old.PlayerController;
-import io.github.Farm.player.old.PlayerImageManager;
-import io.github.Farm.player.old.PlayerRenderer;
+import io.github.Farm.player.PlayerController;
+import io.github.Farm.player.PlayerRenderer;
+import io.github.Farm.player.PlayerImageManager;
 
 
 public class Main extends ApplicationAdapter {
@@ -33,12 +31,9 @@ public class Main extends ApplicationAdapter {
 
 
     //-------------player
-    private PlayerRenderer playerRenderer;
-    private PlayerController playerController;
-    private PlayerImageManager playerImageManager;
 
-    private PlayerRender playerRenderNew;
-    private PlayerCotrollerr playerCotrollerrNew;
+    private PlayerRenderer playerRendererNew;
+    private PlayerController playerControllerNew;
     private PlayerImageManager playerImageManagerNew;
 
     //-------------plant
@@ -87,22 +82,19 @@ public class Main extends ApplicationAdapter {
         //  plantManager.addPlant(new PlantRenderer(new Vector2(200, 100), PlantType.carrot));
 
 
-        playerController = new PlayerController(new Vector2(1000, 1000), 150f, world, mapInteractionHandler, plantManager); // Use tile size
-        playerImageManager = new PlayerImageManager();
-        playerRenderer = new PlayerRenderer(playerController, playerImageManager, 64);
 
-        playerCotrollerrNew = new PlayerCotrollerr(new Vector2(900, 900), 150f, world, mapInteractionHandler, plantManager);
+        playerControllerNew = new PlayerController(new Vector2(900, 900), 150f, world, mapInteractionHandler, plantManager);
         playerImageManagerNew = new PlayerImageManager();
-        playerRenderNew = new PlayerRender(playerCotrollerrNew, playerImageManagerNew, 64);
+        playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
-        gameRenderer = new GameRenderer(playerRenderNew, plantManager, camera,map);
+        gameRenderer = new GameRenderer(playerRendererNew, plantManager, camera,map);
     }
 
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(playerCotrollerrNew.getPosition().x, playerCotrollerrNew.getPosition().y, 0);
+        camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
         camera.update();
 
         mapRenderer.setView(camera);
@@ -116,9 +108,7 @@ public class Main extends ApplicationAdapter {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
-        Rectangle playerBounds = new Rectangle(playerController.getPosition().x, playerController.getPosition().y, 16, 16);
-        shapeRenderer.rect(playerBounds.x, playerBounds.y, playerBounds.width, playerBounds.height);
-        Rectangle collider = playerCotrollerrNew.getCollider();
+        Rectangle collider = playerControllerNew.getCollider();
         shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
         shapeRenderer.end();
 
@@ -129,10 +119,7 @@ public class Main extends ApplicationAdapter {
 //        plantManager.render(batch,camera);
 //        batch.end();
 
-        playerController.update(deltaTime);
-        playerRenderer.render(batch);
-
-        playerCotrollerrNew.update(deltaTime);
+        playerControllerNew.update(deltaTime);
         gameRenderer.render();
 //        playerRenderNew.render(batch);
     }
@@ -141,7 +128,6 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        playerRenderer.dispose();
         map.dispose();
     }
 }

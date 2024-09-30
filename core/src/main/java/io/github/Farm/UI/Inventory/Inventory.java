@@ -1,4 +1,4 @@
-package io.github.Farm.UI;
+package io.github.Farm.UI.Inventory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

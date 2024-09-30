@@ -1,8 +1,8 @@
-package io.github.Farm.player.lam_lai_file.PLAYER_STATE;
+package io.github.Farm.player.PLAYER_STATE;
 
-import io.github.Farm.player.lam_lai_file.PlayerCotrollerr;
+import io.github.Farm.player.PlayerController;
 
-public class WaitingState implements PlayerStateee {
+public class WaitingState implements InterfacePlayerState {
     private String direction;
     private float waitTime = 0f;
 
@@ -11,13 +11,13 @@ public class WaitingState implements PlayerStateee {
     }
 
     @Override
-    public void enter(PlayerCotrollerr player) {
+    public void enter(PlayerController player) {
         player.setCurrentState("WAITING_" + direction);
 
     }
 
     @Override
-    public void update(PlayerCotrollerr player, float deltaTime) {
+    public void update(PlayerController player, float deltaTime) {
         waitTime += deltaTime;
         if (waitTime >= 2.0f) {
             player.changeState(new CaughtState(direction));
@@ -25,7 +25,7 @@ public class WaitingState implements PlayerStateee {
     }
 
     @Override
-    public void exit(PlayerCotrollerr player) {
+    public void exit(PlayerController player) {
 
     }
 

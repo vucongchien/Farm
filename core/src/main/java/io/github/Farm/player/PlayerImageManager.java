@@ -1,10 +1,10 @@
-package io.github.Farm.player.old;
+package io.github.Farm.player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import io.github.Farm.player.PlayerState;
+import io.github.Farm.player.PLAYER_STATE.PlayerState;
 
 import java.util.EnumMap;
 

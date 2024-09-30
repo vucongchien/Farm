@@ -1,4 +1,4 @@
-package io.github.Farm.player;
+package io.github.Farm.Interface;
 
 import com.badlogic.gdx.math.Rectangle;
 
