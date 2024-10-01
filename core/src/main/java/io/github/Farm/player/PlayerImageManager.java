@@ -24,7 +24,7 @@ public class PlayerImageManager {
         animations.put(PlayerState.DIG_LEFT, flipAnimation(animations.get(PlayerState.DIG_RIGHT)));
     }
 
-    private Animation<TextureRegion> createAnimation(String sheetPath, int frameCols, int frameRows, float frameDuration) {
+    public Animation<TextureRegion> createAnimation(String sheetPath, int frameCols, int frameRows, float frameDuration) {
         Texture sheetTexture = new Texture(sheetPath);
         TextureRegion[][] tmpFrames = TextureRegion.split(sheetTexture, sheetTexture.getWidth() / frameCols, sheetTexture.getHeight() / frameRows);
 
@@ -38,7 +38,7 @@ public class PlayerImageManager {
 
         return new Animation<>(frameDuration, new Array<>(frames));
     }
-    private Animation<TextureRegion> flipAnimation(Animation<TextureRegion> original) {
+    public Animation<TextureRegion> flipAnimation(Animation<TextureRegion> original) {
         Array<TextureRegion> flippedFrames = new Array<>();
         for (TextureRegion frame : original.getKeyFrames()) {
             TextureRegion flippedFrame = new TextureRegion(frame);
