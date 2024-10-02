@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle; // Thêm dòng này để nhập khẩu Rectangle
+import io.github.Farm.InputHandlerInventory;
+
 
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -18,6 +22,11 @@ public class Main extends ApplicationAdapter {
     private MainMenu mainMenu; // Thêm biến MainMenu
     private SettingGame settingGame; // Thêm biến SettingGame
     private boolean isInGame;
+    private Inventory inventory; // Thêm biến Inventory
+    private Texture backpackTexture;  // Texture cho balo
+    private Rectangle backpackBounds;
+    private InputHandlerInventory inputHandler;
+
 
     @Override
     public void create() {
@@ -40,10 +49,37 @@ public class Main extends ApplicationAdapter {
         // Khởi tạo mainMenu và settingGame
         mainMenu = new MainMenu();
         settingGame = new SettingGame();
+        // Khởi tạo Inventory
+        inventory = new Inventory();
+        // Thêm một số item mẫu vào inventory
+        // Thêm một số item mẫu vào inventory
+        inventory.addItem("Apple", new Texture(Gdx.files.internal("inventory/almonds.png")), 5);
+        inventory.addItem("Carrot", new Texture(Gdx.files.internal("inventory/apple_green.png")), 3);
+        inventory.addItem("asparagus", new Texture(Gdx.files.internal("inventory/asparagus.png")), 10);
+        inventory.addItem("egg", new Texture(Gdx.files.internal("inventory/egg_whole_white.png")), 100);
+        inventory.addItem("banana", new Texture(Gdx.files.internal("inventory/banana.png")), 100);
+        inventory.addItem("corn", new Texture(Gdx.files.internal("inventory/corn.png")), 100);
+        inventory.addItem("watermelon", new Texture(Gdx.files.internal("inventory/watermelon_whole.png")), 100);
+        inventory.addItem("chili", new Texture(Gdx.files.internal("inventory/chili_pepper_green.png")), 100);
+
+
+        backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
+        backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
+
+        // Khởi tạo InputHandler
+        inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
+        Gdx.input.setInputProcessor(inputHandler);
     }
 
+
+    private void handleInput() {
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.I)) { // Phím 'I' để mở inventory
+            isInGame = !isInGame; // Chuyển đổi trạng thái trò chơi
+        }
+    }
     @Override
     public void render() {
+        handleInput();
 
         if (mainMenu.isMenuActive()) {
             mainMenu.handleInput(); // Xử lý sự kiện đầu vào cho menu
@@ -81,6 +117,15 @@ public class Main extends ApplicationAdapter {
                 batch.begin();
                 playerRenderer.render(batch);
                 batch.end();
+
+                // Vẽ inventory nếu đang ở trạng thái 'isInGame'
+                if (inputHandler.isInGame()) {
+                    inventory.draw(batch, camera, player.getPosition());
+                }
+                // Vẽ hình ảnh balo
+                batch.begin();
+                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
+                batch.end();
             }
         }
     }
@@ -93,5 +138,7 @@ public class Main extends ApplicationAdapter {
         map.dispose();
         mainMenu.dispose(); // Gọi phương thức dispose của MainMenu
         settingGame.dispose(); // Gọi phương thức dispose của SettingGame
+        inventory.dispose();
+        backpackTexture.dispose();
     }
 }
