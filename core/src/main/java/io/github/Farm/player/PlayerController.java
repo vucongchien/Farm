@@ -8,11 +8,9 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
-import io.github.Farm.PLAYER_STATE.*;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.UI.Inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
-import io.github.Farm.player.lam_lai_file.PLAYER_STATE.*;
 
 public class PlayerController implements Collider, Disposable {
     private Vector2 position;

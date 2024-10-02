@@ -25,10 +25,10 @@ public class TimeCoolDown {
         GreenBar[5] =new TextureRegion(new Texture("UI/greenbar_05.png"));
         GreenBar[6] =new TextureRegion(new Texture("UI/greenbar_06.png"));
     }
-    public void render(SpriteBatch batch,Vector2 position, float Time, float TimeMax, Gamemap map){
+    public void render(SpriteBatch batch,Vector2 position, float Time, float TimeMax, TiledMap map){
         this.position=position;
         TimeToChangeState=TimeMax/7;
-        TiledMap tiledMap = map.getTiledMap();
+        TiledMap tiledMap = map;
         TiledMapTileLayer lay = (TiledMapTileLayer) tiledMap.getLayers().get("bandau");
 
         float tileWidth = lay.getTileWidth();
