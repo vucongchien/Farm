@@ -11,6 +11,11 @@ public class AssentPaths {
     public static final String Player_D_walk="Player_animation/D_walk.png";
     public static final String Player_W_walk="Player_animation/W_walk.png";
 
+    public static final String Player_A_shovel="Player_animation/A_shove.png";
+    public static final String Player_S_shovel="Player_animation/S_shove.png";
+    public static final String Player_D_shovel="Player_animation/D_shove.png";
+    public static final String Player_W_shovel="Player_animation/W_shovel.png";
+
     //tile map
     public static final String map="tile_map/map.tmx";
 

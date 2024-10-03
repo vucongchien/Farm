@@ -1,0 +1,36 @@
+package io.github.Farm.animal;
+
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.github.Farm.player.PlayerImageManager;
+
+import java.util.EnumMap;
+
+public class AnimalImageManager {
+    private final EnumMap<PetState, Animation<TextureRegion>> animations;
+    private final PlayerImageManager playerImageManager;
+    public AnimalImageManager() {
+        animations = new EnumMap<>(PetState.class);
+        playerImageManager = new PlayerImageManager();
+
+        animations.put(PetState.WALK_RIGHT,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowWalk_Right.png",4,1,0.1f));
+        animations.put(PetState.WALK_LEFT, playerImageManager.flipAnimation(animations.get(PetState.WALK_RIGHT)));
+        animations.put(PetState.WALK_BACK,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowWalk_Backward.png",4,1,0.1f));
+        animations.put(PetState.WALK_FACE,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowWalk_Forward.png",4,1,0.1f));
+
+        animations.put(PetState.IDLE_RIGHT,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowIdle_Right.png",6,1,0.1f));
+        animations.put(PetState.IDLE_LEFT,playerImageManager.flipAnimation(animations.get(PetState.IDLE_RIGHT)));
+        animations.put(PetState.IDLE_BACK,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowIdle_Back.png",6,1,0.1f));
+        animations.put(PetState.IDLE_FACE,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowIdle_Face.png",6,1,0.1f));
+
+        animations.put(PetState.SLEEP_RIGHT,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowSleeping_Right.png",4,1,0.1f));
+        animations.put(PetState.SLEEP_LEFT,playerImageManager.flipAnimation(animations.get(PetState.SLEEP_RIGHT)));
+        animations.put(PetState.SLEEP_BACK,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowSleeping_Back.png",4,1,0.1f));
+        animations.put(PetState.SLEEP_FACE,playerImageManager.createAnimation("Animal_animation/1/cow/WhiteCowSleeping_Face.png",4,1,0.1f));
+
+    }
+
+    public Animation<TextureRegion> getAnimation(PetState petState) {
+        return animations.get(petState);
+    }
+}

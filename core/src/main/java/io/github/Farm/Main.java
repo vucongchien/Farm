@@ -4,23 +4,42 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+<<<<<<< HEAD
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle; // Thêm dòng này để nhập khẩu Rectangle
 import io.github.Farm.InputHandlerInventory;
+=======
+import com.badlogic.gdx.utils.TimeUtils;
+import io.github.Farm.UI.Selecbox;
+import io.github.Farm.UI.TimeCoolDown;
+import io.github.Farm.animal.Buffalo;
+import io.github.Farm.animal.wolf;
+import io.github.Farm.player.PlayerController;
+import io.github.Farm.player.PlayerImageManager;
+import io.github.Farm.player.PlayerRenderer;
+import io.github.Farm.player.hoatdong;
+
+import java.util.ArrayList;
+
+import static io.github.Farm.animal.PetState.IDLE_RIGHT;
+import static io.github.Farm.animal.PetState.WALK_LEFT;
+>>>>>>> HowToGrowPlant
 
 
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private PlayerController player;
+    private hoatdong player;
     private PlayerRenderer playerRenderer;
+    private PlayerImageManager playerImageManager;
 
 
     private OrthographicCamera camera;
     private Gamemap map;
-    private MainMenu mainMenu; // Thêm biến MainMenu
-    private SettingGame settingGame; // Thêm biến SettingGame
+    private MainMenu mainMenu;
+    private SettingGame settingGame;
     private boolean isInGame;
     private Inventory inventory; // Thêm biến Inventory
     private Texture backpackTexture;  // Texture cho balo
@@ -28,27 +47,37 @@ public class Main extends ApplicationAdapter {
     private InputHandlerInventory inputHandler;
 
 
+    private Selecbox selecbox;
+    private TimeCoolDown timeCoolDownBar;
+
+//............................................buffalo
+    private ArrayList<Buffalo> arraybuffalo=new ArrayList<>();
+    private ArrayList<wolf> arraywolf= new ArrayList<>();
+    private long stopTimereproduction;
+    private long stopTimehungry;
     @Override
     public void create() {
+        Gdx.graphics.setWindowedMode(1920, 1080);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        // Khởi tạo
-        player = new PlayerController(new Vector2(100, 200), 200);
-        playerRenderer = new PlayerRenderer(player,
-            AssentPaths.Player_W_idle, AssentPaths.Player_S_idle, AssentPaths.Player_A_idle, AssentPaths.Player_D_idle,
-            AssentPaths.Player_W_walk, AssentPaths.Player_S_walk, AssentPaths.Player_A_walk, AssentPaths.Player_D_walk,
-            3, 1, 0.2f, 16);
 
-        batch = new SpriteBatch();
-        //lkajflkajf
+//--------------------------------khoi tao map
         map = new Gamemap();
         map.create(AssentPaths.map);
-        player.setMap(map);
+
+
+// -------------------------------Khởi tạo player
+        player = new hoatdong(new Vector2(100, 200), 200,map);
+        playerImageManager=new PlayerImageManager();
+        playerRenderer = new PlayerRenderer(player, playerImageManager,  64);
+
+
+        batch = new SpriteBatch();
         map.setCamera(camera);
-        // Khởi tạo mainMenu và settingGame
         mainMenu = new MainMenu();
         settingGame = new SettingGame();
+<<<<<<< HEAD
         // Khởi tạo Inventory
         inventory = new Inventory();
         // Thêm một số item mẫu vào inventory
@@ -69,6 +98,17 @@ public class Main extends ApplicationAdapter {
         // Khởi tạo InputHandler
         inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
         Gdx.input.setInputProcessor(inputHandler);
+=======
+
+//..............................khoi tao buffalo
+        arraywolf.add(new wolf(new Vector2(850,850),100,true));
+        arraywolf.add(new wolf(new Vector2(850,750),100,false));
+        arraybuffalo.add(new Buffalo(new Vector2(650,500),100,1,1,true));
+        arraybuffalo.add(new Buffalo(new Vector2(650,600),100,1,1,true));
+        arraybuffalo.add(new Buffalo(new Vector2(650,550),100,1,1,true));
+        stopTimereproduction = TimeUtils.millis();
+        stopTimehungry = TimeUtils.millis();
+>>>>>>> HowToGrowPlant
     }
 
 
@@ -81,42 +121,63 @@ public class Main extends ApplicationAdapter {
     public void render() {
         handleInput();
 
+//............................buffalo
+
+        if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
+            if(arraybuffalo.size()<10) {
+                arraybuffalo.add(new Buffalo(new Vector2(700, 550), 100, 1, 1, true));
+                stopTimereproduction = TimeUtils.millis();
+            }
+        }
+        if (TimeUtils.timeSinceMillis(stopTimehungry) >= 5000) {
+            for(Buffalo x:arraybuffalo){
+                if(x.gethungry()>0) {
+                    x.sethungry(10);
+                }
+            }
+            stopTimehungry = TimeUtils.millis();
+        }
+
+
+
+
+
+        camera.setToOrtho(false,500,282);
         if (mainMenu.isMenuActive()) {
-            mainMenu.handleInput(); // Xử lý sự kiện đầu vào cho menu
-            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f); // Xóa màn hình với màu nền
-            batch.setProjectionMatrix(camera.combined); // Thiết lập ma trận chiếu cho SpriteBatch
+            mainMenu.handleInput();
+            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+            batch.setProjectionMatrix(camera.combined);
             mainMenu.render(batch); // Vẽ menu
         } else {
-            // Xử lý đầu vào và render cho SettingGame
+
             settingGame.handleInput();
 
             if (settingGame.isActive()) {
-                // Khi SettingGame đang hoạt động, tạm dừng game
                 ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
                 map.render();
-
-                batch.setProjectionMatrix(camera.combined);
-                batch.begin();
-                playerRenderer.render(batch); // Vẫn vẽ nhân vật nhưng không cho phép điều khiển
-                batch.end();
-
-                settingGame.render(batch); // Vẽ bảng cài đặt lên trên game
-            } else {
-                // Khi SettingGame không hoạt động, game chạy bình thường
-                float deltaTime = Gdx.graphics.getDeltaTime();
-                player.update(deltaTime);
-                player.plow(map);
-
-                camera.position.set(player.getPosition().x, player.getPosition().y, 0);
-                camera.update();
-
-                ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-                map.render();
-
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 playerRenderer.render(batch);
+//..................cho buffalo
+
+                for (int i = 0; i < arraybuffalo.size(); i++) {
+                    Buffalo x = arraybuffalo.get(i);
+                    for (int j =0; j < arraybuffalo.size(); j++) {
+                        if(i!=j) {
+                            Buffalo y = arraybuffalo.get(j);
+                            x.dam(y);
+                        }
+                    }
+                    if(arraybuffalo.get(i).getmau()==0){
+                        arraybuffalo.remove(i);
+                    }
+                    x.ve(batch, 32, Gdx.graphics.getDeltaTime(),camera);
+                    arraywolf.get(i).hoatdong(arraywolf,arraybuffalo,batch,32,Gdx.graphics.getDeltaTime(),camera);
+
+                }
+
                 batch.end();
+<<<<<<< HEAD
 
                 // Vẽ inventory nếu đang ở trạng thái 'isInGame'
                 if (inputHandler.isInGame()) {
@@ -126,6 +187,42 @@ public class Main extends ApplicationAdapter {
                 batch.begin();
                 batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
                 batch.end();
+=======
+                settingGame.render(batch);
+            } else {
+                float deltaTime = Gdx.graphics.getDeltaTime();
+                player.update(deltaTime);
+                camera.position.set(player.getPosition().x, player.getPosition().y, 0);
+                camera.update();
+                ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+                map.render();
+                batch.setProjectionMatrix(camera.combined);
+//......................cho buffalo
+                for (int i = 0; i < arraybuffalo.size(); i++) {
+                    Buffalo x = arraybuffalo.get(i);
+                    for (int j = 0; j < arraybuffalo.size(); j++) {
+                        if(i!=j) {
+                            Buffalo y = arraybuffalo.get(j);
+                            x.dam(y);
+                        }
+                    }
+                    x.ve(batch, 32, Gdx.graphics.getDeltaTime(),camera);
+                    if(arraybuffalo.get(i).getmau()==0){
+                        arraybuffalo.remove(i);
+                    }
+                }
+                for(int i=0;i<arraywolf.size();i++){
+                    arraywolf.get(i).hoatdong(arraywolf,arraybuffalo,batch,37.67f,Gdx.graphics.getDeltaTime(),camera);
+                }
+
+//--------------------------cho player
+
+                playerRenderer.render(batch);
+                selecbox=new Selecbox(player.getPosition(),batch,map);
+                if(player.isPlowing()) {
+                    timeCoolDownBar = new TimeCoolDown(player.getPosition(), player.getStartPlow(), player.getTimeToPlow(), batch, map);
+                }
+>>>>>>> HowToGrowPlant
             }
         }
     }
@@ -136,9 +233,15 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         playerRenderer.dispose();
         map.dispose();
+<<<<<<< HEAD
         mainMenu.dispose(); // Gọi phương thức dispose của MainMenu
         settingGame.dispose(); // Gọi phương thức dispose của SettingGame
         inventory.dispose();
         backpackTexture.dispose();
+=======
+        mainMenu.dispose();
+        settingGame.dispose();
+
+>>>>>>> HowToGrowPlant
     }
 }
