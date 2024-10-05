@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.player.PlayerImageManager;
-import io.github.Farm.player.PlayerState;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
 import java.util.ArrayList;
@@ -101,7 +99,7 @@ public void render(SpriteBatch batch, int initialSize, PetState x,OrthographicCa
 //             randomInty = ThreadLocalRandom.current().nextInt((int)(getStartpoint().y),(int)(getStartpoint().y+100));
         //}
         randomIntx = ThreadLocalRandom.current().nextInt(500,650);
-        randomInty= ThreadLocalRandom.current().nextInt(600,750);
+        randomInty= ThreadLocalRandom.current().nextInt(950,1050);
         return new Vector2(randomIntx, randomInty);
     }
 public boolean dam(Buffalo a) {
@@ -278,10 +276,10 @@ public void xaychuong(Vector2 a){
 }
 
 
-    public void iamtired(PlantType input){
-       if(input==PlantType.POTATO){
-           eat(input);
-
-       }
-    }
+//    public void iamtired(PlantType input){
+//       if(input==PlantType.POTATO){
+//           eat(input);
+//
+//       }
+//    }
 }

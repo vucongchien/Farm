@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
@@ -22,6 +23,10 @@ import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
+import io.github.Farm.animal.Buffalo;
+import io.github.Farm.animal.wolf;
+
+import java.util.ArrayList;
 
 
 public class Main extends ApplicationAdapter {
@@ -29,7 +34,10 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private World world;
 
-
+    private ArrayList<Buffalo> arraybuffalo=new ArrayList<>();
+    private ArrayList<wolf> arraywolf= new ArrayList<>();
+    private long stopTimereproduction;
+    private long stopTimehungry;
     //-------------player
 
     private PlayerRenderer playerRendererNew;
@@ -60,6 +68,14 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
+        //..............................khoi tao buffalo
+        arraywolf.add(new wolf(new Vector2(850,1050),100,true));
+        arraywolf.add(new wolf(new Vector2(850,1040),100,false));
+        arraybuffalo.add(new Buffalo(new Vector2(650,1000),100,1,1,true));
+        arraybuffalo.add(new Buffalo(new Vector2(700,1000),100,1,1,true));
+        arraybuffalo.add(new Buffalo(new Vector2(750,1000),100,1,1,true));
+        stopTimereproduction = TimeUtils.millis();
+        stopTimehungry = TimeUtils.millis();
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -122,6 +138,40 @@ public class Main extends ApplicationAdapter {
         playerControllerNew.update(deltaTime);
         gameRenderer.render();
 //        playerRenderNew.render(batch);
+        //............................buffalo
+
+        if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
+            if(arraybuffalo.size()<10) {
+                arraybuffalo.add(new Buffalo(new Vector2(700, 1000), 100, 1, 1, true));
+                stopTimereproduction = TimeUtils.millis();
+            }
+        }
+        if (TimeUtils.timeSinceMillis(stopTimehungry) >= 10000) {
+            for(Buffalo x:arraybuffalo){
+                if(x.gethungry()>0) {
+                    x.sethungry(10);
+                }
+            }
+            stopTimehungry = TimeUtils.millis();
+        }
+        for (int i = arraybuffalo.size() - 1; i >= 0; i--) {
+            Buffalo x = arraybuffalo.get(i);
+            for (int j = 0; j < arraybuffalo.size(); j++) {
+                if (i != j) {
+                    Buffalo y = arraybuffalo.get(j);
+                    x.dam(y);
+                }
+            }
+            if (x.getmau() == 0) {
+                arraybuffalo.remove(i);
+                continue;
+            }
+            x.ve(batch, 32, Gdx.graphics.getDeltaTime(), camera);
+        }
+        for(int i=0;i<arraywolf.size();i++){
+            arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
+
+        }
     }
 
 

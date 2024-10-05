@@ -27,6 +27,7 @@ public class wolf extends pests{
     private float stateTime;
     private long starttime=0 ,endtime=0;
     private wolfImageManager imageManager;
+    private Vector2 conmoitl;
     private Vector2 conmoi;
     private float so;
 //    private boolean check=false;
@@ -40,57 +41,38 @@ public class wolf extends pests{
     }
 
     public Vector2  timgannhat(ArrayList<Buffalo> buffalo){
-        Vector2 min= buffalo.get(0).getlocation();
-        for(Buffalo a:buffalo){
-            if(Math.abs(a.getlocation().x-getlocation().x)<Math.abs(min.x-getlocation().x)||Math.abs(a.getlocation().y-getlocation().y)<Math.abs(min.y-getlocation().y)){
-                min=a.getlocation();
+        if(buffalo.size()==0){
+            return new Vector2(0,0);
+        }else {
+            Vector2 min = buffalo.get(0).getlocation();
+            for (Buffalo a : buffalo) {
+                if (Math.abs(a.getlocation().x - getlocation().x) < Math.abs(min.x - getlocation().x) || Math.abs(a.getlocation().y - getlocation().y) < Math.abs(min.y - getlocation().y)) {
+                    min = a.getlocation();
+                }
             }
+            return min;
         }
-        return min;
     }
 
 
-//    public void hoatdong(ArrayList<Buffalo> a, SpriteBatch batch,int initialSize,float deltaTime,OrthographicCamera camera){
-//
-//        if(TimeUtils.timeSinceMillis(starttime) >= 10000){
-//            if(thulinh==true){
-//                if(conmoi==null) {
-//                    conmoi = timgannhat(a);
-//                    conmoi.x+=50;conmoi.y+=50;
-//                }
-//                if(getlocation().dst(conmoi) < 1f){
-//                    render(batch, initialSize, PetState.IDLE_FACE,camera);
-//                    setTrangthaitancong(true);
-//                }else{
-//                    if(getlocation().x>conmoi.x){
-//                        getlocation().x -= 10f * deltaTime;
-//                        setLocation(getlocation().x, getlocation().y);
-//                        getbox().setPosition(getlocation().x, getlocation().y);
-//                        render(batch, initialSize, PetState.WALK_LEFT,camera);
-//                    } else if (getlocation().y>conmoi.y) {
-//                        getlocation().y -= 10f * deltaTime;
-//                        setLocation(getlocation().x, getlocation().y);
-//                        getbox().setPosition(getlocation().x, getlocation().y);
-//                        render(batch, initialSize, PetState.WALK_LEFT,camera);
-//                    }
-//
-//                }
-//
-//            }
-//        }
-//
-//    }
+
     public void hoatdong(ArrayList<wolf> c,ArrayList<Buffalo> a, SpriteBatch batch, float initialSize, float deltaTime, OrthographicCamera camera) {
     if(thulinh==true){
-        if (conmoi == null) {
-            conmoi = timgannhat(a).cpy();
-            conmoi.x+=50;conmoi.y+=50;
-       }
-        if(getlocation().dst(850,850) < 1f){
+        if (a.size() == 0) {
+            check = 2;
+            setTrangthaitancong(false);
+        } else {
+            if (conmoitl == null) {
+                conmoitl = timgannhat(a).cpy();
+                conmoitl.x += 50;
+                conmoitl.y += 50;
+            }
+        }
+        if(getlocation().dst(850,1050) < 1f){
             if(starttime==0){
                 starttime=TimeUtils.millis();
             }
-            if(TimeUtils.timeSinceMillis(starttime)<5000){check=0;
+            if(TimeUtils.timeSinceMillis(starttime)<30000){check=0;
                 render(batch, initialSize, PetState.IDLE_RIGHT, camera);
             }else {
                 starttime=0;
@@ -99,12 +81,12 @@ public class wolf extends pests{
         }else {
             starttime=0;
         }
-        if(getlocation().dst(conmoi) < 10f){
+        if(getlocation().dst(conmoitl) < 10f){
             if(endtime==0){
                 endtime=TimeUtils.millis();
                 setTrangthaitancong(true);
             }
-            if (TimeUtils.timeSinceMillis(endtime) < 5000) {
+            if (TimeUtils.timeSinceMillis(endtime) < 30000) {
                 render(batch, initialSize, PetState.IDLE_RIGHT, camera);
                 check=0;
 
@@ -119,25 +101,25 @@ public class wolf extends pests{
 
 
         if(check==1){
-                if (Math.abs(getlocation().x - conmoi.x) > 1f) {
-                    if (getlocation().x > conmoi.x) {
+                if (Math.abs(getlocation().x - conmoitl.x) > 1f) {
+                    if (getlocation().x > conmoitl.x) {
                         getlocation().x -= 10f * deltaTime;
                         setLocation(getlocation().x, getlocation().y);
                         getbox().setPosition(getlocation().x, getlocation().y);
                         render(batch, initialSize, PetState.WALK_LEFT, camera);
-                    } else if (getlocation().x < conmoi.x) {
+                    } else if (getlocation().x < conmoitl.x) {
                         getlocation().x += 10f * deltaTime;
                         setLocation(getlocation().x, getlocation().y);
                         getbox().setPosition(getlocation().x, getlocation().y);
                         render(batch, initialSize, PetState.WALK_RIGHT, camera);
                     }
-                } else if (Math.abs(getlocation().y - conmoi.y) > 1f) {
-                    if (getlocation().y > conmoi.y) {
+                } else if (Math.abs(getlocation().y - conmoitl.y) > 1f) {
+                    if (getlocation().y > conmoitl.y) {
                         getlocation().y -= 10f * deltaTime;
                         setLocation(getlocation().x, getlocation().y);
                         getbox().setPosition(getlocation().x, getlocation().y);
                         render(batch, initialSize, PetState.WALK_FACE, camera);
-                    } else if (getlocation().y < conmoi.y) {
+                    } else if (getlocation().y < conmoitl.y) {
                         getlocation().y += 10f * deltaTime;
                         setLocation(getlocation().x, getlocation().y);
                         getbox().setPosition(getlocation().x, getlocation().y);
@@ -174,7 +156,14 @@ public class wolf extends pests{
                     render(batch, initialSize, PetState.WALK_BACK, camera);
                 }
             }
+            if (getlocation().dst(850, 1050) < 1f) {
+                conmoitl = timgannhat(a).cpy();
+                conmoitl.x += 50;
+                conmoitl.y += 50;
+                check = 1;
+            }
         }
+
     }else{
         Vector2 chu=null;
         boolean tc = false;
@@ -184,8 +173,8 @@ public class wolf extends pests{
                 tc= b.gettrangthaitancon();
             }
         }
-
-        if(tc==false){
+        conmoi=timgannhat(a);
+        if(tc==false|| conmoi.x==0){
         if(chu!=null){
             if(Math.abs(getlocation().x - chu.x) < so&&Math.abs(getlocation().y - chu.y) < so){
                 render(batch, initialSize, PetState.IDLE_RIGHT, camera);
@@ -251,7 +240,7 @@ public class wolf extends pests{
                     }
                 }
             }
-            conmoi=timgannhat(a);
+
             if (Math.abs(getlocation().x - conmoi.x) > 1f) {
                 if (getlocation().x > conmoi.x) {
                     getlocation().x -= 10f * deltaTime;

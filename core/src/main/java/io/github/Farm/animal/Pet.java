@@ -30,20 +30,20 @@ public class Pet {
     public void setKilled(boolean a){
         killed=a;
     }
-    public void eat(PlantType input){
-         switch (input){
-             case  TOMATO:
-                 sethungry(gethungry()+10);
-                 break;
-             case POTATO:
-                 sethungry(gethungry()+20);
-                 break;
-             case CARROT:
-                 sethungry(gethungry()+50);
-                 break;
-             default:
-                 break;
-         }
-    }
+//    public void eat(PlantType input){
+//         switch (input){
+//             case  TOMATO:
+//                 sethungry(gethungry()+10);
+//                 break;
+//             case POTATO:
+//                 sethungry(gethungry()+20);
+//                 break;
+//             case CARROT:
+//                 sethungry(gethungry()+50);
+//                 break;
+//             default:
+//                 break;
+//         }
+//    }
 
 }

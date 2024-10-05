@@ -2,16 +2,16 @@ package io.github.Farm.animal;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import io.github.Farm.player.PlayerImageManager;
+import io.github.Farm.animal.AnimalImageManager;
 
 import java.util.EnumMap;
 
 public class wolfImageManager {
     private final EnumMap<PetState, Animation<TextureRegion>> animations;
-    private final PlayerImageManager playerImageManager;
+    private final AnimalImageManager playerImageManager;
     public wolfImageManager() {
         animations = new EnumMap<>(PetState.class);
-        playerImageManager = new PlayerImageManager();
+        playerImageManager = new AnimalImageManager();
 
         animations.put(PetState.WALK_LEFT,playerImageManager.createAnimation("Animal_animation/1/wolf/S_Walk.png",6,1,0.1f));
         animations.put(PetState.WALK_RIGHT, playerImageManager.flipAnimation(animations.get(PetState.WALK_LEFT)));
