@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Vector2;
 
 public class SettingGame {
     private boolean isActive;
@@ -40,7 +41,6 @@ public class SettingGame {
         options = new String[]{"Continue", "Sound", "Exit"};
         selectedOption = 0;
         panelBackground = new Texture("Setting/table.png"); // Hình nền của bảng (nếu có)
-        settingsIcon = new Texture("Setting/barsHorizontal.png"); // Icon cài đặt
 
         // Khởi tạo âm thanh di chuyển
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
@@ -92,28 +92,12 @@ public class SettingGame {
         }
     }
 
-    public void render(SpriteBatch batch) {
-
-        batch.begin();
-
-        // Vẽ icon và chữ "ESC" ở góc trên bên trái màn hình
-        float iconX = 10; // Vị trí x của icon (khoảng cách từ cạnh trái màn hình)
-        float iconY = Gdx.graphics.getHeight() - iconSize - 10; // Vị trí y của icon (khoảng cách từ cạnh trên màn hình)
-
-        // Vẽ icon
-        batch.draw(settingsIcon, iconX, iconY, iconSize, iconSize);
-
-        // Vẽ chữ "ESC" bên cạnh icon
-        String escText = "ESC";
-        layout.setText(font, escText);
-        font.setColor(Color.WHITE);
-        font.draw(batch, escText, iconX + iconSize + 10, iconY + iconSize / 2 + layout.height / 2);
-
-        batch.end();
+    public void render(SpriteBatch batch, Vector2 playerPosition) {
 
         // Nếu menu cài đặt đang hoạt động, vẽ bảng tùy chọn
         if (isActive) {
             batch.begin();
+
             // Lấy kích thước của màn hình
             float screenWidth = Gdx.graphics.getWidth();
             float screenHeight = Gdx.graphics.getHeight();
@@ -122,11 +106,11 @@ public class SettingGame {
             float panelWidth = 400;
             float panelHeight = 300;
 
-            // Vị trí của bảng (căn giữa màn hình)
-            float panelX = (screenWidth - panelWidth) / 2;
-            float panelY = (screenHeight - panelHeight) / 2;
+            // Vị trí của bảng (căn giữa nhân vật)
+            float panelX = playerPosition.x - panelWidth / 2;
+            float panelY = playerPosition.y - panelHeight / 2;
 
-            // Vẽ hình nền của bảng (có thể là một hình ảnh hoặc màu)
+            // Vẽ hình nền của bảng
             batch.draw(panelBackground, panelX, panelY, panelWidth, panelHeight);
 
             // Căn giữa các tùy chọn trong bảng
@@ -157,9 +141,12 @@ public class SettingGame {
         }
     }
 
+
+
+
     public void dispose() {
         font.dispose();
         panelBackground.dispose(); // Giải phóng tài nguyên
-        settingsIcon.dispose(); // Giải phóng tài nguyên icon
+
     }
 }

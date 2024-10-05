@@ -72,37 +72,32 @@ public class Main extends ApplicationAdapter {
     }
 
 
-    private void handleInput() {
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.I)) { // Phím 'I' để mở inventory
-            isInGame = !isInGame; // Chuyển đổi trạng thái trò chơi
-        }
-    }
     @Override
     public void render() {
-        handleInput();
 
         if (mainMenu.isMenuActive()) {
-            mainMenu.handleInput(); // Xử lý sự kiện đầu vào cho menu
-            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f); // Xóa màn hình với màu nền
-            batch.setProjectionMatrix(camera.combined); // Thiết lập ma trận chiếu cho SpriteBatch
-            mainMenu.render(batch); // Vẽ menu
+            mainMenu.handleInput();
+            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+            batch.setProjectionMatrix(camera.combined);
+            mainMenu.render(batch);
         } else {
-            // Xử lý đầu vào và render cho SettingGame
             settingGame.handleInput();
 
             if (settingGame.isActive()) {
-                // Khi SettingGame đang hoạt động, tạm dừng game
                 ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
                 map.render();
 
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
-                playerRenderer.render(batch); // Vẫn vẽ nhân vật nhưng không cho phép điều khiển
+                playerRenderer.render(batch);
+                // Tính toán vị trí balo dựa trên vị trí nhân vật
+                backpackBounds.setPosition(player.getPosition().x - camera.viewportWidth / 2 + 10,
+                    player.getPosition().y - camera.viewportHeight / 2 + 10);
+                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
                 batch.end();
 
-                settingGame.render(batch); // Vẽ bảng cài đặt lên trên game
+                settingGame.render(batch, player.getPosition());
             } else {
-                // Khi SettingGame không hoạt động, game chạy bình thường
                 float deltaTime = Gdx.graphics.getDeltaTime();
                 player.update(deltaTime);
                 player.plow(map);
@@ -116,19 +111,20 @@ public class Main extends ApplicationAdapter {
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 playerRenderer.render(batch);
+                // Tính toán vị trí balo dựa trên vị trí nhân vật
+                backpackBounds.setPosition(player.getPosition().x - camera.viewportWidth / 2 + 10,
+                    player.getPosition().y - camera.viewportHeight / 2 + 10);
+                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
                 batch.end();
 
                 // Vẽ inventory nếu đang ở trạng thái 'isInGame'
                 if (inputHandler.isInGame()) {
                     inventory.draw(batch, camera, player.getPosition());
                 }
-                // Vẽ hình ảnh balo
-                batch.begin();
-                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
-                batch.end();
             }
         }
     }
+
 
 
     @Override
