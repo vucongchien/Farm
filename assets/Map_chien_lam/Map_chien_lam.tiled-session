@@ -1,0 +1,83 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Map.tmx",
+    "automapping.whileDrawing": false,
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "D:/Java_oop/Farm/assets/tile_map/NaUX7.tsx": {
+            "scaleInDock": 1
+        },
+        "D:/Java_oop/Farm/assets/tile_map/map.tmx": {
+            "scale": 0.37109375,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 960.6736842105263,
+                "y": 533.5578947368421
+            }
+        },
+        "D:/Java_oop/Farm/assets/tile_map/no1.tsx": {
+            "scaleInDock": 1
+        },
+        "Map.tmx": {
+            "expandedGroupLayers": [
+                31,
+                20,
+                29
+            ],
+            "scale": 0.5,
+            "selectedLayer": 19,
+            "viewCenter": {
+                "x": 1287,
+                "y": 207
+            }
+        },
+        "Other.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 2
+        },
+        "tileset.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1.5,
+            "scaleInEditor": 2
+        },
+        "tileset_vippp.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 3,
+            "scaleInEditor": 2
+        }
+    },
+    "frame.defaultDuration": 100,
+    "last.externalTilesetPath": "D:/Java_oop/Farm/assets/Map_chien_lam",
+    "last.imagePath": "C:/Users/123ch/OneDrive - student.ptithcm.edu.vn/Desktop/art/new/Other",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "Map.tmx",
+        "tileset.tsx"
+    ],
+    "project": "Map_chien_lam.tiled-project",
+    "property.type": "object",
+    "recentFiles": [
+        "tileset.tsx",
+        "Map.tmx",
+        "tileset_vippp.tsx",
+        "Other.tsx",
+        "D:/Java_oop/Farm/assets/tile_map/map.tmx"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.type": 1
+}

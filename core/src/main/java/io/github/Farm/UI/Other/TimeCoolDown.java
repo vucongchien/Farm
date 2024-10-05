@@ -1,4 +1,4 @@
-package io.github.Farm.UI;
+package io.github.Farm.UI.Other;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.Gamemap;
 
 public class TimeCoolDown {
     private TextureRegion[] GreenBar;
@@ -14,8 +13,8 @@ public class TimeCoolDown {
     private Vector2 position;
 
 
-    public TimeCoolDown(Vector2 position, float Time, float TimeMax, SpriteBatch batch,Gamemap map){
-        this.position=position;
+
+    public TimeCoolDown(){
 
         GreenBar=new TextureRegion[7];
         GreenBar[0] =new TextureRegion(new Texture("UI/greenbar_00.png"));
@@ -25,10 +24,11 @@ public class TimeCoolDown {
         GreenBar[4] =new TextureRegion(new Texture("UI/greenbar_04.png"));
         GreenBar[5] =new TextureRegion(new Texture("UI/greenbar_05.png"));
         GreenBar[6] =new TextureRegion(new Texture("UI/greenbar_06.png"));
-
+    }
+    public void render(SpriteBatch batch,Vector2 position, float Time, float TimeMax, TiledMap map){
+        this.position=position;
         TimeToChangeState=TimeMax/7;
-
-        TiledMap tiledMap = map.getTiledMap();
+        TiledMap tiledMap = map;
         TiledMapTileLayer lay = (TiledMapTileLayer) tiledMap.getLayers().get("bandau");
 
         float tileWidth = lay.getTileWidth();
@@ -45,7 +45,6 @@ public class TimeCoolDown {
             batch.draw(GreenBar[index],tileX * tileWidth+tileWidth*1/4,tileY * tileHeight+tileHeight*3/2 ,tileWidth / 2, tileHeight / 4);
             batch.end();
         }
-
     }
 
 
