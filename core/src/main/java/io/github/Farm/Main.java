@@ -150,25 +150,17 @@ public class Main extends ApplicationAdapter {
             mainMenu.handleInput();
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            batch.setProjectionMatrix(camera.combined);
             mainMenu.render(batch);
         } else {
+            settingGame.handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (settingGame.isActive()) {
-                settingGame.handleInput();
+
                 Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 mapRenderer.setView(camera);
                 mapRenderer.render();
 
-                batch.setProjectionMatrix(camera.combined);
-                batch.begin();
-                playerRendererNew.render(batch);
-                // Tính toán vị trí balo dựa trên vị trí nhân vật
-                backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
-                    playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
-                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
-                batch.end();
 
                 settingGame.render(batch, playerControllerNew.getPosition());
             } else {
@@ -230,6 +222,14 @@ public class Main extends ApplicationAdapter {
                 for (int i = 0; i < arraywolf.size(); i++) {
                     arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
                 }
+
+                batch.begin();
+                playerRendererNew.render(batch);
+                // Tính toán vị trí balo dựa trên vị trí nhân vật
+                backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
+                    playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
+                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
+                batch.end();
 
                 // Vẽ inventory nếu đang ở trạng thái 'isInGame'
                 if (inputHandler.isInGame()) {

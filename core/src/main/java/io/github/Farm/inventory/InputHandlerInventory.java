@@ -48,7 +48,7 @@ public class InputHandlerInventory extends InputAdapter {
                 moveSound.play();
                 inventory.moveSelectionRight();  // Di chuyển sang phải
             } else if (keycode == Keys.ENTER) {
-                SoundEnter.play();
+                moveSound.play();
                 inventory.useSelectedItem();  // Sử dụng vật phẩm
             }
         }

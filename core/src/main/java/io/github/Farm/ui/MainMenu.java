@@ -63,7 +63,7 @@ public class MainMenu {
         totalMenuHeight += (menuItems.length - 1) * itemSpacing; // Tổng chiều cao của menu cộng với khoảng cách giữa các mục
         // Khởi tạo âm thanh di chuyển
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
-        moveSound.play();
+
         SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
 
         // Tạo một mảng để lưu các frame
@@ -74,7 +74,7 @@ public class MainMenu {
 
         for (int i = 0; i < totalFrames; i++) {
             // Định dạng tên file với số có 2 chữ số
-            String fileName = String.format("ui/frame_%02d_delay-0.1s.png", i);
+            String fileName = String.format("ui1/frame_%02d_delay-0.1s.png", i);
             Texture frameTexture = new Texture(Gdx.files.internal(fileName));
             TextureRegion frameRegion = new TextureRegion(frameTexture);
             frames.add(frameRegion);
