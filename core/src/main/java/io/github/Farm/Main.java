@@ -112,13 +112,36 @@ public class Main extends ApplicationAdapter {
 
         camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
         camera.update();
+        if (mainMenu.isMenuActive()) {
+            mainMenu.handleInput();
+            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+            batch.setProjectionMatrix(camera.combined);
+            mainMenu.render(batch);
+        } else {
+            settingGame.handleInput();
 
         mapRenderer.setView(camera);
         mapRenderer.render();
+            if (settingGame.isActive()) {
+                ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+                map.render();
 
         world.step(1 / 60f, 6, 2);
+                batch.setProjectionMatrix(camera.combined);
+                batch.begin();
+                playerRenderer.render(batch);
+                // Tính toán vị trí balo dựa trên vị trí nhân vật
+                backpackBounds.setPosition(player.getPosition().x - camera.viewportWidth / 2 + 10,
+                    player.getPosition().y - camera.viewportHeight / 2 + 10);
+                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
+                batch.end();
 
         float deltaTime = Gdx.graphics.getDeltaTime();
+                settingGame.render(batch, player.getPosition());
+            } else {
+                float deltaTime = Gdx.graphics.getDeltaTime();
+                player.update(deltaTime);
+                player.plow(map);
 
         debugRenderer.render(world, camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -139,6 +162,14 @@ public class Main extends ApplicationAdapter {
         gameRenderer.render();
 //        playerRenderNew.render(batch);
         //............................buffalo
+                batch.setProjectionMatrix(camera.combined);
+                batch.begin();
+                playerRenderer.render(batch);
+                // Tính toán vị trí balo dựa trên vị trí nhân vật
+                backpackBounds.setPosition(player.getPosition().x - camera.viewportWidth / 2 + 10,
+                    player.getPosition().y - camera.viewportHeight / 2 + 10);
+                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
+                batch.end();
 
         if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
             if(arraybuffalo.size()<10) {
@@ -171,8 +202,14 @@ public class Main extends ApplicationAdapter {
         for(int i=0;i<arraywolf.size();i++){
             arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
 
+                // Vẽ inventory nếu đang ở trạng thái 'isInGame'
+                if (inputHandler.isInGame()) {
+                    inventory.draw(batch, camera, player.getPosition());
+                }
+            }
         }
     }
+
 
 
     @Override
