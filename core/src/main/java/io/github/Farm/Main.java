@@ -25,6 +25,11 @@ import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.animal.Buffalo;
 import io.github.Farm.animal.wolf;
+import io.github.Farm.ui.MainMenu;
+import io.github.Farm.ui.SettingGame;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.inventory.InputHandlerInventory;
+import com.badlogic.gdx.graphics.Texture; // Thêm dòng này để import lớp Texture
 
 import java.util.ArrayList;
 
@@ -55,15 +60,20 @@ public class Main extends ApplicationAdapter {
 
 
     private OrthographicCamera camera;
-
-
+    // Biến cho menu chính, cài đặt và inventory
+    private MainMenu mainMenu; // Khai báo mainMenu
+    private SettingGame settingGame; // Khai báo settingGame
+    private boolean isInGame; // Khai báo biến isInGame
     //------------------render
     GameRenderer gameRenderer;
     ShapeRenderer shapeRenderer;
     Box2DDebugRenderer debugRenderer;
 
-
+    private Rectangle backpackBounds; // Khai báo backpackBounds
+    private Texture backpackTexture; // Khai báo biến lưu trữ hình ảnh ba lô
 //-----------------------------------inventory
+    private InputHandlerInventory inputHandler;
+    private Inventory inventory; // Khai báo biến inventory
 
 
     @Override
@@ -104,44 +114,75 @@ public class Main extends ApplicationAdapter {
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
         gameRenderer = new GameRenderer(playerRendererNew, plantManager, camera,map);
+        // Khởi tạo menu và setting
+        mainMenu = new MainMenu(); // Khởi tạo main menu
+        settingGame = new SettingGame(); // Khởi tạo setting menu
+        // Khởi tạo mainMenu và settingGame
+        mainMenu = new MainMenu();
+        settingGame = new SettingGame();
+        // Khởi tạo Inventory
+        inventory = new Inventory();
+        // Thêm một số item mẫu vào inventory
+        // Thêm một số item mẫu vào inventory
+        inventory.addItem("Apple", new Texture(Gdx.files.internal("inventory/almonds.png")), 5);
+        inventory.addItem("Carrot", new Texture(Gdx.files.internal("inventory/apple_green.png")), 3);
+        inventory.addItem("asparagus", new Texture(Gdx.files.internal("inventory/asparagus.png")), 10);
+        inventory.addItem("egg", new Texture(Gdx.files.internal("inventory/egg_whole_white.png")), 100);
+        inventory.addItem("banana", new Texture(Gdx.files.internal("inventory/banana.png")), 100);
+        inventory.addItem("corn", new Texture(Gdx.files.internal("inventory/corn.png")), 100);
+        inventory.addItem("watermelon", new Texture(Gdx.files.internal("inventory/watermelon_whole.png")), 100);
+        inventory.addItem("chili", new Texture(Gdx.files.internal("inventory/chili_pepper_green.png")), 100);
+
+
+        backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
+        backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
+
+        // Khởi tạo InputHandler
+        inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
+        Gdx.input.setInputProcessor(inputHandler);
+
     }
 
     @Override
     public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
-        camera.update();
+        // Kiểm tra xem menu có đang hoạt động không
         if (mainMenu.isMenuActive()) {
             mainMenu.handleInput();
-            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+            Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.setProjectionMatrix(camera.combined);
             mainMenu.render(batch);
         } else {
-            settingGame.handleInput();
-
-            mapRenderer.setView(camera);
-            mapRenderer.render();
+            // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (settingGame.isActive()) {
-                ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-                map.render();
+                settingGame.handleInput();
+                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                mapRenderer.setView(camera);
+                mapRenderer.render();
 
-                world.step(1 / 60f, 6, 2);
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
-                playerRenderer.render(batch);
+                playerRendererNew.render(batch);
                 // Tính toán vị trí balo dựa trên vị trí nhân vật
-                backpackBounds.setPosition(player.getPosition().x - camera.viewportWidth / 2 + 10,
-                    player.getPosition().y - camera.viewportHeight / 2 + 10);
+                backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
+                    playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
                 batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
                 batch.end();
 
-                float deltaTime = Gdx.graphics.getDeltaTime();
-                settingGame.render(batch, player.getPosition());
+                settingGame.render(batch, playerControllerNew.getPosition());
             } else {
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
+                camera.update();
+
+                mapRenderer.setView(camera);
+                mapRenderer.render();
+
+                world.step(1 / 60f, 6, 2);
+
                 float deltaTime = Gdx.graphics.getDeltaTime();
-                player.update(deltaTime);
-                player.plow(map);
 
                 debugRenderer.render(world, camera.combined);
                 shapeRenderer.setProjectionMatrix(camera.combined);
@@ -157,16 +198,7 @@ public class Main extends ApplicationAdapter {
                 playerControllerNew.update(deltaTime);
                 gameRenderer.render();
 
-                //............................buffalo
-                batch.setProjectionMatrix(camera.combined);
-                batch.begin();
-                playerRenderer.render(batch);
-                // Tính toán vị trí balo dựa trên vị trí nhân vật
-                backpackBounds.setPosition(player.getPosition().x - camera.viewportWidth / 2 + 10,
-                    player.getPosition().y - camera.viewportHeight / 2 + 10);
-                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
-                batch.end();
-
+                // Kiểm tra và cập nhật buffalo
                 if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
                     if (arraybuffalo.size() < 10) {
                         arraybuffalo.add(new Buffalo(new Vector2(700, 1000), 100, 1, 1, true));
@@ -197,22 +229,22 @@ public class Main extends ApplicationAdapter {
                 }
                 for (int i = 0; i < arraywolf.size(); i++) {
                     arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
+                }
 
-                    // Vẽ inventory nếu đang ở trạng thái 'isInGame'
-                    if (inputHandler.isInGame()) {
-                        inventory.draw(batch, camera, player.getPosition());
-                    }
+                // Vẽ inventory nếu đang ở trạng thái 'isInGame'
+                if (inputHandler.isInGame()) {
+                    inventory.draw(batch, camera, playerControllerNew.getPosition());
                 }
             }
         }
     }
 
-    // Di chuyển phương thức dispose ra ngoài phương thức render
+
+
     @Override
     public void dispose() {
         batch.dispose();
         map.dispose();
+        inventory.dispose(); // Giải phóng tài nguyên của inventory
     }
-
 }
-

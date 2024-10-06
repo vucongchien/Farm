@@ -1,4 +1,5 @@
-package io.github.Farm;
+package io.github.Farm.inventory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
