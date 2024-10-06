@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
-import io.github.Farm.UI.Inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
 
 public class PlayerController implements Collider, Disposable {
@@ -31,8 +30,7 @@ public class PlayerController implements Collider, Disposable {
     private MovementHandler movementHandler;
     private PlayerStateManager stateManager;
 
-    //inventory
-    private Inventory inventory;
+
 
     //collider
     private Rectangle collider;
@@ -48,7 +46,6 @@ public class PlayerController implements Collider, Disposable {
         this.movementHandler = new MovementHandler(world, createBody(startPosition, world));
         this.stateManager = new PlayerStateManager(new IdleState("RIGHT"));
 
-        this.inventory = new Inventory();
         this.collider=new Rectangle(position.x,position.y,16,16);
         this.shapeRenderer=new ShapeRenderer();
     }
@@ -273,9 +270,7 @@ public class PlayerController implements Collider, Disposable {
         return inputHandler;
     }
 
-    public Inventory getInventory() {
-        return inventory;
-    }
+
 
     public MovementHandler getMovementHandler() {
         return movementHandler;

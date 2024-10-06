@@ -6,7 +6,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
-import io.github.Farm.UI.Other.SelectionBox;
 import io.github.Farm.player.PlayerRenderer;
 
 import java.util.ArrayList;
@@ -55,9 +54,7 @@ public class GameRenderer {
             entity.render(batch);
             if (entity instanceof PlantRenderer) {
                 PlantRenderer plantRenderer = (PlantRenderer) entity;
-                if (plantRenderer.isUI_DrawSelectionBox()) {
-                    SelectionBox.getInstance().render(plantRenderer.getPosition(), batch,map);
-                }
+
             }
         }
 

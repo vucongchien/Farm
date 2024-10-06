@@ -3,7 +3,6 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.UI.Inventory.Inventory;
 
 public class InputHandler {
 
@@ -49,13 +48,5 @@ public class InputHandler {
         return Gdx.input.isKeyPressed(Input.Keys.C);
     }
 
-    public void handleInventoryInput(Inventory inventory) {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            inventory.moveSelection(-1);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            inventory.moveSelection(1);
-        }
 
-    }
 }
