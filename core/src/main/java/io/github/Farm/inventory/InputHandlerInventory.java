@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import io.github.Farm.Inventory;
+import io.github.Farm.inventory.Inventory;
 
 public class InputHandlerInventory extends InputAdapter {
     private OrthographicCamera camera;

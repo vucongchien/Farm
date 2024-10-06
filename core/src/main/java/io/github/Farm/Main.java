@@ -120,13 +120,13 @@ public class Main extends ApplicationAdapter {
         } else {
             settingGame.handleInput();
 
-        mapRenderer.setView(camera);
-        mapRenderer.render();
+            mapRenderer.setView(camera);
+            mapRenderer.render();
             if (settingGame.isActive()) {
                 ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
                 map.render();
 
-        world.step(1 / 60f, 6, 2);
+                world.step(1 / 60f, 6, 2);
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 playerRenderer.render(batch);
@@ -136,32 +136,28 @@ public class Main extends ApplicationAdapter {
                 batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
                 batch.end();
 
-        float deltaTime = Gdx.graphics.getDeltaTime();
+                float deltaTime = Gdx.graphics.getDeltaTime();
                 settingGame.render(batch, player.getPosition());
             } else {
                 float deltaTime = Gdx.graphics.getDeltaTime();
                 player.update(deltaTime);
                 player.plow(map);
 
-        debugRenderer.render(world, camera.combined);
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        Rectangle collider = playerControllerNew.getCollider();
-        shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
-        shapeRenderer.end();
+                debugRenderer.render(world, camera.combined);
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(Color.RED);
+                Rectangle collider = playerControllerNew.getCollider();
+                shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
+                shapeRenderer.end();
 
+                batch.setProjectionMatrix(camera.combined);
+                plantManager.update(deltaTime);
 
-        batch.setProjectionMatrix(camera.combined);
-        plantManager.update(deltaTime);
-//        batch.begin();
-//        plantManager.render(batch,camera);
-//        batch.end();
+                playerControllerNew.update(deltaTime);
+                gameRenderer.render();
 
-        playerControllerNew.update(deltaTime);
-        gameRenderer.render();
-//        playerRenderNew.render(batch);
-        //............................buffalo
+                //............................buffalo
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 playerRenderer.render(batch);
@@ -171,51 +167,52 @@ public class Main extends ApplicationAdapter {
                 batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
                 batch.end();
 
-        if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
-            if(arraybuffalo.size()<10) {
-                arraybuffalo.add(new Buffalo(new Vector2(700, 1000), 100, 1, 1, true));
-                stopTimereproduction = TimeUtils.millis();
-            }
-        }
-        if (TimeUtils.timeSinceMillis(stopTimehungry) >= 10000) {
-            for(Buffalo x:arraybuffalo){
-                if(x.gethungry()>0) {
-                    x.sethungry(10);
+                if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
+                    if (arraybuffalo.size() < 10) {
+                        arraybuffalo.add(new Buffalo(new Vector2(700, 1000), 100, 1, 1, true));
+                        stopTimereproduction = TimeUtils.millis();
+                    }
                 }
-            }
-            stopTimehungry = TimeUtils.millis();
-        }
-        for (int i = arraybuffalo.size() - 1; i >= 0; i--) {
-            Buffalo x = arraybuffalo.get(i);
-            for (int j = 0; j < arraybuffalo.size(); j++) {
-                if (i != j) {
-                    Buffalo y = arraybuffalo.get(j);
-                    x.dam(y);
+                if (TimeUtils.timeSinceMillis(stopTimehungry) >= 10000) {
+                    for (Buffalo x : arraybuffalo) {
+                        if (x.gethungry() > 0) {
+                            x.sethungry(10);
+                        }
+                    }
+                    stopTimehungry = TimeUtils.millis();
                 }
-            }
-            if (x.getmau() == 0) {
-                arraybuffalo.remove(i);
-                continue;
-            }
-            x.ve(batch, 32, Gdx.graphics.getDeltaTime(), camera);
-        }
-        for(int i=0;i<arraywolf.size();i++){
-            arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
+                for (int i = arraybuffalo.size() - 1; i >= 0; i--) {
+                    Buffalo x = arraybuffalo.get(i);
+                    for (int j = 0; j < arraybuffalo.size(); j++) {
+                        if (i != j) {
+                            Buffalo y = arraybuffalo.get(j);
+                            x.dam(y);
+                        }
+                    }
+                    if (x.getmau() == 0) {
+                        arraybuffalo.remove(i);
+                        continue;
+                    }
+                    x.ve(batch, 32, Gdx.graphics.getDeltaTime(), camera);
+                }
+                for (int i = 0; i < arraywolf.size(); i++) {
+                    arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
 
-                // Vẽ inventory nếu đang ở trạng thái 'isInGame'
-                if (inputHandler.isInGame()) {
-                    inventory.draw(batch, camera, player.getPosition());
+                    // Vẽ inventory nếu đang ở trạng thái 'isInGame'
+                    if (inputHandler.isInGame()) {
+                        inventory.draw(batch, camera, player.getPosition());
+                    }
                 }
             }
         }
     }
 
-
-
+    // Di chuyển phương thức dispose ra ngoài phương thức render
     @Override
     public void dispose() {
         batch.dispose();
         map.dispose();
     }
+
 }
 
