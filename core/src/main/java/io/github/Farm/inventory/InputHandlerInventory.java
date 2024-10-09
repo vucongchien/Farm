@@ -22,7 +22,7 @@ public class InputHandlerInventory extends InputAdapter {
         this.backpackBounds = backpackBounds;
         this.inventory = inventory;
         this.isInGame = isInGame;
-        // Khởi tạo âm thanh di chuyển
+
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
         SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
     }
@@ -31,7 +31,7 @@ public class InputHandlerInventory extends InputAdapter {
     public boolean keyDown(int keycode) {
         if (keycode == Keys.I) {
             moveSound.play();
-            isInGame = !isInGame; // Chuyển đổi trạng thái mở/tắt inventory
+            isInGame = !isInGame;
         }
 
         if (isInGame) {

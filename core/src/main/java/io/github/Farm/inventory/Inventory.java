@@ -8,30 +8,27 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;  // Nhập khẩu lớp Rectangle từ gói com.badlogic.gdx.math
-import com.badlogic.gdx.math.Vector3;    // Nhập khẩu lớp Vector3 từ gói com.badlogic.gdx.math
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory {
-    private Map<String, InventoryItem> items;  // Lưu trữ các vật phẩm
-    private BitmapFont font;                   // Font chữ để hiển thị số lượng
-    private int maxSlots;                      // Số lượng ô tối đa
-    private float slotSize;                    // Kích thước của mỗi ô
-    private float totalWidth, totalHeight;    // Kích thước tổng của inventory
-    private ShapeRenderer shapeRenderer;      // ShapeRenderer để vẽ khung
-    private int columns;                      // Số cột trong inventory
+    private Map<String, Item> items;
+    private BitmapFont font
+    private int maxSlots;
+    private float slotSize;
+    private float totalWidth, totalHeight;
+    private ShapeRenderer shapeRenderer;
+    private int columns;
 
-    private int selectedItemIndex = 0; // Chỉ mục vật phẩm đang được chọn
+    private int selectedItemIndex = 0;
 
 
     // Constructor mặc định
     public Inventory() {
-        this(20, 60);  // Tăng kích thước ô lên 60
+        this(20, 60);
     }
 
-    // Constructor với số lượng ô và kích thước ô
     public Inventory(int maxSlots, float slotSize) {
         this.items = new HashMap<>();
         this.font = new BitmapFont();
@@ -48,28 +45,26 @@ public class Inventory {
 
     }
 
-    // Thêm một vật phẩm vào inventory
     public void addItem(String name, Texture texture, int quantity) {
         if (items.size() < maxSlots) {
-            items.put(name, new InventoryItem(name, texture, quantity));
+            items.put(name, new Item(name, texture, quantity));
         }
     }
 
-    // Phương thức dùng vật phẩm (trừ số lượng, nếu còn thì giữ lại, nếu hết thì xóa vật phẩm)
     public void useSelectedItem() {
-        InventoryItem selectedItem = getSelectedItem();
+        Item selectedItem = getSelectedItem();
         if (selectedItem != null) {
-            selectedItem.quantity--;  // Trừ 1 số lượng
-            if (selectedItem.quantity <= 0) {
-                items.remove(selectedItem.name);  // Xóa nếu số lượng <= 0
+            selectedItem.reduceQuantity();
+            if (selectedItem.getQuantity() <= 0) {
+                items.remove(selectedItem.getName());
             }
         }
     }
 
     // Lấy vật phẩm hiện tại được chọn
-    public InventoryItem getSelectedItem() {
+    public Item getSelectedItem() {
         int i = 0;
-        for (InventoryItem item : items.values()) {
+        for (Item item : items.values()) {
             if (i == selectedItemIndex) {
                 return item;
             }
@@ -78,10 +73,10 @@ public class Inventory {
         return null;
     }
 
-    // Di chuyển lên và xuống giữa các vật phẩm
+
     public void moveSelectionUp() {
-        if (selectedItemIndex >= columns) { // Chỉ cho phép di chuyển lên nếu không ở hàng đầu tiên
-            selectedItemIndex -= columns; // Di chuyển lên một hàng
+        if (selectedItemIndex >= columns) {
+            selectedItemIndex -= columns;
         }
     }
 
@@ -135,7 +130,7 @@ public class Inventory {
         // Vẽ các vật phẩm trước
         batch.begin();
         int i = 0;
-        for (InventoryItem item : items.values()) {
+        for (Item item : items.values()) {
             float x = inventoryX + (i % columns) * slotSize;
             float y = inventoryY + totalHeight - ((i / columns + 1) * slotSize);
 
@@ -163,29 +158,10 @@ public class Inventory {
     public void dispose() {
         font.dispose();
         shapeRenderer.dispose();
-        for (InventoryItem item : items.values()) {
+        for (Item item : items.values()) {
             item.dispose();
         }
     }
 
-    // Lớp con InventoryItem để đại diện cho từng vật phẩm
-    private class InventoryItem {
-        private String name;
-        private Texture texture;
-        private int quantity;
 
-        public InventoryItem(String name, Texture texture, int quantity) {
-            this.name = name;
-            this.texture = texture;
-            this.quantity = quantity;
-        }
-
-        public String getName() { return name; }
-        public int getQuantity() { return quantity; }
-        public Texture getTexture() { return texture; }
-
-        public void dispose() {
-            texture.dispose();
-        }
-    }
 }
