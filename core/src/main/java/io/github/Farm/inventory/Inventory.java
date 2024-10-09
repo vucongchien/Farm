@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class Inventory {
     private Map<String, Item> items;
-    private BitmapFont font
+    private BitmapFont font;
     private int maxSlots;
     private float slotSize;
     private float totalWidth, totalHeight;
