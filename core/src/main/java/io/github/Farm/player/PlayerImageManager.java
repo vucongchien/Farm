@@ -94,11 +94,12 @@ public class PlayerImageManager {
         for (Animation<TextureRegion> animation : animations.values()) {
             if (animation != null) {
                 for (TextureRegion frame : animation.getKeyFrames()) {
-                    if (frame.getTexture() != null) {
+                    if (frame != null && frame.getTexture() != null) {
                         frame.getTexture().dispose();
                     }
                 }
             }
         }
+
     }
 }
