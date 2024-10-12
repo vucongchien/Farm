@@ -29,6 +29,7 @@ import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.InputHandlerInventory;
+import io.github.Farm.weather.Weather;
 import com.badlogic.gdx.graphics.Texture; // Thêm dòng này để import lớp Texture
 import java.util.ArrayList;
 
@@ -73,7 +74,8 @@ public class Main extends ApplicationAdapter {
 //-----------------------------------inventory
     private InputHandlerInventory inputHandler;
     private Inventory inventory; // Khai báo biến inventory
-
+//____weather
+    private Weather weather; // Khai báo Weather
 
     @Override
     public void create() {
@@ -135,6 +137,8 @@ public class Main extends ApplicationAdapter {
         // Khởi tạo InputHandler
         inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
         Gdx.input.setInputProcessor(inputHandler);
+        // weather
+        weather = new Weather(); // Khởi tạo Weather
 
     }
 
@@ -150,15 +154,14 @@ public class Main extends ApplicationAdapter {
             settingGame.handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (settingGame.isActive()) {
-
+                batch.setColor(Color.WHITE);
                 Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 mapRenderer.setView(camera);
                 mapRenderer.render();
-
-
                 settingGame.render(batch, playerControllerNew.getPosition());
             } else {
+
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
@@ -166,6 +169,13 @@ public class Main extends ApplicationAdapter {
 
                 mapRenderer.setView(camera);
                 mapRenderer.render();
+
+                // Cập nhật và vẽ thời tiết
+                weather.update(Gdx.graphics.getDeltaTime());
+
+                batch.begin();
+                weather.render(batch); // Vẽ thời tiết lên bản đồ
+                batch.end();
 
                 world.step(1 / 60f, 6, 2);
 
@@ -228,6 +238,7 @@ public class Main extends ApplicationAdapter {
 
                 // Vẽ inventory nếu đang ở trạng thái 'isInGame'
                 if (inputHandler.isInGame()) {
+                    batch.setColor(Color.WHITE);
                     inventory.draw(batch, camera, playerControllerNew.getPosition());
                 }
             }
@@ -239,11 +250,11 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         map.dispose();
         inventory.dispose(); // Giải phóng tài nguyên của inventory
-
         // Giải phóng các texture
         backpackTexture.dispose(); // Giải phóng texture của ba lô
         // Giải phóng các đối tượng khác
         shapeRenderer.dispose();
         debugRenderer.dispose();
+
     }
 }
