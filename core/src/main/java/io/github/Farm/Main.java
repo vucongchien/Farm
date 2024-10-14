@@ -29,6 +29,8 @@ import io.github.Farm.animal.Buffalo;
 import io.github.Farm.animal.wolf;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.InputHandlerInventory;
+import io.github.Farm.ui.MainMenu;
+import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
 import com.badlogic.gdx.graphics.Texture; // Thêm dòng này để import lớp Texture
 import java.util.ArrayList;
@@ -54,11 +56,10 @@ public class Main extends ApplicationAdapter {
     private MapInteractionHandler mapInteractionHandler;
 
 
-    private OrthographicCamera camera;
-    // Biến cho menu chính, cài đặt và inventory
-    private MainMenu mainMenu; // Khai báo mainMenu
-    private SettingGame settingGame; // Khai báo settingGame
-    private boolean isInGame; // Khai báo biến isInGame
+
+    private MainMenu mainMenu;
+    private SettingGame settingGame;
+
     //------------------render
     GameRenderer gameRenderer;
     ShapeRenderer shapeRenderer;
@@ -68,9 +69,7 @@ public class Main extends ApplicationAdapter {
     private Texture backpackTexture;
 
 
-//-----------------------------------inventory
-    private InputHandlerInventory inputHandler;
-    private Inventory inventory; // Khai báo biến inventory
+
 //____weather
     private Weather weather; // Khai báo Weather
 
@@ -97,30 +96,16 @@ public class Main extends ApplicationAdapter {
         playerImageManagerNew = new PlayerImageManager();
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
-        gameRenderer = new GameRenderer(playerRendererNew, plantManager, camera,map);
+        gameRenderer = new GameRenderer(playerRendererNew, camera,map);
         // Khởi tạo mainMenu và settingGame
         mainMenu = new MainMenu();
         settingGame = new SettingGame();
-        // Khởi tạo Inventory
-        inventory = new Inventory();
-        // Thêm một số item mẫu vào inventory
-        inventory.addItem("Apple", new Texture(Gdx.files.internal("inventory/almonds.png")), 5);
-        inventory.addItem("Carrot", new Texture(Gdx.files.internal("inventory/apple_green.png")), 3);
-        inventory.addItem("asparagus", new Texture(Gdx.files.internal("inventory/asparagus.png")), 10);
-        inventory.addItem("egg", new Texture(Gdx.files.internal("inventory/egg_whole_white.png")), 100);
-        inventory.addItem("banana", new Texture(Gdx.files.internal("inventory/banana.png")), 100);
-        inventory.addItem("corn", new Texture(Gdx.files.internal("inventory/corn.png")), 100);
-        inventory.addItem("watermelon", new Texture(Gdx.files.internal("inventory/watermelon_whole.png")), 100);
-        inventory.addItem("chili", new Texture(Gdx.files.internal("inventory/chili_pepper_green.png")), 100);
 
 
         backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
         backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
 
-        // Khởi tạo InputHandler
-        inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
-        Gdx.input.setInputProcessor(inputHandler);
-        // weather
+
         weather = new Weather(); // Khởi tạo Weather
 
     }
@@ -173,57 +158,22 @@ public class Main extends ApplicationAdapter {
                 shapeRenderer.end();
 
                 batch.setProjectionMatrix(camera.combined);
-                plantManager.update(deltaTime);
+                PlantManager.getInstance().update(deltaTime);
 
                 playerControllerNew.update(deltaTime);
                 gameRenderer.render();
 
-                // Kiểm tra và cập nhật buffalo
-                if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
-                    if (arraybuffalo.size() < 10) {
-                        arraybuffalo.add(new Buffalo(new Vector2(700, 1000), 100, 1, 1, true));
-                        stopTimereproduction = TimeUtils.millis();
-                    }
-                }
-                if (TimeUtils.timeSinceMillis(stopTimehungry) >= 10000) {
-                    for (Buffalo x : arraybuffalo) {
-                        if (x.gethungry() > 0) {
-                            x.sethungry(10);
-                        }
-                    }
-                    stopTimehungry = TimeUtils.millis();
-                }
-                for (int i = arraybuffalo.size() - 1; i >= 0; i--) {
-                    Buffalo x = arraybuffalo.get(i);
-                    for (int j = 0; j < arraybuffalo.size(); j++) {
-                        if (i != j) {
-                            Buffalo y = arraybuffalo.get(j);
-                            x.dam(y);
-                        }
-                    }
-                    if (x.getmau() == 0) {
-                        arraybuffalo.remove(i);
-                        continue;
-                    }
-                    x.ve(batch, 32, Gdx.graphics.getDeltaTime(), camera);
-                }
-                for (int i = 0; i < arraywolf.size(); i++) {
-                    arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
-                }
 
                 batch.begin();
-                playerRendererNew.render(batch);
                 batch.setColor(Color.WHITE);
-                // Tính toán vị trí balo dựa trên vị trí nhân vật
                 backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
                     playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
                 batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
                 batch.end();
 
-                // Vẽ inventory nếu đang ở trạng thái 'isInGame'
-                if (inputHandler.isInGame()) {
+                if (Inventory.getInstance().isOpened()) {
                     batch.setColor(Color.WHITE);
-                    inventory.draw(batch, camera, playerControllerNew.getPosition());
+                    Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
                 }
             }
         }
@@ -233,10 +183,8 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         map.dispose();
-        inventory.dispose(); // Giải phóng tài nguyên của inventory
-        // Giải phóng các texture
-        backpackTexture.dispose(); // Giải phóng texture của ba lô
-        // Giải phóng các đối tượng khác
+        Inventory.getInstance().dispose();
+        backpackTexture.dispose();
         shapeRenderer.dispose();
         debugRenderer.dispose();
 

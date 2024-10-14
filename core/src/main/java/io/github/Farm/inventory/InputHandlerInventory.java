@@ -14,8 +14,8 @@ public class InputHandlerInventory extends InputAdapter {
     private Rectangle backpackBounds;
     private Inventory inventory;
     private boolean isInGame;
-    //private Sound moveSound;
-    //private Sound SoundEnter;
+    private Sound moveSound;
+    private Sound SoundEnter;
 
     public InputHandlerInventory(OrthographicCamera camera, Rectangle backpackBounds, Inventory inventory, boolean isInGame) {
         this.camera = camera;
