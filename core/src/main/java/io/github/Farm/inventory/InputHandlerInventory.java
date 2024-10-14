@@ -23,33 +23,32 @@ public class InputHandlerInventory extends InputAdapter {
         this.inventory = inventory;
         this.isInGame = isInGame;
 
-       // moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
-      //  SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
+        moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Keys.I) {
-          //  moveSound.play();
+            moveSound.play(0.05f);
             isInGame = !isInGame;
         }
 
         if (isInGame) {
             if (keycode == Keys.UP) {
-              //  moveSound.play();
-                inventory.moveSelectionUp();
+                moveSound.play(0.05f);
+                inventory.moveSelectionUp();  // Di chuyển lên
             } else if (keycode == Keys.DOWN) {
-              //  moveSound.play();
-                inventory.moveSelectionDown();
+                moveSound.play(0.05f);
+                inventory.moveSelectionDown();  // Di chuyển xuống
             } else if (keycode == Keys.LEFT) {
-              //  moveSound.play();
-                inventory.moveSelectionLeft();
+                moveSound.play(0.05f);
+                inventory.moveSelectionLeft();  // Di chuyển sang trái
             } else if (keycode == Keys.RIGHT) {
-              //  moveSound.play();
-                inventory.moveSelectionRight();
+                moveSound.play(0.05f);
+                inventory.moveSelectionRight();  // Di chuyển sang phải
             } else if (keycode == Keys.ENTER) {
-             //   moveSound.play();
-//                inventory.useSelectedItem();
+               // moveSound.play(0.05f);
+                //inventory.useSelectedItem();  // Sử dụng vật phẩm
             }
         }
         return true;
