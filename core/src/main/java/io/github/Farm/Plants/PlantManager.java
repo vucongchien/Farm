@@ -53,7 +53,7 @@ public class PlantManager {
     public void render(SpriteBatch batch, Camera camera) {
 
         for (PlantRenderer plant : plants) {
-            plant.render(batch);
+            plant.render(batch,camera);
         }
     }
 

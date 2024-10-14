@@ -1,8 +1,9 @@
 package io.github.Farm.Interface;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public interface RenderableEntity {
     float getY();
-    void render(SpriteBatch batch);
+    void render(SpriteBatch batch, Camera camera);
 }

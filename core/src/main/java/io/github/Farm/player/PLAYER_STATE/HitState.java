@@ -21,7 +21,6 @@ public class HitState implements InterfacePlayerState {
 
     @Override
     public void update(PlayerController player, float deltaTime) {
-        //check plant
         startHit+= Gdx.graphics.getDeltaTime();
         if(startHit>=timeToHit){
             hitSomeThing(player);
@@ -29,7 +28,6 @@ public class HitState implements InterfacePlayerState {
         if(startHit>=0.5){
             startHit=0;
         }
-        System.out.println(startHit+ "  "+ timeToHit);
 
     }
 
@@ -42,6 +40,7 @@ public class HitState implements InterfacePlayerState {
                 iterator.remove();
             }
         }
+
     }
 
     @Override

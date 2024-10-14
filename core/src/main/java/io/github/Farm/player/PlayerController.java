@@ -36,8 +36,7 @@ public class PlayerController implements Collider, Disposable {
     private Rectangle collider;
     private ShapeRenderer shapeRenderer;
 
-    public PlayerController(Vector2 startPosition, float speed, World world,
-                            MapInteractionHandler mapInteractionHandler, PlantManager plantManager) {
+    public PlayerController(Vector2 startPosition, float speed, World world, MapInteractionHandler mapInteractionHandler, PlantManager plantManager) {
         this.position=startPosition;
         this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
 
@@ -235,21 +234,6 @@ public class PlayerController implements Collider, Disposable {
         return position;
     }
 
-//    public PlayerState getCurrentState() {
-//        return currentState;
-//    }
-
-//    public void setCurrentState(PlayerState currentState) {
-//        this.currentState = currentState;
-//    }
-
-//    public PlayerState getLastState() {
-//        return lastState;
-//    }
-
-//    public void setLastState(PlayerState lastState) {
-//        this.lastState = lastState;
-//    }
     public String getCurrentState(){
         return stateManager.getCurrentStateName();
     }

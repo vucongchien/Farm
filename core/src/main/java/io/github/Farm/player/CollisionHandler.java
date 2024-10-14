@@ -7,6 +7,8 @@ import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.Plants.PlantType;
+import io.github.Farm.animal.WolfRender;
+import io.github.Farm.animal.WolfManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,13 +39,22 @@ public class CollisionHandler implements Collider {
                 if(playerController.getCurrentState().startsWith("WATER_")){
                     plant.water();
                 }
-
-
-
             }
         }
         //check nhieu cai khac o day--
+        Iterator<WolfRender> iteratorwolf = WolfManager.getwolfmanage().getwolfmanafer().iterator();
+        while (iteratorwolf.hasNext()){
+            WolfRender wolf=iteratorwolf.next();
+            if (playerController.getCollider().overlaps(wolf.getCollider())) {
+                wolf.onCollision(playerController);
+                if (playerController.getCurrentState().startsWith("HIT_")) {
+                    wolf.sethp();
+
+                }
+            }
+        }
     }
+
 
     public void handlePlowing(Vector2 positionInMap) {
         mapInteractionHandler.digSoil(positionInMap);

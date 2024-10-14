@@ -1,5 +1,6 @@
 package io.github.Farm.player;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,13 +29,15 @@ public class PlayerRenderer implements RenderableEntity {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch, Camera camera) {
 
         stateTime += player.getDeltaTime();
         updateAnimation();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
-
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         batch.draw(frame, player.getPosition().x-32, player.getPosition().y-30, size, size);
+        batch.end();
     }
 
     private void updateAnimation() {
