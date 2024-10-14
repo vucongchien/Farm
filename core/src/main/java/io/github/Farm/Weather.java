@@ -9,10 +9,10 @@ public class Weather {
     private String currentWeather; // Nắng, Mưa, Mây
     private float timeOfDay; // Giá trị từ 0.0 (đêm) đến 1.0 (ngày)
     private Texture rainTexture; // Hình ảnh giọt mưa
-    private final int rainDropCount = 40; // Số giọt mưa
+    private final int rainDropCount = 5; // Số giọt mưa
     private float weatherDuration; // Thời gian duy trì thời tiết hiện tại
-    private final float minWeatherDuration = 20f; // Thời gian tối thiểu của mỗi thời tiết
-    private final float maxWeatherDuration = 40f; // Thời gian tối đa của mỗi thời tiết
+    private final float minWeatherDuration = 3f; // Thời gian tối thiểu của mỗi thời tiết
+    private final float maxWeatherDuration = 5f; // Thời gian tối đa của mỗi thời tiết
 //    private Texture sunTexture; // Hình ảnh ánh sáng mặt trời
     private Texture cloudTexture; // Hình ảnh đám mây
     private float cloudSpeed = 40f; // Tốc độ di chuyển của mây
@@ -21,7 +21,7 @@ public class Weather {
 
 
     public Weather() {
-        this.currentWeather = "Cloudy"; // Giá trị mặc định
+        this.currentWeather = "Rainy"; // Giá trị mặc định
         this.rainTexture = new Texture(Gdx.files.internal("Weather/rain_drops-01.png")); // Tải hình ảnh giọt mưa
         this.weatherDuration = getRandomDuration(); // Đặt thời gian ngẫu nhiên cho thời tiết ban đầu
 //        this.sunTexture = new Texture(Gdx.files.internal("Weather/Sunny/sunlight.png")); // Tải hình ảnh ánh sáng mặt trời
@@ -45,7 +45,7 @@ public class Weather {
         }
 
         // Cập nhật vị trí đám mây khi thời tiết là "Cloudy"
-        if (currentWeather.equals("Cloudy")) {
+        if (currentWeather.equals("Cloudy") || currentWeather.equals("Rainy")) {
             for (int i = 0; i < cloudCount; i++) {
                 cloudPositions[i] += cloudSpeed * deltaTime; // Di chuyển mây từ trái sang phải
                 if (cloudPositions[i] > Gdx.graphics.getWidth()) {
@@ -70,11 +70,17 @@ public class Weather {
             case "Sunny":
                 break;
             case "Rainy":
-                batch.setColor(Color.GRAY.r, Color.GRAY.g, Color.GRAY.b, 0.8f); // 0.5f cho độ trong suốt 50%
+                batch.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, 0.7f); // 0.5f cho độ trong suốt 50%
                 for (int i = 0; i < rainDropCount; i++) {
                     float x = (float) Math.random() * Gdx.graphics.getWidth(); // Giới hạn x
                     float y = (float) Math.random() * Gdx.graphics.getHeight(); // Giới hạn y
                     batch.draw(rainTexture, x, y);
+                }
+                // Vẽ các đám mây
+                batch.setColor(Color.GRAY.r, Color.GRAY.g, Color.GRAY.b, 0.8f); // 0.5f cho độ trong suốt 50%
+                for (int i = 0; i < cloudCount; i++) {
+                    float y = Gdx.graphics.getHeight() * 1.065f; // Đặt vị trí y cao hơn
+                    batch.draw(cloudTexture, cloudPositions[i], y);
                 }
                 break;
             case "Cloudy":

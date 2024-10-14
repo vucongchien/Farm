@@ -24,31 +24,30 @@ public class InputHandlerInventory extends InputAdapter {
         this.isInGame = isInGame;
 
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
-        SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Keys.I) {
-            moveSound.play();
+            moveSound.play(0.05f);
             isInGame = !isInGame;
         }
 
         if (isInGame) {
             if (keycode == Keys.UP) {
-                moveSound.play();
+                moveSound.play(0.05f);
                 inventory.moveSelectionUp();  // Di chuyển lên
             } else if (keycode == Keys.DOWN) {
-                moveSound.play();
+                moveSound.play(0.05f);
                 inventory.moveSelectionDown();  // Di chuyển xuống
             } else if (keycode == Keys.LEFT) {
-                moveSound.play();
+                moveSound.play(0.05f);
                 inventory.moveSelectionLeft();  // Di chuyển sang trái
             } else if (keycode == Keys.RIGHT) {
-                moveSound.play();
+                moveSound.play(0.05f);
                 inventory.moveSelectionRight();  // Di chuyển sang phải
             } else if (keycode == Keys.ENTER) {
-                moveSound.play();
+                moveSound.play(0.05f);
                 inventory.useSelectedItem();  // Sử dụng vật phẩm
             }
         }

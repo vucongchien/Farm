@@ -230,6 +230,7 @@ public class Main extends ApplicationAdapter {
 
                 batch.begin();
                 playerRendererNew.render(batch);
+                batch.setColor(Color.WHITE);
                 // Tính toán vị trí balo dựa trên vị trí nhân vật
                 backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
                     playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
