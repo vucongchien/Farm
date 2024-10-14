@@ -107,7 +107,7 @@ public class PlayerController implements Collider, Disposable {
         Vector2 movement = inputHandler.handleMovementInput();
         stateManager.updateState(this, deltaTime);
 
-        body.setLinearVelocity(movement.scl(10f));
+        body.setLinearVelocity(movement.scl(150f));
         position.set(body.getPosition());
         this.positionInMap.set(
             isFacingRight ? (int) (position.x / 16) + 1 : (int) (position.x / 16) - 1,
