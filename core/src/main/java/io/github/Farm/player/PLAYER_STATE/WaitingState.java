@@ -12,7 +12,6 @@ public class WaitingState implements InterfacePlayerState {
 
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("WAITING_" + direction);
 
     }
 

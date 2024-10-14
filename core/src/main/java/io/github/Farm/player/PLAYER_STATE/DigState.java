@@ -10,7 +10,7 @@ public class DigState implements InterfacePlayerState {
 
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("DIG_"+direction);
+
     }
 
     @Override

@@ -26,15 +26,15 @@
         },
         "Map.tmx": {
             "expandedGroupLayers": [
-                31,
+                29,
                 20,
-                29
+                31
             ],
-            "scale": 0.5,
-            "selectedLayer": 19,
+            "scale": 0.33,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1287,
-                "y": 207
+                "x": 1325.757575757576,
+                "y": 680.3030303030303
             }
         },
         "Other.tsx": {
@@ -44,12 +44,12 @@
         },
         "tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1.5,
-            "scaleInEditor": 2
+            "scaleInDock": 2,
+            "scaleInEditor": 1
         },
         "tileset_vippp.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 3,
+            "scaleInDock": 1,
             "scaleInEditor": 2
         }
     },

@@ -2,12 +2,7 @@ package io.github.Farm.player.PLAYER_STATE;
 
 import io.github.Farm.player.PlayerController;
 
-public class SwimState implements InterfacePlayerState {
-    private String direction;
-    public SwimState (String direction){
-        this.direction=direction;
-    }
-
+public class HurtState implements InterfacePlayerState{
     @Override
     public void enter(PlayerController player) {
 
@@ -25,6 +20,6 @@ public class SwimState implements InterfacePlayerState {
 
     @Override
     public String getStateName() {
-        return "SWIM_"+direction;
+        return "";
     }
 }

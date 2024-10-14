@@ -14,8 +14,8 @@ public class InputHandlerInventory extends InputAdapter {
     private Rectangle backpackBounds;
     private Inventory inventory;
     private boolean isInGame;
-    private Sound moveSound; // Biến để lưu âm thanh di chuyển
-    private Sound SoundEnter; // Biến để lưu âm thanh enter
+    //private Sound moveSound;
+    //private Sound SoundEnter;
 
     public InputHandlerInventory(OrthographicCamera camera, Rectangle backpackBounds, Inventory inventory, boolean isInGame) {
         this.camera = camera;
@@ -23,33 +23,33 @@ public class InputHandlerInventory extends InputAdapter {
         this.inventory = inventory;
         this.isInGame = isInGame;
 
-        moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
-        SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
+       // moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
+      //  SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Keys.I) {
-            moveSound.play();
+          //  moveSound.play();
             isInGame = !isInGame;
         }
 
         if (isInGame) {
             if (keycode == Keys.UP) {
-                moveSound.play();
-                inventory.moveSelectionUp();  // Di chuyển lên
+              //  moveSound.play();
+                inventory.moveSelectionUp();
             } else if (keycode == Keys.DOWN) {
-                moveSound.play();
-                inventory.moveSelectionDown();  // Di chuyển xuống
+              //  moveSound.play();
+                inventory.moveSelectionDown();
             } else if (keycode == Keys.LEFT) {
-                moveSound.play();
-                inventory.moveSelectionLeft();  // Di chuyển sang trái
+              //  moveSound.play();
+                inventory.moveSelectionLeft();
             } else if (keycode == Keys.RIGHT) {
-                moveSound.play();
-                inventory.moveSelectionRight();  // Di chuyển sang phải
+              //  moveSound.play();
+                inventory.moveSelectionRight();
             } else if (keycode == Keys.ENTER) {
-                moveSound.play();
-                inventory.useSelectedItem();  // Sử dụng vật phẩm
+             //   moveSound.play();
+//                inventory.useSelectedItem();
             }
         }
         return true;

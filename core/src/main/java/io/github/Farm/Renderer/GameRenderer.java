@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
+import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
 
 import java.util.ArrayList;
@@ -15,14 +16,14 @@ import java.util.List;
 public class GameRenderer {
     private SpriteBatch batch;
     private PlayerRenderer player;
-    private PlantManager plantManager;
     private Camera camera;
     private TiledMap map;
 
+    List<RenderableEntity> renderableEntities = new ArrayList<>();
 
-    public GameRenderer(PlayerRenderer player, PlantManager plantManager, Camera camera, TiledMap map){
+
+    public GameRenderer(PlayerRenderer player, Camera camera, TiledMap map){
         batch=new SpriteBatch();
-        this.plantManager=plantManager;
         this.player =player;
         this.camera=camera;
         this.map=map;
@@ -34,11 +35,13 @@ public class GameRenderer {
     }
 
     private void renderAllEntities(SpriteBatch batch) {
-        List<RenderableEntity> renderableEntities = new ArrayList<>();
+        renderableEntities.clear();
 
         renderableEntities.add(player);
 
-        renderableEntities.addAll(plantManager.getPlants());
+        renderableEntities.addAll(PlantManager.getInstance().getListPlants());
+
+        renderableEntities.addAll(ItemManager.getInstance().getItemList());
 
 
         renderableEntities.sort(new Comparator<RenderableEntity>() {
@@ -47,17 +50,17 @@ public class GameRenderer {
                 return Float.compare(e2.getY(), e1.getY());
             }
         });
-        batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();
+
+
         for (RenderableEntity entity : renderableEntities) {
-            entity.render(batch);
+            entity.render(batch,camera);
             if (entity instanceof PlantRenderer) {
                 PlantRenderer plantRenderer = (PlantRenderer) entity;
-
             }
+
         }
 
-        batch.end();
+
     }
 }

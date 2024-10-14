@@ -3,8 +3,14 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import io.github.Farm.inventory.Inventory;
 
 public class InputHandler {
+    PlayerController playerController;
+
+    public InputHandler(PlayerController playerController){
+        this.playerController=playerController;
+    }
 
     public Vector2 handleMovementInput() {
         Vector2 movement = new Vector2();
@@ -21,6 +27,24 @@ public class InputHandler {
             movement.x = 1;
         }
         return movement.len() > 1 ? (movement.nor()) : movement;
+    }
+
+    public void handleInventoryInput(){
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            Inventory.getInstance().moveSelectionUp();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            Inventory.getInstance().moveSelectionDown();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            Inventory.getInstance().moveSelectionLeft();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            Inventory.getInstance().moveSelectionRight();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            Inventory.getInstance().useSelectedItem(playerController);
+        }
     }
 
     public boolean isPlowing() {

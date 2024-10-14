@@ -1,74 +1,72 @@
 package io.github.Farm.inventory;
 
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
+import io.github.Farm.player.PlayerController;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Inventory {
-    private Map<String, Item> items;
-    private BitmapFont font;
-    private int maxSlots;
-    private float slotSize;
-    private float totalWidth, totalHeight;
-    private ShapeRenderer shapeRenderer;
-    private int columns;
+
+    private static Inventory instance;
+
+    public static Inventory getInstance() {
+        if (instance == null) {
+            instance = new Inventory();
+        }
+        return instance;
+    }
+    private final List<InventorySlot> slots = new ArrayList<>();
+    private final BitmapFont font = new BitmapFont();
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final int maxSlots=20;
+    private final float slotSize=60;
+    private final int columns=5;
+    private final int rows = (int) Math.ceil((double) maxSlots / columns);
+    private final float totalWidth = columns * slotSize;
+    private final float totalHeight = rows * slotSize;
 
     private int selectedItemIndex = 0;
 
+    private boolean isOpened=false;
 
-    // Constructor mặc định
+
     public Inventory() {
-        this(20, 60);
+        font.setColor(Color.BLACK);
     }
 
-    public Inventory(int maxSlots, float slotSize) {
-        this.items = new HashMap<>();
-        this.font = new BitmapFont();
-        this.font.setColor(Color.BLACK);  // Đặt màu chữ là đen
-        this.shapeRenderer = new ShapeRenderer();
-        this.maxSlots = maxSlots;
-        this.slotSize = slotSize;
 
-        this.columns = 5;
-        int rows = (int) Math.ceil(maxSlots / (float) columns);
-
-        totalWidth = columns * slotSize;
-        totalHeight = rows * slotSize;
-
-    }
-
-    public void addItem(String name, Texture texture, int quantity) {
-        if (items.size() < maxSlots) {
-            items.put(name, new Item(name, texture, quantity));
+    public void addItem(String name, int quantity) {
+        for(InventorySlot slot:slots){
+            if(name.equals(slot.getFULL_NAME())){
+                slot.raiseQuantity();
+                return;
+            }
+        }
+        if (slots.size() < maxSlots) {
+            slots.add(new InventorySlot(name, quantity));
         }
     }
 
-    public void useSelectedItem() {
-        Item selectedItem = getSelectedItem();
-        if (selectedItem != null) {
-            selectedItem.reduceQuantity();
-            if (selectedItem.getQuantity() <= 0) {
-                items.remove(selectedItem.getName());
+    public void useSelectedItem(PlayerController playerController) {
+        InventorySlot selectedInventorySlot = getSelectedItem();
+        if (selectedInventorySlot != null) {
+            selectedInventorySlot.use(playerController);
+            if (selectedInventorySlot.getQuantity() <= 0) {
+                slots.remove(selectedInventorySlot);
             }
         }
     }
 
-    // Lấy vật phẩm hiện tại được chọn
-    public Item getSelectedItem() {
-        int i = 0;
-        for (Item item : items.values()) {
-            if (i == selectedItemIndex) {
-                return item;
-            }
-            i++;
+    public InventorySlot getSelectedItem() {
+        if (selectedItemIndex >= 0 && selectedItemIndex < slots.size()) {
+            return slots.get(selectedItemIndex);
         }
         return null;
     }
@@ -83,31 +81,31 @@ public class Inventory {
 
 
     public void moveSelectionDown() {
-        if (selectedItemIndex + columns < items.size()) { // Kiểm tra không ra ngoài
-            selectedItemIndex += columns; // Di chuyển xuống một hàng
+        if (selectedItemIndex + columns < slots.size()) {
+            selectedItemIndex += columns;
         }
     }
 
 
     public void moveSelectionLeft() {
         if (selectedItemIndex % columns > 0) {
-            selectedItemIndex--; // Di chuyển sang trái
+            selectedItemIndex--;
         }
     }
 
 
 
     public void moveSelectionRight() {
-        if ((selectedItemIndex + 1) % columns != 0 && selectedItemIndex + 1 < items.size()) {
-            selectedItemIndex++; // Di chuyển sang phải
+        if ((selectedItemIndex + 1) % columns != 0 && selectedItemIndex + 1 < slots.size()) {
+            selectedItemIndex++;
         }
     }
 
 
-    // Vẽ inventory và làm nổi bật vật phẩm đang được chọn
     public void draw(SpriteBatch batch, OrthographicCamera camera, Vector2 playerPosition) {
-        float inventoryX = playerPosition.x - (totalWidth / 2);
-        float inventoryY = playerPosition.y - (totalHeight / 2);
+        batch.setProjectionMatrix(camera.combined);
+        float inventoryX = 900;
+        float inventoryY = 900;
 
         // Vẽ background và khung của inventory
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -129,20 +127,18 @@ public class Inventory {
 
         // Vẽ các vật phẩm trước
         batch.begin();
-        int i = 0;
-        for (Item item : items.values()) {
+        for (int i = 0; i < slots.size(); i++) {
+            InventorySlot inventorySlot = slots.get(i);
             float x = inventoryX + (i % columns) * slotSize;
             float y = inventoryY + totalHeight - ((i / columns + 1) * slotSize);
 
-            // Vẽ texture vật phẩm
-            batch.draw(item.getTexture(), x + 5, y + 5, slotSize - 10, slotSize - 10);  // Để lại khoảng trống nhỏ
-            // Vẽ số lượng vật phẩm
-            font.draw(batch, String.valueOf(item.getQuantity()), x + slotSize - 20, y + 20);
-            i++;
+            // Vẽ texture item
+            batch.draw(inventorySlot.getTexture(), x + 5, y + 5, slotSize - 10, slotSize - 10);
+            // Vẽ số lượng item
+            font.draw(batch, String.valueOf(inventorySlot.getQuantity()), x + slotSize - 20, y + 20);
         }
         batch.end();
 
-        // Vẽ viền đỏ quanh vật phẩm được chọn sau khi vẽ texture và số lượng
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
         float selectedX = (selectedItemIndex % columns) * slotSize;
@@ -152,15 +148,19 @@ public class Inventory {
     }
 
 
+    public boolean isOpened() {
+        return isOpened;
+    }
 
+    public void setOpened(){
+        isOpened=!isOpened;
+    }
 
     // Giải phóng tài nguyên
     public void dispose() {
         font.dispose();
         shapeRenderer.dispose();
-        for (Item item : items.values()) {
-            item.dispose();
-        }
+        slots.forEach(InventorySlot::dispose);
     }
 
 

@@ -11,13 +11,12 @@ public class WalkState implements InterfacePlayerState {
     }
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("WALK_" + direction);
+
     }
 
     @Override
     public void update(PlayerController player, float deltaTime) {
-        Vector2 movement = player.getInputHandler().handleMovementInput();
-        if (movement.x == 0 && movement.y == 0) {
+        if (!player.getInputHandler().isMoving()) {
             player.changeState(new IdleState(direction));
         }
     }

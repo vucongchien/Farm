@@ -12,7 +12,7 @@ public class CastingState implements InterfacePlayerState {
 
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("CASTING_" + direction);
+
     }
 
     @Override

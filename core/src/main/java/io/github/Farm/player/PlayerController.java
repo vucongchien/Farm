@@ -1,33 +1,37 @@
 package io.github.Farm.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Timer;
 import io.github.Farm.Interface.Collider;
+import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
-import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
 
 public class PlayerController implements Collider, Disposable {
+    private Heath heath;
     private Vector2 position;
     private Vector2 positionInMap;
-//    private PlayerState currentState = PlayerState.IDLE_RIGHT;
-//    private PlayerState lastState = PlayerState.IDLE_RIGHT;
+
+    //boolean
+    private boolean canAct=true;
     private boolean isFacingRight = true;
-    private boolean isOpenInventory = false;
     private boolean isFishing=false;
     private boolean isSwim=false;
+    private boolean isPlanting=false;
 
     //fishing
     private float TimeStartFish=0f;
     private float TimeToFishing=5f;
 
     private InputHandler inputHandler;
-    private CollisionHandler collisionHandler;
-    private MovementHandler movementHandler;
+    private  CollisionHandler collisionHandler;
     private PlayerStateManager stateManager;
 
 
@@ -35,15 +39,21 @@ public class PlayerController implements Collider, Disposable {
     //collider
     private Rectangle collider;
     private ShapeRenderer shapeRenderer;
+    private World world;
+    private Body body;
 
-    public PlayerController(Vector2 startPosition, float speed, World world,
-                            MapInteractionHandler mapInteractionHandler, PlantManager plantManager) {
+    public PlayerController(Vector2 startPosition, World world,MapInteractionHandler mapInteractionHandler) {
+
+        this.heath=new Heath(100);
+
         this.position=startPosition;
         this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
 
-        this.inputHandler = new InputHandler();
-        this.collisionHandler = new CollisionHandler(plantManager, mapInteractionHandler);
-        this.movementHandler = new MovementHandler(world, createBody(startPosition, world));
+        this.inputHandler = new InputHandler(this);
+        this.collisionHandler = new CollisionHandler( mapInteractionHandler);
+        this.world=world;
+        this.body=createBody(startPosition, world);
+
         this.stateManager = new PlayerStateManager(new IdleState("RIGHT"));
 
         this.collider=new Rectangle(position.x,position.y,16,16);
@@ -74,41 +84,43 @@ public class PlayerController implements Collider, Disposable {
         //state
         updatePlayerState(deltaTime);
 
-
         //update may bien tao lao
-
         collider.setPosition(isFacingRight ? position.x + 5 : position.x - 20, position.y - 5);
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            Inventory.getInstance().setOpened();
+            Inventory.getInstance().addItem("SEED_pumpkin",1);
+            Inventory.getInstance().addItem("FOOD_pumpkin",1);
+        }
 
-        //----------------all input
+        if(Inventory.getInstance().isOpened()){
+            body.setLinearVelocity(Vector2.Zero);
+            inputHandler.handleInventoryInput();
+            canAct=false;
+            return;
+        }else {
+            canAct=true;
+        }
 
-
+//---------------------------all input
         //move
         Vector2 movement = inputHandler.handleMovementInput();
         stateManager.updateState(this, deltaTime);
 
-        movementHandler.moveCharacter(movement, 150f);  // Ví dụ về tốc độ
-        position.set(movementHandler.getPosition());
-        this.positionInMap = new Vector2(
+        body.setLinearVelocity(movement.scl(10f));
+        position.set(body.getPosition());
+        this.positionInMap.set(
             isFacingRight ? (int) (position.x / 16) + 1 : (int) (position.x / 16) - 1,
             (int) (position.y / 16)
         );
 
         //logic swim
         if (isSwim) return;
-
         collisionHandler.checkCollisions(this);
 
         if (inputHandler.isPlowing()) {
             collisionHandler.handlePlowing(positionInMap);
         }
-
-        if (inputHandler.isOpeningInventory()) {
-            isOpenInventory = !isOpenInventory;
-        }
-
-        Vector2 velocity = movementHandler.getBody().getLinearVelocity();
-        System.out.println("Current Velocity: " + velocity);
 
 
     }
@@ -117,9 +129,9 @@ public class PlayerController implements Collider, Disposable {
         stateManager.changeState(this, newState);
     }
 
-    public void setCurrentState(String state) {
-    }
     public void updatePlayerState(float deltaTime){
+        if(!canAct) return;
+
         Vector2 movement = inputHandler.handleMovementInput();
         if(movement.x>0)        { isFacingRight=true; }
         else if(movement.x<0)   { isFacingRight=false;}
@@ -133,7 +145,6 @@ public class PlayerController implements Collider, Disposable {
             return;
         }
         else isSwim=false;
-
 
         if (inputHandler.isCasting()&&!isFishing)
         {
@@ -163,56 +174,33 @@ public class PlayerController implements Collider, Disposable {
         {
             stateManager.changeState(this, new WalkState(direction));
         }
-        else if(!isFishing)
+        else if (isPlanting){
+            stateManager.changeState(this,new DoingState(direction));
+        }
+        else if(!isFishing )
         {
             stateManager.changeState(this, new IdleState(direction));
         }
 
 
+
+
         //is fishing
-        if(!stateManager.getCurrentStateName().matches("^(WAITING_|CASTING_|CAUGHT_).*")){
+        if(!stateManager.getCurrentStateName().startsWith("WAITING_")||!stateManager.getCurrentStateName().startsWith("CASTING_")||!stateManager.getCurrentStateName().startsWith("CAUGHT_")){
             isFishing=false;
+        }
+        if(!stateManager.getCurrentStateName().startsWith("DOING_")){
+            isPlanting=false;
         }
 
 
-
-        //input
-//        if(inputHandler.isPlowing()){
-//
-//            //currentState=PlayerState.valueOf("DIG_"+LeftOrRight);
-//        } else if (inputHandler.isHitting()) {
-//            //currentState=PlayerState.valueOf("HIT_"+LeftOrRight);
-//        } else if (inputHandler.isWatering()) {
-//            //currentState=PlayerState.valueOf("WATER_"+LeftOrRight);
-//        } else if (inputHandler.isCasting()) {
-//            //currentState=PlayerState.valueOf("CASTING_"+LeftOrRight);
-//            isFishing=true;
-//            TimeStartFish=0f;
-//        } else if(!isFishing) {
-//            //currentState=PlayerState.valueOf((movement.x==0&&movement.y==0?"IDLE_":"WALK_")+LeftOrRight);
-//        }
-
-//        if(isFishing){
-//            TimeStartFish+=deltaTime;
-//            if(TimeStartFish>=TimeToFishing+0.4){
-//                isFishing=false;
-//                return;
-//            }
-//            if(TimeStartFish>=TimeToFishing){
-//                currentState=PlayerState.valueOf("CAUGHT_"+LeftOrRight);
-//                return;
-//            }
-//            if(TimeStartFish>=0.4){
-//                currentState=PlayerState.valueOf("WAITING_"+LeftOrRight);
-//            }
-//        }
 
     }
 
     @Override
     public void dispose() {
         shapeRenderer.dispose();
-        movementHandler.getWorld().destroyBody(movementHandler.getBody());
+        world.destroyBody(body);
     }
 
     @Override
@@ -225,8 +213,6 @@ public class PlayerController implements Collider, Disposable {
 
     }
 
-
-
     public float getDeltaTime() {
         return Gdx.graphics.getDeltaTime();
     }
@@ -235,21 +221,6 @@ public class PlayerController implements Collider, Disposable {
         return position;
     }
 
-//    public PlayerState getCurrentState() {
-//        return currentState;
-//    }
-
-//    public void setCurrentState(PlayerState currentState) {
-//        this.currentState = currentState;
-//    }
-
-//    public PlayerState getLastState() {
-//        return lastState;
-//    }
-
-//    public void setLastState(PlayerState lastState) {
-//        this.lastState = lastState;
-//    }
     public String getCurrentState(){
         return stateManager.getCurrentStateName();
     }
@@ -258,9 +229,6 @@ public class PlayerController implements Collider, Disposable {
         return isFacingRight;
     }
 
-    public boolean isOpenInventory() {
-        return isOpenInventory;
-    }
 
     public CollisionHandler getCollisionHandler() {
         return collisionHandler;
@@ -271,14 +239,31 @@ public class PlayerController implements Collider, Disposable {
     }
 
 
-
-    public MovementHandler getMovementHandler() {
-        return movementHandler;
-    }
-
     public Vector2 getPositionInMap() {
         return positionInMap;
     }
 
+    public void setPosition(Vector2 position){
+        this.position=position;
+    }
 
+    public Heath getHeath(){
+        return heath;
+    }
+
+    public boolean isCanAct() {
+        return canAct;
+    }
+
+    public void setCanAct(boolean canAct) {
+        this.canAct = canAct;
+    }
+
+    public void setPlanting(boolean planting) {
+        isPlanting = planting;
+    }
+
+    public boolean isPlanting() {
+        return isPlanting;
+    }
 }

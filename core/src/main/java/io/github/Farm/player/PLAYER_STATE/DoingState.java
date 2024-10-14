@@ -2,9 +2,13 @@ package io.github.Farm.player.PLAYER_STATE;
 
 import io.github.Farm.player.PlayerController;
 
-public class SwimState implements InterfacePlayerState {
+import java.util.Timer;
+
+public class DoingState implements InterfacePlayerState{
     private String direction;
-    public SwimState (String direction){
+    private float time=0f;
+
+    public DoingState(String direction){
         this.direction=direction;
     }
 
@@ -15,6 +19,10 @@ public class SwimState implements InterfacePlayerState {
 
     @Override
     public void update(PlayerController player, float deltaTime) {
+        time += deltaTime;
+        if (time >= 2f) {
+            player.setPlanting(false);
+        }
 
     }
 
@@ -25,6 +33,6 @@ public class SwimState implements InterfacePlayerState {
 
     @Override
     public String getStateName() {
-        return "SWIM_"+direction;
+        return "DOING_"+direction;
     }
 }

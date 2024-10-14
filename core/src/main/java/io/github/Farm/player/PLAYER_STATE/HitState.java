@@ -1,7 +1,9 @@
 package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.Gdx;
+import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
+import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerController;
 
 import java.util.Iterator;
@@ -16,32 +18,29 @@ public class HitState implements InterfacePlayerState {
     }
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("HIT_"+direction);
+
     }
 
     @Override
     public void update(PlayerController player, float deltaTime) {
-        //check plant
         startHit+= Gdx.graphics.getDeltaTime();
-        if(startHit>=timeToHit){
-            hitSomeThing(player);
-        }
+
         if(startHit>=0.5){
             startHit=0;
         }
-        System.out.println(startHit+ "  "+ timeToHit);
+        if(startHit>=timeToHit){
+            hitSomeThing(player);
+        }
+
 
     }
 
     public void hitSomeThing(PlayerController player){
-        Iterator<PlantRenderer> iterator = player.getCollisionHandler().getPlantManager().getPlants().iterator();
-        while (iterator.hasNext()) {
-            PlantRenderer plant = iterator.next();
-            if (player.getCollider().overlaps(plant.getCollider())) {
-                plant.onCollision(player);
-                iterator.remove();
-            }
+        if(PlantManager.getInstance().getPlantAt(player.getPositionInMap())!=null){
+            PlantManager.getInstance().getMapPlants().get(player.getPositionInMap()).onCollision(player);
+            PlantManager.getInstance().getMapPlants().remove(player.getPositionInMap());
         }
+        startHit=-0.2f;
     }
 
     @Override

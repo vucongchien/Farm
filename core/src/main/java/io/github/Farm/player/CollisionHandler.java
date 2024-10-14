@@ -7,50 +7,42 @@ import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.Plants.PlantType;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.inventory.Item;
+import io.github.Farm.inventory.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /// chiu trach nhiem tuong tac giua nhan vat voi map ///
 public class CollisionHandler implements Collider {
-    private PlantManager plantManager;
+
     private MapInteractionHandler mapInteractionHandler;
 
-    public CollisionHandler(PlantManager plantManager, MapInteractionHandler mapInteractionHandler) {
-        this.plantManager = plantManager;
+    public CollisionHandler(MapInteractionHandler mapInteractionHandler) {
+
         this.mapInteractionHandler = mapInteractionHandler;
     }
 
     public void checkCollisions(PlayerController playerController) {
-        //check collision plant va player
-
-        Iterator<PlantRenderer> iterator = plantManager.getPlants().iterator();
-        while (iterator.hasNext()){
-            PlantRenderer plant=iterator.next();
-            if (playerController.getCollider().overlaps(plant.getCollider())) {
-                plant.onCollision(playerController);
-//                //Hit
-//                if(playerCotrollerr.getCurrentState().startsWith("HIT_")) {
-//                    iterator.remove();
-//                }
-                //water
-                if(playerController.getCurrentState().startsWith("WATER_")){
-                    plant.water();
-                }
-
-
-
+        //check nhieu cai khac o day--
+        Iterator<Item> iterator = ItemManager.getInstance().getItemList().iterator();
+        while(iterator.hasNext()){
+            Item item =iterator.next();
+            if(playerController.getCollider().overlaps(item.getCollider())){
+                item.onCollision(playerController);
+                iterator.remove();
             }
         }
-        //check nhieu cai khac o day--
+
     }
 
     public void handlePlowing(Vector2 positionInMap) {
         mapInteractionHandler.digSoil(positionInMap);
     }
 
-    public void plantSeed(Vector2 positionInMap, PlantType plantType) {
-        mapInteractionHandler.plantSeed(positionInMap);
+    public void plantSeed(Vector2 positionInMap, PlantType plantType,PlayerController playerController) {
+        mapInteractionHandler.plantSeed(positionInMap,plantType,playerController);
     }
 
     public boolean isPlayerCanFish(Rectangle playerCollider){
@@ -80,7 +72,4 @@ public class CollisionHandler implements Collider {
         return mapInteractionHandler;
     }
 
-    public PlantManager getPlantManager() {
-        return plantManager;
-    }
 }
