@@ -32,7 +32,8 @@ public class MainMenu {
     private boolean isDemoActive; // Biến để kiểm soát trạng thái màn hình demo
     private Animation<TextureRegion> demoAnimation; // Animation cho demo
     private float elapsedTime;
-
+    private String controlsText; // Text chứa nội dung điều khiển
+    private boolean isControlsActive; // Kiểm soát trạng thái hiển thị của bảng điều khiển
 
 
 
@@ -52,6 +53,13 @@ public class MainMenu {
         this.isMenuActive = true; // Mặc định menu đang hoạt động
         this.maxTextWidth = 0; // Khởi tạo maxTextWidth
         this.totalMenuHeight = 0; // Khởi tạo totalMenuHeight
+        this.controlsText = "W S A D: Move character\n" +
+            "C: Fish\n" +
+            "F: Dig\n" +
+            "R: Water\n" +
+            "I: Open Inventory\n" +
+            "ESC: Open Settings";
+        this.isControlsActive = false;
 
         // Tính toán độ rộng lớn nhất của các text và tổng chiều cao của menu
         GlyphLayout layout = new GlyphLayout();
@@ -102,21 +110,30 @@ public class MainMenu {
             // Tính toán startY sao cho menu căn giữa theo chiều dọc
             float startY = (screenHeight - totalMenuHeight) / 2;
 
-            for (int i = 0; i < menuItems.length; i++) {
-                String text = menuItems[i];
-                GlyphLayout layout = new GlyphLayout(font, text); // Đặt text để tính toán
-                if (i == selectedIndex) {
-                    font.setColor(Color.RED); // Màu đỏ cho mục được chọn
-                    text = "> " + text + " <"; // Highlight selected item
-                } else {
-                    font.setColor(Color.WHITE); // Màu trắng cho mục không được chọn
+            if(!isControlsActive){
+                for (int i = 0; i < menuItems.length; i++) {
+                    String text = menuItems[i];
+                    GlyphLayout layout = new GlyphLayout(font, text); // Đặt text để tính toán
+                    if (i == selectedIndex) {
+                        font.setColor(Color.RED); // Màu đỏ cho mục được chọn
+                        text = "> " + text + " <"; // Highlight selected item
+                    } else {
+                        font.setColor(Color.WHITE); // Màu trắng cho mục không được chọn
+                    }
+
+                    float x = startX; // Vị trí x để căn giữa theo chiều ngang
+                    // Điều chỉnh vị trí y để căn giữa các mục menu theo chiều dọc
+                    float y = startY + totalMenuHeight - (layout.height + itemSpacing) * (i + 1) + layout.height;
+
+                    font.draw(batch, text, x, y); // Vẽ từng mục menu
                 }
-
-                float x = startX; // Vị trí x để căn giữa theo chiều ngang
-                // Điều chỉnh vị trí y để căn giữa các mục menu theo chiều dọc
-                float y = startY + totalMenuHeight - (layout.height + itemSpacing) * (i + 1) + layout.height;
-
-                font.draw(batch, text, x, y); // Vẽ từng mục menu
+            }
+            else if(isControlsActive) {
+                // Hiển thị bảng điều khiển ở giữa màn hình
+                GlyphLayout layout = new GlyphLayout(font, controlsText);
+                float x = (Gdx.graphics.getWidth() - layout.width) / 2;
+                float y = (Gdx.graphics.getHeight() + layout.height) / 2;
+                font.draw(batch, controlsText, x, y);
             }
             batch.end();
         }
@@ -139,16 +156,21 @@ public class MainMenu {
                     break;
                 case 1:
                     // Options
-
+                    isControlsActive = true;
                     break;
+
                 case 2:
                     // Exit
                     Gdx.app.exit();
                     break;
             }
         }
-
+        if (isControlsActive && Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            isControlsActive = false;
+            isMenuActive = true;
+        }
     }
+
 
     public boolean isMenuActive() {
         return isMenuActive;
