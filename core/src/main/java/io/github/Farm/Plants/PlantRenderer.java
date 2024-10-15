@@ -37,8 +37,6 @@
         private float width = 16f;
         private float height = 16f;
 
-        private ShapeRenderer shapeRenderer=new ShapeRenderer();
-
         public PlantRenderer(Vector2 position, PlantType type) {
             this.position = position;
             this.type = type;

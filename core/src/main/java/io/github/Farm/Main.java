@@ -2,7 +2,6 @@ package io.github.Farm;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,25 +14,19 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
-import io.github.Farm.Plants.PlantType;
 import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
-import io.github.Farm.animal.Buffalo;
-import io.github.Farm.animal.wolf;
 import io.github.Farm.inventory.Inventory;
-import io.github.Farm.inventory.InputHandlerInventory;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
 import com.badlogic.gdx.graphics.Texture; // Thêm dòng này để import lớp Texture
-import java.util.ArrayList;
 
 
 public class Main extends ApplicationAdapter {
@@ -61,17 +54,15 @@ public class Main extends ApplicationAdapter {
     private SettingGame settingGame;
 
     //------------------render
-    GameRenderer gameRenderer;
-    ShapeRenderer shapeRenderer;
-    Box2DDebugRenderer debugRenderer;
+    private GameRenderer gameRenderer;
+    private ShapeRenderer shapeRenderer;
+    private Box2DDebugRenderer debugRenderer;
 
-    private Rectangle backpackBounds;
-    private Texture backpackTexture;
 
 
 
 //____weather
-    private Weather weather; // Khai báo Weather
+    private Weather weather;
 
     @Override
     public void create() {
@@ -102,8 +93,7 @@ public class Main extends ApplicationAdapter {
         settingGame = new SettingGame();
 
 
-        backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
-        backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
+
 
 
         weather = new Weather(); // Khởi tạo Weather
@@ -138,11 +128,9 @@ public class Main extends ApplicationAdapter {
                 mapRenderer.setView(camera);
                 mapRenderer.render();
 
-                // Cập nhật và vẽ thời tiết
                 weather.update(Gdx.graphics.getDeltaTime());
-
                 batch.begin();
-                weather.render(batch); // Vẽ thời tiết lên bản đồ
+                weather.render(batch);
                 batch.end();
 
                 world.step(1 / 60f, 6, 2);
@@ -164,16 +152,11 @@ public class Main extends ApplicationAdapter {
                 gameRenderer.render();
 
 
-                batch.begin();
-                batch.setColor(Color.WHITE);
-                backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
-                    playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
-                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
-                batch.end();
 
                 if (Inventory.getInstance().isOpened()) {
                     batch.setColor(Color.WHITE);
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
+
                 }
             }
         }
@@ -184,7 +167,6 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         map.dispose();
         Inventory.getInstance().dispose();
-        backpackTexture.dispose();
         shapeRenderer.dispose();
         debugRenderer.dispose();
 
