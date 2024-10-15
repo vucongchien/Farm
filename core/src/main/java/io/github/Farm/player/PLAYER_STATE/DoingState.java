@@ -9,6 +9,7 @@ public class DoingState implements InterfacePlayerState{
     private  TimeCoolDown timeCoolDown;
 
     public DoingState(String direction){
+        time=0f;
         this.direction=direction;
         timeCoolDown=new TimeCoolDown();
     }
@@ -22,7 +23,7 @@ public class DoingState implements InterfacePlayerState{
     public void update(PlayerController player, float deltaTime) {
         time += deltaTime;
 
-        if (time >= 2f) {
+        if (time >= 3f) {
             player.setPlanting(false);
         }
         timeCoolDown.renderGreenBar( player.getPositionInMap().scl(16), 2, 32, 16);

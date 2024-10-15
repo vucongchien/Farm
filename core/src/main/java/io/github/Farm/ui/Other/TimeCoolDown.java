@@ -57,7 +57,6 @@ public class TimeCoolDown {
 
         if (index == GreenBar.length - 1) {
             countTime = 0;
-            System.out.println("da ve xong");
         }
 
         return index;

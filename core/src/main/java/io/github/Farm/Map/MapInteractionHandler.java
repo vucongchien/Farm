@@ -17,12 +17,10 @@ import java.util.ArrayList;
 public class MapInteractionHandler {
 
     private MapManager mapManager;
-    private SpriteBatch batch;
 
 
     public MapInteractionHandler(MapManager mapManager) {
         this.mapManager = mapManager;
-        this.batch=batch;
     }
 
     public boolean checkTile(Vector2 positonInMap,String tileType){
@@ -47,14 +45,21 @@ public class MapInteractionHandler {
             Inventory.getInstance().setOpened();
             playerController.setPlanting(true);
 
-            Timer.schedule(new Timer.Task() {
+            Timer.Task plantingTask = new Timer.Task() {
                 @Override
                 public void run() {
                     if (playerController.isPlanting()) {
+                        // mapManager.changeTile(positionInMap,"PlantedSeed_1","planted_seed");
                         PlantManager.getInstance().addPlantFromInventory(positionInMap, plantType);
+                        this.cancel();
+                    }
+                    else {
+                        System.out.println("nonono");
+                        this.cancel();
                     }
                 }
-            }, 2);
+            };
+            Timer.schedule(plantingTask, 2);
 
 
         } else {
