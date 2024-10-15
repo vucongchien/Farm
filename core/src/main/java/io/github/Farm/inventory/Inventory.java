@@ -103,11 +103,8 @@ public class Inventory {
 
 
     public void draw(SpriteBatch batch, OrthographicCamera camera, Vector2 playerPosition) {
-<<<<<<< Updated upstream
         batch.setProjectionMatrix(camera.combined);
-=======
 
->>>>>>> Stashed changes
         float inventoryX = playerPosition.x - (totalWidth / 2);
         float inventoryY = playerPosition.y - (totalHeight / 2);
 
