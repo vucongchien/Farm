@@ -139,7 +139,7 @@ public class Main extends ApplicationAdapter {
 //                settingGame.render(batch, playerControllerNew.getPosition());
 //            } else {
                 BuffaloManager.getbuffalomanager().update();
-                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager());
+                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
 //                wolfManager.update(buffaloManager);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

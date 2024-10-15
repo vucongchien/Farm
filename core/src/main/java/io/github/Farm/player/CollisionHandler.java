@@ -42,17 +42,7 @@ public class CollisionHandler implements Collider {
             }
         }
         //check nhieu cai khac o day--
-        Iterator<WolfRender> iteratorwolf = WolfManager.getwolfmanage().getwolfmanafer().iterator();
-        while (iteratorwolf.hasNext()){
-            WolfRender wolf=iteratorwolf.next();
-            if (playerController.getCollider().overlaps(wolf.getCollider())) {
-                wolf.onCollision(playerController);
-                if (playerController.getCurrentState().startsWith("HIT_")) {
-                    wolf.sethp();
 
-                }
-            }
-        }
     }
 
 

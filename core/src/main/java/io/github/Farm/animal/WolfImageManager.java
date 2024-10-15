@@ -21,10 +21,10 @@ public class WolfImageManager implements Disposable {
         animations.put(PetState.WALK_BACK,playerImageManager.createAnimation("Animal_animation/cow/WhiteCowWalk_Backward.png",4,1,0.1f));
         animations.put(PetState.WALK_FACE,playerImageManager.createAnimation("Animal_animation/wolf/D_Walk.png",6,1,0.1f));
 
-        animations.put(PetState.IDLE_RIGHT,playerImageManager.createAnimation("Animal_animation/wolf/S_Attack.png",6,1,0.1f));
+        animations.put(PetState.IDLE_RIGHT,playerImageManager.createAnimation("Animal_animation/wolf/D_Attack.png",6,1,0.1f));
         animations.put(PetState.IDLE_LEFT,playerImageManager.flipAnimation(animations.get(PetState.IDLE_RIGHT)));
         animations.put(PetState.IDLE_BACK,playerImageManager.createAnimation("Animal_animation/cow/WhiteCowIdle_Back.png",6,1,0.1f));
-        animations.put(PetState.IDLE_FACE,playerImageManager.createAnimation("Animal_animation/cow/WhiteCowIdle_Face.png",6,1,0.1f));
+        animations.put(PetState.IDLE_FACE,playerImageManager.createAnimation("Animal_animation/wolf/D_Attack.png",6,1,0.1f));
 
         animations.put(PetState.SLEEP_RIGHT,playerImageManager.createAnimation("Animal_animation/cow/WhiteCowSleeping_Right.png",4,1,0.1f));
         animations.put(PetState.SLEEP_LEFT,playerImageManager.flipAnimation(animations.get(PetState.SLEEP_RIGHT)));

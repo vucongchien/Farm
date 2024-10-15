@@ -17,6 +17,7 @@ import java.util.Timer;
 
 import com.badlogic.gdx.math.Rectangle;
 import io.github.Farm.Interface.Animal;
+import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.Pet;
 import io.github.Farm.animal.PetState;
@@ -434,12 +435,12 @@ public class Buffalo extends Pet implements RenderableEntity {
     @Override
     public void render(SpriteBatch batch, Camera camera) {
         box.setPosition(getlocation().x, getlocation().y);
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(box.x, box.y, box.width, box.height);
-        shapeRenderer.end();
+//        shapeRenderer = new ShapeRenderer();
+//        shapeRenderer.setProjectionMatrix(camera.combined);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(Color.RED);
+//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+//        shapeRenderer.end();
         currentAnimation = imageManager.getAnimation(crencurrentState);
 
         batch.setProjectionMatrix(camera.combined);

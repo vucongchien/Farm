@@ -264,5 +264,8 @@ public class PlayerController implements Collider, Disposable {
         return positionInMap;
     }
 
+//    public Vector2 getPositionBody(){
+//        return body.getPosition();
+//    }
 
 }

@@ -1,7 +1,10 @@
 package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.Plants.PlantRenderer;
+import io.github.Farm.animal.WolfManager;
+import io.github.Farm.animal.WolfRender;
 import io.github.Farm.player.PlayerController;
 
 import java.util.Iterator;
@@ -10,6 +13,7 @@ public class HitState implements InterfacePlayerState {
     private String direction;
     private static float startHit=0f;
     private float timeToHit=0.3f;
+    static boolean check;
 
     public HitState(String direction){
         this.direction=direction;
@@ -22,11 +26,14 @@ public class HitState implements InterfacePlayerState {
     @Override
     public void update(PlayerController player, float deltaTime) {
         startHit+= Gdx.graphics.getDeltaTime();
-        if(startHit>=timeToHit){
-            hitSomeThing(player);
+
+        if(startHit>=timeToHit&&!check){
+                hitSomeThing(player);
+                check=true;
         }
         if(startHit>=0.5){
             startHit=0;
+            check=false;
         }
 
     }
@@ -38,6 +45,14 @@ public class HitState implements InterfacePlayerState {
             if (player.getCollider().overlaps(plant.getCollider())) {
                 plant.onCollision(player);
                 iterator.remove();
+            }
+        }
+        Iterator<WolfRender> iteratorwolf = WolfManager.getwolfmanage().getwolfmanafer().iterator();
+        while (iteratorwolf.hasNext()){
+            WolfRender wolf=iteratorwolf.next();
+            if (player.getCollider().overlaps(wolf.getCollider())) {
+                wolf.onCollision(player);
+
             }
         }
 
