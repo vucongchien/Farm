@@ -3,13 +3,12 @@
     import com.badlogic.gdx.graphics.Camera;
     import com.badlogic.gdx.graphics.g2d.SpriteBatch;
     import com.badlogic.gdx.graphics.Texture;
-    import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
     import com.badlogic.gdx.math.Rectangle;
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.utils.TimeUtils;
     import io.github.Farm.Interface.RenderableEntity;
     import io.github.Farm.Interface.Collider;
-    import io.github.Farm.inventory.ItemManager;
+    import io.github.Farm.ui.inventory.ItemManager;
     import io.github.Farm.player.PlayerController;
 
     public class PlantRenderer implements Collider, RenderableEntity {
@@ -36,8 +35,6 @@
 
         private float width = 16f;
         private float height = 16f;
-
-        private ShapeRenderer shapeRenderer=new ShapeRenderer();
 
         public PlantRenderer(Vector2 position, PlantType type) {
             this.position = position;

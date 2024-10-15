@@ -1,4 +1,4 @@
-package io.github.Farm.inventory;
+package io.github.Farm.ui.inventory;
 
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -104,8 +104,9 @@ public class Inventory {
 
     public void draw(SpriteBatch batch, OrthographicCamera camera, Vector2 playerPosition) {
         batch.setProjectionMatrix(camera.combined);
-        float inventoryX = 900;
-        float inventoryY = 900;
+
+        float inventoryX = playerPosition.x - (totalWidth / 2);
+        float inventoryY = playerPosition.y - (totalHeight / 2);
 
         // Vẽ background và khung của inventory
         shapeRenderer.setProjectionMatrix(camera.combined);

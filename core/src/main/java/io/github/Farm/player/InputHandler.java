@@ -3,7 +3,7 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.inventory.Inventory;
+import io.github.Farm.ui.inventory.Inventory;
 
 public class InputHandler {
     PlayerController playerController;

@@ -1,4 +1,4 @@
-package io.github.Farm.inventory;
+package io.github.Farm.ui.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -6,8 +6,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import io.github.Farm.inventory.Inventory;
 
 public class InputHandlerInventory extends InputAdapter {
     private OrthographicCamera camera;

@@ -1,4 +1,4 @@
-package io.github.Farm.UI.Other;
+package io.github.Farm.ui.Other;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,7 +11,6 @@ public class SelectionBox {
     private static SelectionBox instance;
     private TextureRegion[] selectionBoxTextures;
 
-    // Private constructor to prevent instantiation from outside
     private SelectionBox() {
         selectionBoxTextures = new TextureRegion[4];
         selectionBoxTextures[0] = new TextureRegion(new Texture("UI/selectbox_tl.png"));

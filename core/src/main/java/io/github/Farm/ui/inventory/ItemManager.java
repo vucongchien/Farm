@@ -1,7 +1,6 @@
-package io.github.Farm.inventory;
+package io.github.Farm.ui.inventory;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.List;
