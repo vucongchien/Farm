@@ -13,13 +13,14 @@ public class CaughtState implements InterfacePlayerState {
 
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("CAUGHT_" + direction);
+
     }
 
     @Override
     public void update(PlayerController player, float deltaTime) {
         if(waitTime<0.2f){
             waitTime+=deltaTime;
+            System.out.println(waitTime);
             return;
         }
         player.changeState(new IdleState(direction));

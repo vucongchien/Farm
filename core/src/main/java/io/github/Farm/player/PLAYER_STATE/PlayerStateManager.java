@@ -12,10 +12,12 @@ public class PlayerStateManager {
     }
 
     public void changeState(PlayerController player, InterfacePlayerState newState) {
+        if(currentState.getStateName().equals(newState.getStateName())){
+            return;
+        }
         if (!currentState.getStateName().equals(preState.getStateName()) ) {
             preState=currentState;
             currentState.exit(player);
-            System.out.println(preState +"    "+ currentState);
         }
         currentState = newState;
         currentState.enter(player);

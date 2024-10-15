@@ -10,7 +10,7 @@ public class SwimState implements InterfacePlayerState {
 
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("SWIM_" + direction);
+
     }
 
     @Override

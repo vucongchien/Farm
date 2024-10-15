@@ -9,6 +9,7 @@ import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.WolfManager;
+import io.github.Farm.ui.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
 
 import java.util.ArrayList;
@@ -21,14 +22,12 @@ public class GameRenderer {
     private PlantManager plantManager;
     private Camera camera;
     private TiledMap map;
-    private long checkquantity=0;
-    private long checkquantitybuffalo=0;
-    private long checkquantitywolf=0;
+
+    List<RenderableEntity> renderableEntities = new ArrayList<>();
 
 
-    public GameRenderer(PlayerRenderer player,PlantManager plantManager, Camera camera, TiledMap map){
+    public GameRenderer(PlayerRenderer player, Camera camera, TiledMap map){
         batch=new SpriteBatch();
-        this.plantManager=plantManager;
         this.player =player;
         this.camera=camera;
         this.map=map;
@@ -60,30 +59,32 @@ public class GameRenderer {
 
 
     private void renderAllEntities(SpriteBatch batch) {
-
-        List<RenderableEntity> renderableEntities = new ArrayList<>();
+        renderableEntities.clear();
 
         renderableEntities.add(player);
 
-        renderableEntities.addAll(plantManager.getPlants());
+        renderableEntities.addAll(PlantManager.getInstance().getListPlants());
 
-        renderableEntities.addAll(BuffaloManager.getbuffalomanager().getBuffaloManager());
+        renderableEntities.addAll(ItemManager.getInstance().getItemList());
 
-        renderableEntities.addAll(WolfManager.getwolfmanage().getwolfmanafer());
 
-//        renderableEntities.sort(new Comparator<RenderableEntity>() {
-//            @Override
-//            public int compare(RenderableEntity e1, RenderableEntity e2) {
-//                return Float.compare(e2.getY(), e1.getY());
-//            }
-//        });
+        renderableEntities.sort(new Comparator<RenderableEntity>() {
+            @Override
+            public int compare(RenderableEntity e1, RenderableEntity e2) {
+                return Float.compare(e2.getY(), e1.getY());
+            }
+        });
+
+
 
         for (RenderableEntity entity : renderableEntities) {
             entity.render(batch,camera);
             if (entity instanceof PlantRenderer) {
                 PlantRenderer plantRenderer = (PlantRenderer) entity;
-
             }
+
         }
+
+
     }
 }

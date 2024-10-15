@@ -4,11 +4,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.player.PLAYER_STATE.PlayerState;
 
 import java.util.EnumMap;
 
-public class PlayerImageManager {
+public class PlayerImageManager implements Disposable {
     private final EnumMap<PlayerState, Animation<TextureRegion>> animations;
 
     public PlayerImageManager() {
@@ -49,6 +50,9 @@ public class PlayerImageManager {
 
         animations.put(PlayerState.WAITING_RIGHT, createAnimation("Player_animation/spr_waiting_strip9.png", 9, 1, 0.04f));
         animations.put(PlayerState.WAITING_LEFT, flipAnimation(animations.get(PlayerState.WAITING_RIGHT)));
+
+        animations.put(PlayerState.HURT_RIGHT,createAnimation("Player_animation/spr_hurt_strip8.png",8,1,0.04f));
+        animations.put(PlayerState.HURT_LEFT,flipAnimation(animations.get(PlayerState.HURT_RIGHT)));
     }
 
     private Animation<TextureRegion> createAnimation(String sheetPath, int frameCols, int frameRows, float frameDuration) {
@@ -89,16 +93,17 @@ public class PlayerImageManager {
         return animations.get(state);
     }
 
-
+    @Override
     public void dispose() {
         for (Animation<TextureRegion> animation : animations.values()) {
             if (animation != null) {
                 for (TextureRegion frame : animation.getKeyFrames()) {
-                    if (frame.getTexture() != null) {
+                    if (frame != null && frame.getTexture() != null) {
                         frame.getTexture().dispose();
                     }
                 }
             }
         }
+
     }
 }

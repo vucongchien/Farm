@@ -10,7 +10,11 @@ public enum PlayerState {
     DOING_LEFT,DOING_RIGHT,
     HAMMER_LEFT,HAMMER_RIGHT,
     SWIM_LEFT,SWIM_RIGHT,
+    HURT_LEFT,HURT_RIGHT,
+
     CASTING_LEFT, CASTING_RIGHT,WAITING_LEFT,WAITING_RIGHT,CAUGHT_LEFT,CAUGHT_RIGHT;
+
+
 
     public static PlayerState getIdleState(PlayerState lastDirection) {
         switch (lastDirection) {

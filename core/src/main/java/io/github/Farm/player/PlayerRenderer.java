@@ -30,7 +30,8 @@ public class PlayerRenderer implements RenderableEntity {
 
     @Override
     public void render(SpriteBatch batch, Camera camera) {
-
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         stateTime += player.getDeltaTime();
         updateAnimation();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);

@@ -1,8 +1,9 @@
 package io.github.Farm.Plants;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Disposable;
 
-public class PlantImageManager {
+public class PlantImageManager implements Disposable {
     private Texture seedTexture;
     private Texture sproutTexture;
     private Texture youngTexture;
@@ -30,6 +31,7 @@ public class PlantImageManager {
         }
     }
 
+    @Override
     public void dispose() {
         seedTexture.dispose();
         sproutTexture.dispose();

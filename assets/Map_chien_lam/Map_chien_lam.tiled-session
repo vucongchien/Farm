@@ -28,13 +28,15 @@
             "expandedGroupLayers": [
                 31,
                 20,
-                29
+                29,
+                37,
+                16
             ],
-            "scale": 0.5,
+            "scale": 0.33,
             "selectedLayer": 19,
             "viewCenter": {
-                "x": 1287,
-                "y": 207
+                "x": 1610.6060606060605,
+                "y": 665.151515151515
             }
         },
         "Other.tsx": {
@@ -44,12 +46,12 @@
         },
         "tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1.5,
-            "scaleInEditor": 2
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "tileset_vippp.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 3,
+            "scaleInDock": 1,
             "scaleInEditor": 2
         }
     },

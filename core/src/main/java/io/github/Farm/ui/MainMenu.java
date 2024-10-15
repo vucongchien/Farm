@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 
 
 
+
 public class MainMenu {
     private BitmapFont font;
     private Texture background; // Biến để lưu background
@@ -34,18 +35,18 @@ public class MainMenu {
 
 
 
+
     public MainMenu() {
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 36; // Kích thước chữ lớn hơn
-//        parameter.color = Color.BLACK; // Màu đen
         parameter.borderWidth = 2; // Độ dày của viền để tạo cảm giác in đậm
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
 
-//        this.background = new Texture(Gdx.files.internal("ui/demo.gif")); // Khởi tạo background
+
         this.menuItems = new String[] {"Start Game", "Options", "Exit"};
         this.selectedIndex = 0;
         this.isMenuActive = true; // Mặc định menu đang hoạt động
@@ -64,7 +65,7 @@ public class MainMenu {
         // Khởi tạo âm thanh di chuyển
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
 
-        SoundEnter = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_enterbutton.wav"));
+
 
         // Tạo một mảng để lưu các frame
         Array<TextureRegion> frames = new Array<>();
@@ -82,14 +83,11 @@ public class MainMenu {
         // Tạo animation với tốc độ 10 frame mỗi giây (có thể điều chỉnh)
         backgroundAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
 
-
-
     }
 
     public void render(SpriteBatch batch) {
         if (isMenuActive) {
             batch.begin();
-
             // Cập nhật thời gian đã trôi qua
             elapsedTime += Gdx.graphics.getDeltaTime();
 
@@ -128,20 +126,20 @@ public class MainMenu {
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
             selectedIndex = (selectedIndex + 1) % menuItems.length;
-            moveSound.play(); // Phát âm thanh ngay lập tức để kiểm tra
+            moveSound.play(0.05f); // Phát âm thanh ngay lập tức để kiểm tra
         } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.UP)) {
             selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
-            moveSound.play(); // Phát âm thanh ngay lập tức để kiểm tra
+            moveSound.play(0.05f); // Phát âm thanh ngay lập tức để kiểm tra
         } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
             switch (selectedIndex) {
+
                 case 0:
                     // Start game
-                    SoundEnter.play();
                     isMenuActive = false;
                     break;
                 case 1:
                     // Options
-                    SoundEnter.play();
+
                     break;
                 case 2:
                     // Exit
@@ -149,6 +147,7 @@ public class MainMenu {
                     break;
             }
         }
+
     }
 
     public boolean isMenuActive() {
@@ -163,12 +162,20 @@ public class MainMenu {
         if (font != null) {
             font.dispose(); // Giải phóng tài nguyên font
         }
-        if (background != null) {
-            background.dispose(); // Giải phóng tài nguyên background
+
+        // Giải phóng âm thanh
+        if (moveSound != null) {
+            moveSound.dispose(); // Giải phóng âm thanh di chuyển
         }
+        if (SoundEnter != null) {
+            SoundEnter.dispose(); // Giải phóng âm thanh enter
+        }
+
         // Giải phóng tài nguyên cho các texture trong animation
         for (TextureRegion frame : backgroundAnimation.getKeyFrames()) {
-            frame.getTexture().dispose();
+            if (frame.getTexture() != null) {
+                frame.getTexture().dispose(); // Giải phóng texture nếu không null
+            }
         }
     }
 

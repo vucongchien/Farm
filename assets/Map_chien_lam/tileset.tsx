@@ -172,6 +172,7 @@
    <frame tileid="417" duration="100"/>
   </animation>
  </tile>
+ <tile id="449" type="dug_soil"/>
  <tile id="451">
   <objectgroup draworder="index" id="5">
    <object id="4" x="0.15625" y="0.0625">

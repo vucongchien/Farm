@@ -1,13 +1,12 @@
 package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.Gdx;
+import io.github.Farm.Plants.PlantManager;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.animal.WolfManager;
 import io.github.Farm.animal.WolfRender;
 import io.github.Farm.player.PlayerController;
-
-import java.util.Iterator;
 
 public class HitState implements InterfacePlayerState {
     private String direction;
@@ -20,7 +19,7 @@ public class HitState implements InterfacePlayerState {
     }
     @Override
     public void enter(PlayerController player) {
-        player.setCurrentState("HIT_"+direction);
+
     }
 
     @Override
@@ -56,6 +55,11 @@ public class HitState implements InterfacePlayerState {
             }
         }
 
+        if(PlantManager.getInstance().getPlantAt(player.getPositionInMap())!=null){
+            PlantManager.getInstance().getMapPlants().get(player.getPositionInMap()).onCollision(player);
+            PlantManager.getInstance().getMapPlants().remove(player.getPositionInMap());
+        }
+        startHit=-0.2f;
     }
 
     @Override
