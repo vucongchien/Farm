@@ -82,7 +82,7 @@ public class Main extends ApplicationAdapter {
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
 
 
-        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler);
+        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
         playerImageManagerNew = new PlayerImageManager();
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
@@ -157,6 +157,7 @@ public class Main extends ApplicationAdapter {
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
 
                 }
+
             }
         }
     }

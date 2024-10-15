@@ -29,7 +29,7 @@ public class InventorySlot {
                 return;
 
             case "SEED":
-                playerController.getCollisionHandler().plantSeed(playerController.getPositionInMap(),PlantType.valueOf(NAME),playerController);
+                playerController.getCollisionHandler().plantSeed(PlantType.valueOf(NAME));
                 return;
         }
     }

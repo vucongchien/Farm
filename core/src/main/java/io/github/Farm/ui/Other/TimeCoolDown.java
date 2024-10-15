@@ -1,6 +1,7 @@
 package io.github.Farm.ui.Other;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -62,15 +63,19 @@ public class TimeCoolDown {
         return index;
     }
 
-    public void renderGreenBar( Vector2 position,float timeDelay,float width,float height){
+    public void renderGreenBar(Vector2 position, Camera camera, float timeDelay, float width, float height){
         int index=getIndex(timeDelay);
 
-
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(GreenBar[index],position.x-1,position.y -330,width, height);
+        batch.draw(GreenBar[index],position.x-6.5f,position.y+16 ,width, height);
         batch.end();
 
 
+    }
+
+    public void reset(){
+        countTime=0f;
     }
 
 

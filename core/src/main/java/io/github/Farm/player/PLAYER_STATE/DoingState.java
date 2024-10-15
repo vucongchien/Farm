@@ -4,9 +4,9 @@ import io.github.Farm.player.PlayerController;
 import io.github.Farm.ui.Other.TimeCoolDown;
 
 public class DoingState implements InterfacePlayerState{
-    private String direction;
+    private final String direction;
     private float time=0f;
-    private  TimeCoolDown timeCoolDown;
+    private final TimeCoolDown timeCoolDown;
 
     public DoingState(String direction){
         time=0f;
@@ -16,17 +16,16 @@ public class DoingState implements InterfacePlayerState{
 
     @Override
     public void enter(PlayerController player) {
-
     }
 
     @Override
     public void update(PlayerController player, float deltaTime) {
-        time += deltaTime;
+        time += player.getDeltaTime();
 
-        if (time >= 3f) {
+        if (time >= 2f) {
             player.setPlanting(false);
         }
-        timeCoolDown.renderGreenBar( player.getPositionInMap().scl(16), 2, 32, 16);
+        timeCoolDown.renderGreenBar( player.getPosition(), player.getCamera(), 2.5f, 14, 7);
 
     }
 

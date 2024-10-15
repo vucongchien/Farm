@@ -1,6 +1,5 @@
 package io.github.Farm.Map;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -19,6 +18,12 @@ public class MapInteractionHandler {
     private MapManager mapManager;
 
 
+    private final float TIME_TO_PLANT =2f;
+    private final float TIME_TO_DIG=2f;
+
+    private Timer.Task currentTask;
+
+
     public MapInteractionHandler(MapManager mapManager) {
         this.mapManager = mapManager;
     }
@@ -29,42 +34,44 @@ public class MapInteractionHandler {
         return mapManager.getTileClass(positonInMap).equals(tileType);
     }
 
-    public void digSoil(Vector2 positionInMap) {
+    public void digSoil(PlayerController playerController) {
 
-        String tileClass = mapManager.getTileClass(positionInMap);
+        String tileClass = mapManager.getTileClass(playerController.getPositionInMap());
         if ("grass".equals(tileClass)) {
-            mapManager.changeTile(positionInMap, "dug_soil","land");
+
+            mapManager.changeTile(playerController.getPositionInMap(), "dug_soil", "land");
+
         }
         else {
 
+            System.out.println("Cannot plant: " + tileClass);
         }
+
     }
-    public void plantSeed(Vector2 positionInMap, PlantType plantType, PlayerController playerController){
-        String tileClass=mapManager.getTileClass(positionInMap);
+    public void plantSeed( PlantType plantType, PlayerController playerController){
+        String tileClass=mapManager.getTileClass(playerController.getPositionInMap());
         if("dug_soil".equals(tileClass)){
             Inventory.getInstance().setOpened();
             playerController.setPlanting(true);
 
-            Timer.Task plantingTask = new Timer.Task() {
+            if (currentTask != null) {
+                currentTask.cancel();
+            }
+            currentTask = new Timer.Task() {
                 @Override
                 public void run() {
                     if (playerController.isPlanting()) {
-                        // mapManager.changeTile(positionInMap,"PlantedSeed_1","planted_seed");
-                        PlantManager.getInstance().addPlantFromInventory(positionInMap, plantType);
-                        this.cancel();
-                    }
-                    else {
-                        System.out.println("nonono");
-                        this.cancel();
+                        PlantManager.getInstance().addPlantFromInventory(playerController.getPositionInMap(), plantType);
+
                     }
                 }
             };
-            Timer.schedule(plantingTask, 2);
-
+            Timer.schedule(currentTask, TIME_TO_PLANT);
 
         } else {
             System.out.println("Cannot plant: " + tileClass);
         }
+
 
     }
 

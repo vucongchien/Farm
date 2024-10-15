@@ -2,6 +2,7 @@ package io.github.Farm.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -25,15 +26,9 @@ public class PlayerController implements Collider, Disposable {
     private boolean isSwim=false;
     private boolean isPlanting=false;
 
-    //fishing
-    private float TimeStartFish=0f;
-    private float TimeToFishing=5f;
-
     private InputHandler inputHandler;
     private  CollisionHandler collisionHandler;
     private PlayerStateManager stateManager;
-
-
 
     //collider
     private Rectangle collider;
@@ -41,7 +36,9 @@ public class PlayerController implements Collider, Disposable {
     private World world;
     private Body body;
 
-    public PlayerController(Vector2 startPosition, World world,MapInteractionHandler mapInteractionHandler) {
+    private Camera camera;
+
+    public PlayerController(Vector2 startPosition, World world,MapInteractionHandler mapInteractionHandler,Camera camera) {
 
         this.heath=new Heath(100);
 
@@ -49,14 +46,15 @@ public class PlayerController implements Collider, Disposable {
         this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
 
         this.inputHandler = new InputHandler(this);
-        this.collisionHandler = new CollisionHandler( mapInteractionHandler);
+        this.collisionHandler = new CollisionHandler( mapInteractionHandler,this);
         this.world=world;
         this.body=createBody(startPosition, world);
-
+        this.camera=camera;
         this.stateManager = new PlayerStateManager(new IdleState("RIGHT"));
 
         this.collider=new Rectangle(position.x,position.y,16,16);
         this.shapeRenderer=new ShapeRenderer();
+
     }
 
     private Body createBody(Vector2 startPosition, World world) {
@@ -115,11 +113,11 @@ public class PlayerController implements Collider, Disposable {
 
         //logic swim
         if (isSwim) return;
-        collisionHandler.checkCollisions(this);
-
-        if (inputHandler.isPlowing()) {
-            collisionHandler.handlePlowing(positionInMap);
-        }
+        collisionHandler.checkCollisions();
+//
+//        if (inputHandler.isPlowing()) {
+//            collisionHandler.handlePlowing();
+//        }
 
 
     }
@@ -264,5 +262,9 @@ public class PlayerController implements Collider, Disposable {
 
     public boolean isPlanting() {
         return isPlanting;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 }

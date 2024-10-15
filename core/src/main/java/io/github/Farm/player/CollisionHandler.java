@@ -15,31 +15,25 @@ import java.util.Iterator;
 public class CollisionHandler implements Collider {
 
     private MapInteractionHandler mapInteractionHandler;
+    private PlayerController playerController;
 
-    public CollisionHandler(MapInteractionHandler mapInteractionHandler) {
-
+    public CollisionHandler(MapInteractionHandler mapInteractionHandler,PlayerController playerController) {
+        this.playerController=playerController;
         this.mapInteractionHandler = mapInteractionHandler;
     }
 
-    public void checkCollisions(PlayerController playerController) {
+    public void checkCollisions() {
         //check nhieu cai khac o day--
-        Iterator<Item> iterator = ItemManager.getInstance().getItemList().iterator();
-        while(iterator.hasNext()){
-            Item item =iterator.next();
-            if(playerController.getCollider().overlaps(item.getCollider())){
-                item.onCollision(playerController);
-                iterator.remove();
-            }
-        }
+
 
     }
 
-    public void handlePlowing(Vector2 positionInMap) {
-        mapInteractionHandler.digSoil(positionInMap);
+    public void handlePlowing() {
+        mapInteractionHandler.digSoil(playerController);
     }
 
-    public void plantSeed(Vector2 positionInMap, PlantType plantType,PlayerController playerController) {
-        mapInteractionHandler.plantSeed(positionInMap,plantType,playerController);
+    public void plantSeed( PlantType plantType) {
+        mapInteractionHandler.plantSeed(plantType,playerController);
     }
 
     public boolean isPlayerCanFish(Rectangle playerCollider){
