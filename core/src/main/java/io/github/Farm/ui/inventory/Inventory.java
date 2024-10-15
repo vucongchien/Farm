@@ -1,4 +1,4 @@
-package io.github.Farm.inventory;
+package io.github.Farm.ui.inventory;
 
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

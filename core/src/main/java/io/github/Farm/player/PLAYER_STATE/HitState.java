@@ -2,11 +2,7 @@ package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.Gdx;
 import io.github.Farm.Plants.PlantManager;
-import io.github.Farm.Plants.PlantRenderer;
-import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerController;
-
-import java.util.Iterator;
 
 public class HitState implements InterfacePlayerState {
     private String direction;

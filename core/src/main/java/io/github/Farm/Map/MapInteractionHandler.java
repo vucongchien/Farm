@@ -9,8 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.ui.Other.TimeCoolDown;
-import io.github.Farm.inventory.Inventory;
+import io.github.Farm.ui.inventory.Inventory;
 import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;

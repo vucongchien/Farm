@@ -68,7 +68,7 @@ public class TimeCoolDown {
 
 
         batch.begin();
-        batch.draw(GreenBar[index],position.x,position.y -330,width, height);
+        batch.draw(GreenBar[index],position.x-1,position.y -330,width, height);
         batch.end();
 
 

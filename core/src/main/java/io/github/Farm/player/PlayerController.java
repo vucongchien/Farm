@@ -7,11 +7,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Timer;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
-import io.github.Farm.inventory.Inventory;
+import io.github.Farm.ui.inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
 
 public class PlayerController implements Collider, Disposable {

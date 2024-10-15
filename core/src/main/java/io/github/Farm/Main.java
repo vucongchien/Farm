@@ -22,11 +22,10 @@ import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
-import io.github.Farm.inventory.Inventory;
+import io.github.Farm.ui.inventory.Inventory;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
-import com.badlogic.gdx.graphics.Texture; // Thêm dòng này để import lớp Texture
 
 
 public class Main extends ApplicationAdapter {
