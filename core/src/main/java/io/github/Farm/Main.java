@@ -46,7 +46,6 @@ public class Main extends ApplicationAdapter {
 
     private PlayerRenderer playerRendererNew;
     private PlayerController playerControllerNew;
-    private PlayerImageManager playerImageManagerNew;
 
 
     //-------------map
@@ -93,7 +92,7 @@ public class Main extends ApplicationAdapter {
 
 
         playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler);
-        playerImageManagerNew = new PlayerImageManager();
+        PlayerImageManager playerImageManagerNew = new PlayerImageManager();
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
         gameRenderer = new GameRenderer(playerRendererNew, camera,map);

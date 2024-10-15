@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.Farm.player.PlayerController;
 import com.badlogic.gdx.math.Vector3;
 import io.github.Farm.inventory.Inventory;
 
@@ -14,14 +15,15 @@ public class InputHandlerInventory extends InputAdapter {
     private Rectangle backpackBounds;
     private Inventory inventory;
     private boolean isInGame;
-    private Sound moveSound;
-    private Sound SoundEnter;
+    private Sound moveSound; // Biến để lưu âm thanh di chuyển
+    private PlayerController playerController; // Thêm biến PlayerController
 
     public InputHandlerInventory(OrthographicCamera camera, Rectangle backpackBounds, Inventory inventory, boolean isInGame) {
         this.camera = camera;
         this.backpackBounds = backpackBounds;
         this.inventory = inventory;
         this.isInGame = isInGame;
+        this.playerController = playerController; // Khởi tạo PlayerController
 
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
     }
@@ -47,8 +49,8 @@ public class InputHandlerInventory extends InputAdapter {
                 moveSound.play(0.05f);
                 inventory.moveSelectionRight();  // Di chuyển sang phải
             } else if (keycode == Keys.ENTER) {
-               // moveSound.play(0.05f);
-                //inventory.useSelectedItem();  // Sử dụng vật phẩm
+                moveSound.play(0.05f);
+                inventory.useSelectedItem(playerController);  // Sử dụng vật phẩm
             }
         }
         return true;

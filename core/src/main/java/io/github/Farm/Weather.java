@@ -19,7 +19,6 @@ public class Weather {
     private float[] cloudPositions; // Vị trí đám mây trên màn hình
     private final int cloudCount = 6; // Số lượng đám mây
 
-
     public Weather() {
         this.currentWeather = "Rainy"; // Giá trị mặc định
         this.rainTexture = new Texture(Gdx.files.internal("Weather/rain_drops-01.png")); // Tải hình ảnh giọt mưa
@@ -65,6 +64,7 @@ public class Weather {
     }
 
     public void render(SpriteBatch batch) {
+
         batch.setColor(Color.WHITE); // Đặt màu mặc định
         switch (currentWeather) {
             case "Sunny":
