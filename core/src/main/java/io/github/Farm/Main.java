@@ -25,6 +25,7 @@ import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.ui.inventory.Inventory;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
+import io.github.Farm.ui.inventory.ItemManager;
 import io.github.Farm.weather.Weather;
 
 
@@ -146,7 +147,6 @@ public class Main extends ApplicationAdapter {
 
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
-
                 playerControllerNew.update(deltaTime);
                 gameRenderer.render();
 

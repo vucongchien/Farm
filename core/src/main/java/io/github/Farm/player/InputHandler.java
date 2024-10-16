@@ -13,6 +13,7 @@ public class InputHandler {
     }
 
     public Vector2 handleMovementInput() {
+
         Vector2 movement = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             movement.y = 1;

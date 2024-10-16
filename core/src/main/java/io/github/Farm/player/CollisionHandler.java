@@ -25,6 +25,14 @@ public class CollisionHandler implements Collider {
     public void checkCollisions() {
         //check nhieu cai khac o day--
 
+        Iterator<Item> iterator = ItemManager.getInstance().getItemList().iterator();
+        while(iterator.hasNext()){
+            Item item =iterator.next();
+            if(playerController.getCollider().overlaps(item.getCollider())){
+                item.onCollision(playerController);
+                iterator.remove();
+            }
+        }
 
     }
 

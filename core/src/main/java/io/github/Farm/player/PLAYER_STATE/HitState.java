@@ -12,6 +12,7 @@ public class HitState implements InterfacePlayerState {
     public HitState(String direction){
         this.direction=direction;
     }
+
     @Override
     public void enter(PlayerController player) {
 
