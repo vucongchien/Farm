@@ -92,16 +92,14 @@ public class Main extends ApplicationAdapter {
         mainMenu = new MainMenu();
         settingGame = new SettingGame();
 
-
-
-
-
-        weather = new Weather(); // Khởi tạo Weather
+        // Khởi tạo Weather với mapManager
+        weather = new Weather(mapManager); // Truyền mapManager vào Weathe
 
     }
 
     @Override
     public void render() {
+        weather.update(Gdx.graphics.getDeltaTime());
         // Kiểm tra xem menu có đang hoạt động không
         if (mainMenu.isMenuActive()) {
             mainMenu.handleInput();
