@@ -34,6 +34,8 @@ import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
 
+import java.util.List;
+
 
 public class Main extends ApplicationAdapter {
 
@@ -71,12 +73,6 @@ public class Main extends ApplicationAdapter {
     private GameRenderer gameRenderer;
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
-
-    private Rectangle backpackBounds; // Khai báo backpackBounds
-    private Texture backpackTexture; // Khai báo biến lưu trữ hình ảnh ba lô
-    //-----------------------------------inventory
-    private InputHandlerInventory inputHandler;
-    private Inventory inventory; // Khai báo biến inventory
 
 
     @Override
@@ -145,9 +141,9 @@ public class Main extends ApplicationAdapter {
 //        backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
 //        backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
 
-        // Khởi tạo InputHandler
-        inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
-        Gdx.input.setInputProcessor(inputHandler);
+//        // Khởi tạo InputHandler
+//        inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
+//        Gdx.input.setInputProcessor(inputHandler);
 
     }
 
@@ -214,10 +210,10 @@ public class Main extends ApplicationAdapter {
 //        batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
 //        batch.end();
 
-        // Vẽ inventory nếu đang ở trạng thái 'isInGame'
-        if (inputHandler.isInGame()) {
-            inventory.draw(batch, camera, playerControllerNew.getPosition());
-        }
+//        // Vẽ inventory nếu đang ở trạng thái 'isInGame'
+//        if (inputHandler.isInGame()) {
+//            inventory.draw(batch, camera, playerControllerNew.getPosition());
+//        }
 }
 
 }

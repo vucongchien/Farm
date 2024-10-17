@@ -180,12 +180,12 @@ public class WolfRender implements Collider, RenderableEntity {
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
         batch.draw(frame, getlocation().x-18, getlocation().y-22, 32, 32);
         batch.end();
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(box.x, box.y, box.width, box.height);
-        shapeRenderer.end();
+//        shapeRenderer = new ShapeRenderer();
+//        shapeRenderer.setProjectionMatrix(camera.combined);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(Color.RED);
+//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+//        shapeRenderer.end();
     }
 
     public float getcooldown(){return cooldown;}

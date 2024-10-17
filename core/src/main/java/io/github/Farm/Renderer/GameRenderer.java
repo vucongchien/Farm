@@ -9,11 +9,12 @@ import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.WolfManager;
-import io.github.Farm.ui.inventory.ItemManager;
+import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.List;
 
 public class GameRenderer {
