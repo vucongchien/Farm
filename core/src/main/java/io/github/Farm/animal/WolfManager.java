@@ -3,8 +3,8 @@ package io.github.Farm.animal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
-import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.player.PLAYER_STATE.HurtState;
 import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
@@ -26,9 +26,12 @@ public class WolfManager {
     private long starttime = 0, endtime = 0;
     private Vector2 preyleader = new Vector2(0, 0);
     //    private float deltaTime=Gdx.graphics.getDeltaTime();
-    private int acttack;
+    private boolean acttack;
     private float radius;
     private float angle;
+
+
+
 
     public WolfManager() {
         wolfmanager = new ArrayList<>();
@@ -47,7 +50,7 @@ public class WolfManager {
     }
 
 
-    public void setBoss() {
+    public void setBoss(BuffaloManager buffaloManager) {
         boolean checkboss = false;
         if (wolfmanager.size() != 0) {
             for (WolfRender x : wolfmanager) {
@@ -65,12 +68,12 @@ public class WolfManager {
 
     public void checkquantity() {
 
-        if (wolfmanager.size() < 5) {
+        if (wolfmanager.size() < 3) {
                 if (breedingTime == 0) {
                     breedingTime = TimeUtils.millis();
                 }
                 if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-
+//                    System.out.println("them");
                     WolfRender wolf = storagewolfmanager.remove(storagewolfmanager.size() - 1);
                     wolfmanager.add(wolf);
                     breedingTime = 0;
@@ -91,43 +94,51 @@ public class WolfManager {
     }
 
     public void update(BuffaloManager buffaloManager,PlayerController playerController) {
-        setBoss();
+        setBoss(buffaloManager);
         checkquantity();
-        attackplayer(playerController);
         activate(buffaloManager);
+        for(WolfRender x:wolfmanager){
+//            x.checkidright(playerController);
+//            x.setPreyphayeright(playerController);
+            x.checkHit(playerController);
 
+        }
+        attackplayer(playerController);
     }
 
     public void activate(BuffaloManager buffaloManager) {
-        if(acttack==0) {
+        if(acttack==false) {
             for (WolfRender wolf : wolfmanager) {
                 if (wolf.getthulinh() == true) {
-//                System.out.println("tau");
                     if (Math.abs(wolf.getlocation().x - home.x) < 1f && Math.abs(wolf.getlocation().y - home.y) < 1f) {
-                        System.out.println("ưhy");
                         if (starttime == 0) {
                             starttime = TimeUtils.millis();
                         }
                         if (TimeUtils.timeSinceMillis(starttime) < 10000) {
                             wolf.setcheck(0);
                             wolf.setCrencurrentState(PetState.IDLE_RIGHT);
+                            System.out.println(TimeUtils.timeSinceMillis(starttime));
                         } else {
+
                             wolf.setprey(buffaloManager);
                             preyleader = wolf.getPrey().getlocation().cpy().add(50, 50);
                             starttime = 0;
                             wolf.setcheck(1);
                         }
+//                        System.out.println(preyleader);
                     } else {
                         starttime = 0;
 
                     }
-                    if (preyleader.x != 50 || preyleader.y != 50) {
+                    if (preyleader.x != 0 || preyleader.y != 0) {
+                        System.out.println(wolf.getcheck());
                         if (Math.abs(wolf.getlocation().x - preyleader.x) < 10f && Math.abs(wolf.getlocation().y - preyleader.y) < 10f) {
                             if (endtime == 0) {
                                 endtime = TimeUtils.millis();
                                 wolf.setTrangthaitancong(true);
                             }
                             if (TimeUtils.timeSinceMillis(endtime) < 10000) {
+                                System.out.println("nguvllll");
                                 wolf.setCrencurrentState(PetState.IDLE_RIGHT);
                                 wolf.setcheck(0);
                             } else {
@@ -136,17 +147,20 @@ public class WolfManager {
                                 endtime = 0;
                             }
                         } else {
+//                            System.out.println("ngu1");
+                            System.out.println(wolf.getcheck());
                             endtime = 0;
-                        }
-
-                        if (wolf.getcheck() == 1) {
-                            movelocation(wolf, preyleader);
+                            if (wolf.getcheck() == 1) {
+                                System.out.println("ngu2");
+                                movelocation(wolf, preyleader);
+                            }
                         }
                     }
                     if (wolf.getcheck() == 2) {
-                        movelocation(wolf, home, 1f, 1f);
+                        movelocation(wolf, home, 1f, 1f,0.007f);
                         if (Math.abs(wolf.getlocation().x - home.x) < 1f && Math.abs(wolf.getlocation().y - home.y) < 1f) {
-                            preyleader = new Vector2(0, 0);
+                            wolf.setprey(buffaloManager);
+                            preyleader = wolf.getPrey().getlocation().cpy().add(50, 50);
                         }
                     }
                 } else {
@@ -159,15 +173,13 @@ public class WolfManager {
                         if (bossAttack == false || wolf.getPrey() == null) {
                             if (Math.abs(bossLocation.x - home.x) < 1f && Math.abs(bossLocation.y - home.y) < 1f) {
                                 wolf.setCrencurrentState(PetState.IDLE_RIGHT);
-                                movelocation(wolf, new Vector2(bossLocation.x + wolf.getdistancefrombossx(), bossLocation.y + wolf.getDistancefrombossy()), 1f, 1f);
+                                movelocation(wolf, new Vector2(bossLocation.x + wolf.getdistancefrombossx(), bossLocation.y + wolf.getDistancefrombossy()), 1f, 1f,0.007f);
                             } else {
 
                                 if (Math.abs(wolf.getlocation().x - bossLocation.x) < Math.abs(wolf.getdistancefrombossx()) && Math.abs(wolf.getlocation().y - bossLocation.y) < Math.abs(wolf.getDistancefrombossy())) {
                                     wolf.setCrencurrentState(PetState.IDLE_RIGHT);
-//                            System.out.println(wolf.getCrencurrentState() + "1");
                                 } else {
-                                    movelocation(wolf, bossLocation, Math.abs(wolf.getdistancefrombossx()), Math.abs(wolf.getDistancefrombossy()));
-//                            System.out.println(wolf.getCrencurrentState() + "2");
+                                    movelocation(wolf, bossLocation, Math.abs(wolf.getdistancefrombossx()), Math.abs(wolf.getDistancefrombossy()),0.007f);
                                 }
                             }
                         } else {
@@ -206,32 +218,66 @@ public class WolfManager {
     }
 
     public void attackplayer(PlayerController playerController){
-        acttack=0;
-        for(WolfRender wolfRender:wolfmanager){
-            if(wolfRender.getattacked()==true){
-                acttack++;
+        for(WolfRender x:wolfmanager){
+            if(x.gethit()){
+                acttack=true;
                 break;
             }
         }
-        if(acttack>0){
+        if(acttack){
             for(WolfRender wolfRender:wolfmanager){
-                movelocation(wolfRender,new Vector2(playerController.getPosition().x-7,playerController.getPosition().y-16),1f,1f);
-                if(wolfRender.getCollider().overlaps(playerController.getCollider())) {
-
+                if(wolfRender.getlocation().x>playerController.getPosition().x) {
+                    if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
+                        wolfRender.setCrencurrentState(PetState.IDLE_LEFT);
+                        wolfRender.setKill(true);
+                        playerController.changeState(new HurtState("LEFT"));
+                        wolfRender.setanimationattack(true);
+                        while (wolfRender.getcooldown()>0) {
+                            wolfRender.setcooldown();
+                        }
+                    } else {
+                        movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.007f);
+                        wolfRender.setKill(false);
+                        wolfRender.recoverycooldown();
+                    }
                 }
+                else{
+                    if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
+                        wolfRender.setCrencurrentState(PetState.IDLE_RIGHT);
+                        wolfRender.setKill(true);
+                        playerController.changeState(new HurtState("RIGHT"));
+                        wolfRender.setanimationattack(true);
+                        while (wolfRender.getcooldown()>0) {
+                            wolfRender.setcooldown();
+                        }
+                    } else {
+                        wolfRender.setKill(false);
+                        movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.007f);
+                        wolfRender.recoverycooldown();
+                    }
+                }
+            }
+        }
+        acttack = false;
+        if(wolfmanager.size()>0) {
+            wolfmanager.get(0).setcheck(2);
+        }
+        for (WolfRender x : wolfmanager) {
+            if (x.gethit()) {
+                acttack = true;
+                wolfmanager.get(0).setcheck(0);
+                break;
             }
         }
 
     }
 
-
     public void movelocation(WolfRender a, Vector2 b) {
-        movelocation(a, b, 10f,10f);
+        movelocation(a, b, 10f,10f,0.007f);
     }
 
 
-    public void movelocation(WolfRender a, Vector2 b, float sox,float soy) {
-        float deltaTime = Gdx.graphics.getDeltaTime();
+    public void movelocation(WolfRender a, Vector2 b, float sox,float soy,float deltaTime) {
         if (Math.abs(a.getlocation().x - b.x) > sox) {
             if (a.getlocation().x > b.x) {
                 a.getlocation().x -= 10f * deltaTime;

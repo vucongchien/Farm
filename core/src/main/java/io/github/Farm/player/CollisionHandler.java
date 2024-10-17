@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantType;
+import io.github.Farm.animal.WolfManager;
+import io.github.Farm.animal.WolfRender;
 import io.github.Farm.ui.inventory.Item;
 import io.github.Farm.ui.inventory.ItemManager;
 
@@ -24,6 +26,15 @@ public class CollisionHandler implements Collider {
 
     public void checkCollisions() {
         //check nhieu cai khac o day--
+//        Iterator<WolfRender> iteratorwolf = WolfManager.getwolfmanage().getwolfmanafer().iterator();
+//        while (iteratorwolf.hasNext()){
+//            WolfRender wolf=iteratorwolf.next();
+//            if (playerController.getCollider().overlaps(wolf.getCollider())) {
+//                wolf.onCollision(playerController);
+//                wolf.getHp().damaged(20);
+//
+//            }
+//        }
 
 
     }

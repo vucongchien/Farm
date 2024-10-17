@@ -25,12 +25,12 @@ import io.github.Farm.animal.WolfManager;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
-import io.github.Farm.animal.Buffalo;
-import io.github.Farm.animal.wolf;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.WolfManager;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
-import io.github.Farm.inventory.Inventory;
-import io.github.Farm.inventory.InputHandlerInventory;
+import io.github.Farm.ui.inventory.Inventory;
+import io.github.Farm.ui.inventory.InputHandlerInventory;
 import com.badlogic.gdx.graphics.Texture; // Thêm dòng này để import lớp Texture
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private World world;
 
-//    private ArrayList<Buffalo> arraybuffalo=new ArrayList<>();
+    //    private ArrayList<Buffalo> arraybuffalo=new ArrayList<>();
 //    private ArrayList<WolfManager> arraywolf= new ArrayList<>();
     private long stopTimereproduction;
     private long stopTimehungry;
@@ -73,21 +73,13 @@ public class Main extends ApplicationAdapter {
 
     private Rectangle backpackBounds; // Khai báo backpackBounds
     private Texture backpackTexture; // Khai báo biến lưu trữ hình ảnh ba lô
-//-----------------------------------inventory
+    //-----------------------------------inventory
     private InputHandlerInventory inputHandler;
     private Inventory inventory; // Khai báo biến inventory
 
 
     @Override
     public void create() {
-        //..............................khoi tao buffalo
-        arraywolf.add(new wolf(new Vector2(850,1050),100,true));
-        arraywolf.add(new wolf(new Vector2(850,1040),100,false));
-        arraybuffalo.add(new Buffalo(new Vector2(650,1000),100,1,1,true));
-        arraybuffalo.add(new Buffalo(new Vector2(700,1000),100,1,1,true));
-        arraybuffalo.add(new Buffalo(new Vector2(750,1000),100,1,1,true));
-        stopTimereproduction = TimeUtils.millis();
-        stopTimehungry = TimeUtils.millis();
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -111,34 +103,24 @@ public class Main extends ApplicationAdapter {
         //  plantManager.addPlant(new PlantRenderer(new Vector2(200, 100), PlantType.carrot));
 
 
-
-        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
+        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler, camera);
         playerImageManagerNew = new PlayerImageManager();
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
-        gameRenderer = new GameRenderer(playerRendererNew, plantManager, camera,map);
-        // Khởi tạo menu và setting
-        mainMenu = new MainMenu(); // Khởi tạo main menu
-        settingGame = new SettingGame(); // Khởi tạo setting menu
-        // Khởi tạo mainMenu và settingGame
-        mainMenu = new MainMenu();
-        settingGame = new SettingGame();
-        // Khởi tạo Inventory
-        inventory = new Inventory();
-        // Thêm một số item mẫu vào inventory
-        // Thêm một số item mẫu vào inventory
-        inventory.addItem("Apple", new Texture(Gdx.files.internal("inventory/almonds.png")), 5);
-        inventory.addItem("Carrot", new Texture(Gdx.files.internal("inventory/apple_green.png")), 3);
-        inventory.addItem("asparagus", new Texture(Gdx.files.internal("inventory/asparagus.png")), 10);
-        inventory.addItem("egg", new Texture(Gdx.files.internal("inventory/egg_whole_white.png")), 100);
-        inventory.addItem("banana", new Texture(Gdx.files.internal("inventory/banana.png")), 100);
-        inventory.addItem("corn", new Texture(Gdx.files.internal("inventory/corn.png")), 100);
-        inventory.addItem("watermelon", new Texture(Gdx.files.internal("inventory/watermelon_whole.png")), 100);
-        inventory.addItem("chili", new Texture(Gdx.files.internal("inventory/chili_pepper_green.png")), 100);
+        gameRenderer = new GameRenderer(playerRendererNew, camera, map);
+//        // Khởi tạo menu và setting
+//        mainMenu = new MainMenu(); // Khởi tạo main menu
+//        settingGame = new SettingGame(); // Khởi tạo setting menu
+//        // Khởi tạo mainMenu và settingGame
+//        mainMenu = new MainMenu();
+//        settingGame = new SettingGame();
+//        // Khởi tạo Inventory
+//        inventory = new Inventory();
+//        // Thêm một số item mẫu vào inventory
+//        // Thêm một số item mẫu vào inventory
 
-
-        backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
-        backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
+//        backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
+//        backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
 
         // Khởi tạo InputHandler
         inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
@@ -148,113 +130,87 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
+        BuffaloManager.getbuffalomanager().update();
+        WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
         //gameRenderer.addanimal(buffaloManager,wolfManager);
         // Kiểm tra xem menu có đang hoạt động không
-        if (mainMenu.isMenuActive()) {
-            mainMenu.handleInput();
-            Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            mainMenu.render(batch);
-        } else {
-            settingGame.handleInput();
-            // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
-            if (settingGame.isActive()) {
+//        if (mainMenu.isMenuActive()) {
+//            mainMenu.handleInput();
+//            Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+//            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//            mainMenu.render(batch);
+//        } else {
+//            settingGame.handleInput();
+//            // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
+//            if (settingGame.isActive()) {
+//
+//                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+//                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//                mapRenderer.setView(camera);
+//                mapRenderer.render();
+//
+//
+//                settingGame.render(batch, playerControllerNew.getPosition());
+//            } else {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                mapRenderer.setView(camera);
-                mapRenderer.render();
+        camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
+        camera.update();
 
+        mapRenderer.setView(camera);
+        mapRenderer.render();
 
-                settingGame.render(batch, playerControllerNew.getPosition());
-            } else {
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//                weather.update(Gdx.graphics.getDeltaTime());
+        batch.begin();
+//                weather.render(batch);
+        batch.end();
 
-                camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
-                camera.update();
+        world.step(1 / 60f, 6, 2);
 
-                mapRenderer.setView(camera);
-                mapRenderer.render();
+        float deltaTime = Gdx.graphics.getDeltaTime();
 
-                weather.update(Gdx.graphics.getDeltaTime());
-                batch.begin();
-                weather.render(batch);
-                batch.end();
+        debugRenderer.render(world, camera.combined);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        Rectangle collider = playerControllerNew.getCollider();
+        shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
+        shapeRenderer.end();
 
-                world.step(1 / 60f, 6, 2);
+        batch.setProjectionMatrix(camera.combined);
+        PlantManager.getInstance().update(deltaTime);
 
-                float deltaTime = Gdx.graphics.getDeltaTime();
-
-                debugRenderer.render(world, camera.combined);
-                shapeRenderer.setProjectionMatrix(camera.combined);
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.setColor(Color.RED);
-                Rectangle collider = playerControllerNew.getCollider();
-                shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
-                shapeRenderer.end();
-
-                batch.setProjectionMatrix(camera.combined);
-                PlantManager.getInstance().update(deltaTime);
-
-                playerControllerNew.update(deltaTime);
-                gameRenderer.render();
+        playerControllerNew.update(deltaTime);
+        gameRenderer.render();
 //                gameRenderer.addanimal(BuffaloManager.getbuffalomanager(),WolfManager.getwolfmanage());
 
-                // Kiểm tra và cập nhật buffalo
-                if (TimeUtils.timeSinceMillis(stopTimereproduction) >= 30000) {
-                    if (arraybuffalo.size() < 10) {
-                        arraybuffalo.add(new Buffalo(new Vector2(700, 1000), 100, 1, 1, true));
-                        stopTimereproduction = TimeUtils.millis();
-                    }
-                }
-                if (TimeUtils.timeSinceMillis(stopTimehungry) >= 10000) {
-                    for (Buffalo x : arraybuffalo) {
-                        if (x.gethungry() > 0) {
-                            x.sethungry(10);
-                        }
-                    }
-                    stopTimehungry = TimeUtils.millis();
-                }
-                for (int i = arraybuffalo.size() - 1; i >= 0; i--) {
-                    Buffalo x = arraybuffalo.get(i);
-                    for (int j = 0; j < arraybuffalo.size(); j++) {
-                        if (i != j) {
-                            Buffalo y = arraybuffalo.get(j);
-                            x.dam(y);
-                        }
-                    }
-                    if (x.getmau() == 0) {
-                        arraybuffalo.remove(i);
-                        continue;
-                    }
-                    x.ve(batch, 32, Gdx.graphics.getDeltaTime(), camera);
-                }
-                for (int i = 0; i < arraywolf.size(); i++) {
-                    arraywolf.get(i).hoatdong(arraywolf, arraybuffalo, batch, 32, Gdx.graphics.getDeltaTime(), camera);
-                }
+        // Kiểm tra và cập nhật buffalo
 
-                batch.begin();
-                playerRendererNew.render(batch);
-                // Tính toán vị trí balo dựa trên vị trí nhân vật
-                backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
-                    playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
-                batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
-                batch.end();
 
-                // Vẽ inventory nếu đang ở trạng thái 'isInGame'
-                if (inputHandler.isInGame()) {
-                    inventory.draw(batch, camera, playerControllerNew.getPosition());
-                }
-            }
+        playerRendererNew.render(batch, camera);
+        // Tính toán vị trí balo dựa trên vị trí nhân vật
+//        batch.begin();
+//        backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
+//            playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
+
+//        batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
+//        batch.end();
+
+        // Vẽ inventory nếu đang ở trạng thái 'isInGame'
+        if (inputHandler.isInGame()) {
+            inventory.draw(batch, camera, playerControllerNew.getPosition());
         }
+
     }
+
 
 
 
     @Override
     public void dispose() {
-        batch.dispose();
-        map.dispose();
-        inventory.dispose(); // Giải phóng tài nguyên của inventory
+            WolfManager.getwolfmanage().dispose();
+//        batch.dispose();
+//        map.dispose();
+//        inventory.dispose(); // Giải phóng tài nguyên của inventory
     }
 }

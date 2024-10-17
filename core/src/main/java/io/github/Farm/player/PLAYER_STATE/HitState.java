@@ -8,6 +8,8 @@ import io.github.Farm.animal.WolfManager;
 import io.github.Farm.animal.WolfRender;
 import io.github.Farm.player.PlayerController;
 
+import java.util.Iterator;
+
 public class HitState implements InterfacePlayerState {
     private String direction;
     private static float startHit=0f;
@@ -38,19 +40,20 @@ public class HitState implements InterfacePlayerState {
     }
 
     public void hitSomeThing(PlayerController player){
-        Iterator<PlantRenderer> iterator = player.getCollisionHandler().getPlantManager().getPlants().iterator();
-        while (iterator.hasNext()) {
-            PlantRenderer plant = iterator.next();
-            if (player.getCollider().overlaps(plant.getCollider())) {
-                plant.onCollision(player);
-                iterator.remove();
-            }
-        }
+//        Iterator<PlantRenderer> iterator = player.getCollisionHandler().getPlantManager().getPlants().iterator();
+//        while (iterator.hasNext()) {
+//            PlantRenderer plant = iterator.next();
+//            if (player.getCollider().overlaps(plant.getCollider())) {
+//                plant.onCollision(player);
+//                iterator.remove();
+//            }
+//        }
         Iterator<WolfRender> iteratorwolf = WolfManager.getwolfmanage().getwolfmanafer().iterator();
         while (iteratorwolf.hasNext()){
             WolfRender wolf=iteratorwolf.next();
             if (player.getCollider().overlaps(wolf.getCollider())) {
                 wolf.onCollision(player);
+                wolf.getHp().damaged(20);
 
             }
         }

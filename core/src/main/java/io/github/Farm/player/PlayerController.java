@@ -267,4 +267,8 @@ public class PlayerController implements Collider, Disposable {
     public Camera getCamera() {
         return camera;
     }
+
+    public Body getBody() {
+        return body;
+    }
 }

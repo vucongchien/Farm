@@ -59,38 +59,7 @@ public class BuffaloImageManager implements Disposable {
         return animations.get(petState);
     }
 
-//    @Override
-//    public void dispose() {
-//        for (Animation<TextureRegion> animation : animations.values()) {
-//            if (animation != null) {
-//                for (TextureRegion frame : animation.getKeyFrames()) {
-//                    if (frame.getTexture() != null) {
-//                        frame.getTexture().dispose();
-//                    }
-//                }
-//            }
-//        }
-//        for (TextureRegion region : textureRegions) { // Đảm bảo mảng này là TextureRegion[]
-//            if (region != null) {
-//                // Xử lý giải phóng tài nguyên nếu cần, ví dụ nếu dùng Texture, bạn gọi region.getTexture().dispose();
-//            }
-//        }
-//    }
-//@Override
-//public void dispose() {
-//    // Giải phóng tất cả các Texture trong các Animation
-//    for (Animation<TextureRegion> animation : animations.values()) {
-//        if (animation != null) {
-//            for (TextureRegion frame : animation.getKeyFrames()) {
-//                Texture texture = frame.getTexture();
-//                if (texture != null) {
-//                    texture.dispose(); // Giải phóng Texture
-//                }
-//            }
-//        }
-//    }
-//    // Không cần xử lý thêm mảng textureRegions nếu không có mảng này trong lớp BuffaloImageManager
-//}
+
 @Override
 public void dispose() {
     // Giải phóng tất cả các Texture trong các Animation

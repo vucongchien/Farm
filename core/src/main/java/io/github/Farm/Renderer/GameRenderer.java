@@ -13,6 +13,7 @@ import io.github.Farm.ui.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GameRenderer {
@@ -66,6 +67,10 @@ public class GameRenderer {
         renderableEntities.addAll(PlantManager.getInstance().getListPlants());
 
         renderableEntities.addAll(ItemManager.getInstance().getItemList());
+
+        renderableEntities.addAll(BuffaloManager.getbuffalomanager().getBuffaloManager());
+
+        renderableEntities.addAll(WolfManager.getwolfmanage().getwolfmanafer());
 
 
         renderableEntities.sort(new Comparator<RenderableEntity>() {

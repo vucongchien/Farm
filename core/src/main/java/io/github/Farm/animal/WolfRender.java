@@ -11,13 +11,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.player.PlayerController;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -40,7 +41,18 @@ public class WolfRender implements Collider, RenderableEntity {
     private boolean attacked;
     private long timeattacked;
     private int check = 2;
+//    private Vector2 preyphayeright;
+//    private Vector2 preyphayerleft;
+    private boolean idright;
+    private boolean animationattack;
 
+
+
+
+    //...........hitall
+    private boolean hit;
+    private boolean kill;
+    private float cooldown;
 
 
 
@@ -80,10 +92,6 @@ public class WolfRender implements Collider, RenderableEntity {
     public void setDistancefrombossy(float a){distancefrombossy=a;}
 
 
-    public void setBox(float x,float y){
-        box.setPosition(x,y);
-    }
-
     public Vector2 getlocation(){
         return location;
     }
@@ -95,8 +103,6 @@ public class WolfRender implements Collider, RenderableEntity {
     public void setTrangthaitancong(boolean a){
         trangthaitancong=a;
     }
-
-
 
     public  boolean gettrangthaitancon(){
         return trangthaitancong;
@@ -118,7 +124,6 @@ public class WolfRender implements Collider, RenderableEntity {
         crencurrentState= stare;
     }
 
-    public PetState getCrencurrentState(){return crencurrentState;}
 
     public void setprey(BuffaloManager buffaloManager){
         if(buffaloManager.getBuffaloManager().size()==0){
@@ -134,6 +139,9 @@ public class WolfRender implements Collider, RenderableEntity {
         }
     }
 
+    public void setanimationattack(boolean a){animationattack=a;}
+
+
     @Override
     public Rectangle getCollider() {
         return box;
@@ -144,26 +152,21 @@ public class WolfRender implements Collider, RenderableEntity {
         if(other instanceof PlayerController){
             PlayerController playerController =(PlayerController) other;
 
-
-            if (playerController.getCurrentState().startsWith("HIT_")) {
-                isknockback=true;
-                hp.damaged(20);
-                crencurrentState=PetState.WALK_LEFT;
-                System.out.println("ngu"+ hp.getCurrHp());
-                attacked=true;
-                timeattacked=0;
-
-            }
         }
         if(other instanceof Buffalo){
             Buffalo buffalo=(Buffalo) other;
         }
-
     }
-     private Vector2 knockback(){
-        Vector2 endloction=new Vector2(location.x+50,location.y);
-        return endloction.cpy().sub(location).nor();
+    private Vector2 knockback(PlayerController playerController){
+        if(playerController.isFacingRight()) {
+            Vector2 endloction = new Vector2(location.x + 50, location.y);
+            return endloction.cpy().sub(location).nor();
+        }else{
+            Vector2 endloction = new Vector2(location.x - 50, location.y);
+            return endloction.cpy().sub(location).nor();
+        }
      }
+
     @Override
     public float getY(){
         return location.y;
@@ -171,42 +174,26 @@ public class WolfRender implements Collider, RenderableEntity {
 
     @Override
     public void render(SpriteBatch batch, Camera camera) {
-
-        if(timeattacked==0){
-            timeattacked=TimeUtils.millis();
-        }
-        if(TimeUtils.timeSinceMillis(timeattacked)>=10000){
-            attacked=false;
-        }
-
-        if(isknockback){
-            if(timeknockback==0){
-                timeknockback= TimeUtils.millis();
-            }
-            if(TimeUtils.timeSinceMillis(timeknockback)<2000){
-                crencurrentState=PetState.WALK_LEFT;
-            }else{
-                isknockback=false;
-                crencurrentState=PetState.IDLE_LEFT;
-                timeknockback=0;
-                check=2;
-            }
-            location.add(knockback());
-        }
-        box.setPosition(getlocation().x, getlocation().y);
-//        shapeRenderer=new ShapeRenderer();
-//        shapeRenderer.setProjectionMatrix(camera.combined);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(Color.RED);
-//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
-//        shapeRenderer.end();
+        stateTime += Gdx.graphics.getDeltaTime();
         currentAnimation = imageManager.getAnimation(crencurrentState);
         batch.begin();
-        stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
-        batch.draw(frame, getlocation().x, getlocation().y, 32, 32);
+        batch.draw(frame, getlocation().x-18, getlocation().y-22, 32, 32);
         batch.end();
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+        shapeRenderer.end();
     }
+
+    public float getcooldown(){return cooldown;}
+
+    public void setcooldown(){cooldown-=0.1f;}
+
+    public void recoverycooldown(){cooldown=0.6f;}
+
     public void dispose(){
         if (imageManager != null) {
             imageManager.dispose(); // Giải phóng tài nguyên của BuffaloImageManager
@@ -228,5 +215,36 @@ public class WolfRender implements Collider, RenderableEntity {
         }
 
     }
+
+    public boolean gethit(){return hit;}
+
+    public void checkidright(PlayerController playerController){
+        if(Math.abs(location.x-playerController.getPosition().x)<11f&&Math.abs(location.y-playerController.getPosition().y)<11f&&playerController.getPosition().x<location.x){
+            idright=true;
+            crencurrentState=PetState.IDLE_LEFT;
+        }else {
+            idright=false;
+            crencurrentState=PetState.IDLE_RIGHT;
+        }
+    }
+
+//    public boolean getidright(){return idright;}
+
+    public void checkHit(Collider other){
+        if(other instanceof PlayerController){
+            PlayerController playerController= (PlayerController) other;
+            if(Math.abs(location.x-playerController.getPosition().x)<100f&&Math.abs(location.y-playerController.getPosition().y)<100f){
+                hit=true;
+            }else{
+                hit=false;
+            }
+        }
+
+    }
+
+    public void setKill(boolean a){kill=a;}
+
+    public boolean getKill(){return kill;}
+
 }
 
