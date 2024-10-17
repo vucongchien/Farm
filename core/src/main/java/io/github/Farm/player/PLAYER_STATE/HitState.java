@@ -22,7 +22,7 @@ public class HitState implements InterfacePlayerState {
 
     @Override
     public void enter(PlayerController player) {
-
+        check=false;
     }
 
     @Override
@@ -41,21 +41,16 @@ public class HitState implements InterfacePlayerState {
     }
 
     public void hitSomeThing(PlayerController player){
-//        Iterator<PlantRenderer> iterator = player.getCollisionHandler().getPlantManager().getPlants().iterator();
-//        while (iterator.hasNext()) {
-//            PlantRenderer plant = iterator.next();
-//            if (player.getCollider().overlaps(plant.getCollider())) {
-//                plant.onCollision(player);
-//                iterator.remove();
-//            }
-//        }
+        System.out.println("start hit ");
+
         Iterator<WolfRender> iteratorwolf = WolfManager.getwolfmanage().getwolfmanafer().iterator();
         while (iteratorwolf.hasNext()){
             WolfRender wolf=iteratorwolf.next();
             if (player.getCollider().overlaps(wolf.getCollider())) {
+
+
                 wolf.onCollision(player);
                 wolf.getHp().damaged(20);
-
             }
         }
 
@@ -69,6 +64,7 @@ public class HitState implements InterfacePlayerState {
     @Override
     public void exit(PlayerController player) {
         startHit=0;
+        check=false;
     }
 
     @Override

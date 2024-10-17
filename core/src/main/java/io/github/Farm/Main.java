@@ -20,6 +20,8 @@ import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.WolfManager;
 import io.github.Farm.data.*;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
@@ -146,6 +148,7 @@ public class Main extends ApplicationAdapter {
                 settingGame.render(batch, playerControllerNew.getPosition());
             } else {
 
+
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
@@ -173,7 +176,11 @@ public class Main extends ApplicationAdapter {
 
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
+                BuffaloManager.getbuffalomanager().update();
+                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
+
+
                 gameRenderer.render();
 
 
