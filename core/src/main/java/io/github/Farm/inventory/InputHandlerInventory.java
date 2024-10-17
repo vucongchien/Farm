@@ -1,4 +1,4 @@
-package io.github.Farm.ui.inventory;
+package io.github.Farm.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

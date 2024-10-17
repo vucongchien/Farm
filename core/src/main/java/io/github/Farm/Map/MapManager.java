@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MapManager {
     private TiledMap map;
-
+    private boolean nightLayerVisible=false;
 
 
     public MapManager(TiledMap map) {
@@ -58,7 +58,21 @@ public class MapManager {
         }
     }
 
+    public void toggleNightLayer() {
+        MapLayer nightLayer = map.getLayers().get("NIGHT");
+        if (nightLayer != null) {
+            nightLayer.setVisible(!nightLayer.isVisible());
+            nightLayerVisible = nightLayer.isVisible();
+        }
+        else{
+            System.out.println("del co night layer");
+        }
+    }
+
     public TiledMap getTiledMap() {
         return map;
     }
+
+
+
 }

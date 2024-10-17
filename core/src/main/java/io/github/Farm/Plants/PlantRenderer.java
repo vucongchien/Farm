@@ -8,7 +8,7 @@
     import com.badlogic.gdx.utils.TimeUtils;
     import io.github.Farm.Interface.RenderableEntity;
     import io.github.Farm.Interface.Collider;
-    import io.github.Farm.ui.inventory.ItemManager;
+    import io.github.Farm.inventory.ItemManager;
     import io.github.Farm.player.PlayerController;
 
     public class PlantRenderer implements Collider, RenderableEntity {
@@ -135,8 +135,6 @@
                 if(playerController.getCurrentState().startsWith("HIT_")){
                     dropItems(type.toString(),position,playerController.isFacingRight());
                 }
-
-
 
 
 

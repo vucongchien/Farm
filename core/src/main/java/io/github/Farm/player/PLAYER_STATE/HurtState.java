@@ -20,6 +20,7 @@ public class HurtState implements InterfacePlayerState{
     @Override
     public void update(PlayerController player, float deltaTime) {
         time+= player.getDeltaTime();
+        player.getHeath().getHealBar().render(player.getPosition(),player.getCamera(),player.getHeath().getCurrHp(),player.getHeath().getMaxHp(),16,7);
         if(time>=0.31f){
             player.changeState(new IdleState(direction));
         }

@@ -1,4 +1,4 @@
-package io.github.Farm.ui.inventory;
+package io.github.Farm.inventory;
 
 import com.badlogic.gdx.graphics.Texture;
 import io.github.Farm.Plants.PlantType;
@@ -26,6 +26,7 @@ public class InventorySlot {
         switch (TYPE){
             case "FOOD":
                 playerController.getHeath().heal(-10);
+                reduceQuantity();
                 return;
 
             case "SEED":

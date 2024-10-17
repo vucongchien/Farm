@@ -2,6 +2,7 @@ package io.github.Farm;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,27 +20,27 @@ import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
+import io.github.Farm.data.*;
 import io.github.Farm.animal.Buffalo.BuffaloImageManager;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.WolfManager;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
+import io.github.Farm.inventory.Inventory;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.WolfManager;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
-import io.github.Farm.ui.inventory.Inventory;
-import io.github.Farm.ui.inventory.InputHandlerInventory;
-import com.badlogic.gdx.graphics.Texture; // Thêm dòng này để import lớp Texture
-
-import java.util.ArrayList;
+import io.github.Farm.weather.Weather;
 
 
 public class Main extends ApplicationAdapter {
 
     private SpriteBatch batch;
     private World world;
+    private GameSaveManager saveManager;
+    private GameData gameData;
 
     //    private ArrayList<Buffalo> arraybuffalo=new ArrayList<>();
 //    private ArrayList<WolfManager> arraywolf= new ArrayList<>();
@@ -81,6 +82,8 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
 
+
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 450);
@@ -95,6 +98,26 @@ public class Main extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
+
+
+        GameSaveManager saveManager = new GameSaveManager();
+
+//        PlayerData playerData = new PlayerData(800, 900, 100);
+//        saveManager.savePlayerData(playerData);
+//
+//        List<PlantData> plants = new ArrayList<>();
+//        plants.add(new PlantData("POTATO", 1, new Vector2(5, 5)));
+//        saveManager.savePlantsData(plants);
+//
+//        InventoryData inventoryData = new InventoryData();
+//        inventoryData.getItems().add(new InventoryData.Item("pumpkin", 1));
+//        saveManager.saveInventoryData(inventoryData);
+
+        PlayerData loadedPlayerData = saveManager.loadPlayerData();
+        List<PlantData> loadedPlantsData = saveManager.loadPlantsData();
+        InventoryData loadedInventoryData = saveManager.loadInventoryData();
+
+        System.out.println(loadedPlayerData.getPosition());
 
         camera.setToOrtho(false, 800, 450);
 
@@ -177,21 +200,16 @@ public class Main extends ApplicationAdapter {
         shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
         shapeRenderer.end();
 
-        batch.setProjectionMatrix(camera.combined);
-        PlantManager.getInstance().update(deltaTime);
-
-        playerControllerNew.update(deltaTime);
-        gameRenderer.render();
-//                gameRenderer.addanimal(BuffaloManager.getbuffalomanager(),WolfManager.getwolfmanage());
-
-        // Kiểm tra và cập nhật buffalo
+                batch.setProjectionMatrix(camera.combined);
+                PlantManager.getInstance().update(deltaTime);
+                playerControllerNew.update(deltaTime);
+                gameRenderer.render();
 
 
-        playerRendererNew.render(batch, camera);
-        // Tính toán vị trí balo dựa trên vị trí nhân vật
-//        batch.begin();
-//        backpackBounds.setPosition(playerControllerNew.getPosition().x - camera.viewportWidth / 2 + 10,
-//            playerControllerNew.getPosition().y - camera.viewportHeight / 2 + 10);
+
+                if (Inventory.getInstance().isOpened()) {
+                    batch.setColor(Color.WHITE);
+                    Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
 
 //        batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
 //        batch.end();
@@ -200,8 +218,9 @@ public class Main extends ApplicationAdapter {
         if (inputHandler.isInGame()) {
             inventory.draw(batch, camera, playerControllerNew.getPosition());
         }
+}
 
-    }
+}
 
 
 

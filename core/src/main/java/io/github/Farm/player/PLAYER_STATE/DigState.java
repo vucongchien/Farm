@@ -2,12 +2,12 @@ package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.player.PlayerController;
-import io.github.Farm.ui.Other.TimeCoolDown;
+import io.github.Farm.ui.Other.GreenBar;
 
 public class DigState implements InterfacePlayerState {
     private final String direction;
     private float time=0f;
-    private final TimeCoolDown timeCoolDown=new TimeCoolDown();
+    private final GreenBar greenBar =new GreenBar();
     private Vector2 LastPosition;
     public DigState(String direction){
         this.direction=direction;
@@ -24,7 +24,6 @@ public class DigState implements InterfacePlayerState {
         if(!LastPosition.equals(player.getPositionInMap())){
             LastPosition.set(player.getPositionInMap());
             time=0f;
-            timeCoolDown.reset();
         }
 
         time+= player.getDeltaTime();
@@ -34,7 +33,7 @@ public class DigState implements InterfacePlayerState {
         }
 
 
-        timeCoolDown.renderGreenBar( player.getPosition(),player.getCamera(), 1f, 14f, 7f);
+        greenBar.render( player.getPosition(),player.getCamera(), time,1f, 14f, 7f);
     }
 
     @Override

@@ -1,6 +1,7 @@
-package io.github.Farm.ui.inventory;
+package io.github.Farm.inventory;
 
 import com.badlogic.gdx.math.Vector2;
+import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ItemManager  {
         return instance;
     }
 
-    public void update(float deltaTime) {
+    public void update(float deltaTime, PlayerController playerController) {
 
     }
 
@@ -42,4 +43,5 @@ public class ItemManager  {
             item.dispose();
         }
     }
+
 }
