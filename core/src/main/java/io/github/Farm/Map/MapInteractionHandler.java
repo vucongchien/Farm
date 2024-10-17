@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.ui.inventory.Inventory;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.player.PLAYER_STATE.IdleState;
 import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
@@ -62,14 +63,16 @@ public class MapInteractionHandler {
                 public void run() {
                     if (playerController.isPlanting()) {
                         PlantManager.getInstance().addPlantFromInventory(playerController.getPositionInMap(), plantType);
-
+                        playerController.changeState(new IdleState(playerController.isFacingRight()?"RIGHT":"LEFT"));
+                        playerController.setPlanting(false);
+                        System.out.println("thanh cong "+ playerController.getPositionInMap());
                     }
                 }
             };
             Timer.schedule(currentTask, TIME_TO_PLANT);
 
         } else {
-            System.out.println("Cannot plant: " + tileClass);
+            System.out.println("Cannot plant: " + tileClass+ "  "+playerController.getPositionInMap());
         }
 
 

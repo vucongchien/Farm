@@ -1,12 +1,12 @@
 package io.github.Farm.player;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
+import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.ui.inventory.Item;
-import io.github.Farm.ui.inventory.ItemManager;
+import io.github.Farm.inventory.Item;
+import io.github.Farm.inventory.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +32,10 @@ public class CollisionHandler implements Collider {
                 item.onCollision(playerController);
                 iterator.remove();
             }
+        }
+
+        if(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap())!=null){
+
         }
 
     }

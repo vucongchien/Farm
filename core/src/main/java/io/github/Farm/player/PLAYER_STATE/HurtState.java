@@ -5,6 +5,7 @@ import io.github.Farm.player.PlayerController;
 
 public class HurtState implements InterfacePlayerState{
     private String direction;
+    private float time=0f;
 
     public HurtState(String direction){
         this.direction = direction;
@@ -12,11 +13,17 @@ public class HurtState implements InterfacePlayerState{
 
     @Override
     public void enter(PlayerController player) {
-        player.getBody().applyLinearImpulse(new Vector2(direction.equals("RIGHT") ? -50f : 50f, 2f).scl(150f), player.getBody().getWorldCenter(), true); // Knockback
+        player.getBody().applyLinearImpulse(new Vector2(direction.equals("RIGHT") ? -50f : 50f, 2f).scl(150f), player.getBody().getWorldCenter(), true);
+        player.getHeath().damaged(10);
     }
 
     @Override
     public void update(PlayerController player, float deltaTime) {
+        time+= player.getDeltaTime();
+        player.getHeath().getHealBar().render(player.getPosition(),player.getCamera(),player.getHeath().getCurrHp(),player.getHeath().getMaxHp(),16,7);
+        if(time>=0.31f){
+            player.changeState(new IdleState(direction));
+        }
     }
 
     @Override

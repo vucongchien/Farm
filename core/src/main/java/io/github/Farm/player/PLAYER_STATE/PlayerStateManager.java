@@ -27,6 +27,9 @@ public class PlayerStateManager {
         if (currentState != null) {
             currentState.update(player, deltaTime);
         }
+        else {
+            System.out.println("null roi anh zai");
+        }
     }
 
     public String getCurrentStateName() {

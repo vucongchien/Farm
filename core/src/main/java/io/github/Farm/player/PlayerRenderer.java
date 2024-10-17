@@ -15,6 +15,7 @@ public class PlayerRenderer implements RenderableEntity {
     private int size;
     private PlayerState lastState;
 
+
     public PlayerRenderer(PlayerController player, PlayerImageManager imageManager, int initialSize){
         this.player=player;
         this.imageManager = imageManager;

@@ -2,6 +2,7 @@ package io.github.Farm;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,14 +20,17 @@ import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
+import io.github.Farm.data.*;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
-import io.github.Farm.ui.inventory.Inventory;
+import io.github.Farm.inventory.Inventory;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
-import io.github.Farm.ui.inventory.ItemManager;
 import io.github.Farm.weather.Weather;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main extends ApplicationAdapter {
@@ -34,6 +38,8 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private World world;
     private OrthographicCamera camera;
+    private GameSaveManager saveManager;
+    private GameData gameData;
 
     //-------------player
 
@@ -67,6 +73,8 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
 
+
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 450);
@@ -81,6 +89,26 @@ public class Main extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
+
+
+        GameSaveManager saveManager = new GameSaveManager();
+
+//        PlayerData playerData = new PlayerData(800, 900, 100);
+//        saveManager.savePlayerData(playerData);
+//
+//        List<PlantData> plants = new ArrayList<>();
+//        plants.add(new PlantData("POTATO", 1, new Vector2(5, 5)));
+//        saveManager.savePlantsData(plants);
+//
+//        InventoryData inventoryData = new InventoryData();
+//        inventoryData.getItems().add(new InventoryData.Item("pumpkin", 1));
+//        saveManager.saveInventoryData(inventoryData);
+
+        PlayerData loadedPlayerData = saveManager.loadPlayerData();
+        List<PlantData> loadedPlantsData = saveManager.loadPlantsData();
+        InventoryData loadedInventoryData = saveManager.loadInventoryData();
+
+        System.out.println(loadedPlayerData.getPosition());
 
 
         playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
