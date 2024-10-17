@@ -21,19 +21,15 @@ import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.data.*;
-import io.github.Farm.animal.Buffalo.BuffaloImageManager;
-import io.github.Farm.animal.Buffalo.BuffaloManager;
-import io.github.Farm.animal.WolfManager;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.inventory.Inventory;
-import io.github.Farm.animal.Buffalo.BuffaloManager;
-import io.github.Farm.animal.WolfManager;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,21 +37,16 @@ public class Main extends ApplicationAdapter {
 
     private SpriteBatch batch;
     private World world;
+    private OrthographicCamera camera;
     private GameSaveManager saveManager;
     private GameData gameData;
 
-    //    private ArrayList<Buffalo> arraybuffalo=new ArrayList<>();
-//    private ArrayList<WolfManager> arraywolf= new ArrayList<>();
-    private long stopTimereproduction;
-    private long stopTimehungry;
     //-------------player
 
     private PlayerRenderer playerRendererNew;
     private PlayerController playerControllerNew;
     private PlayerImageManager playerImageManagerNew;
 
-    //-------------plant
-    private PlantManager plantManager;
 
     //-------------map
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -64,16 +55,20 @@ public class Main extends ApplicationAdapter {
     private MapInteractionHandler mapInteractionHandler;
 
 
-    private OrthographicCamera camera;
-    // Biến cho menu chính, cài đặt và inventory
-    private MainMenu mainMenu; // Khai báo mainMenu
-    private SettingGame settingGame; // Khai báo settingGame
-    private boolean isInGame; // Khai báo biến isInGame
+
+    private MainMenu mainMenu;
+    private SettingGame settingGame;
+
     //------------------render
     private GameRenderer gameRenderer;
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
 
+
+
+
+    //____weather
+    private Weather weather;
 
     @Override
     public void create() {
@@ -115,86 +110,66 @@ public class Main extends ApplicationAdapter {
 
         System.out.println(loadedPlayerData.getPosition());
 
-        camera.setToOrtho(false, 800, 450);
 
-
-        plantManager = new PlantManager();
-        //  plantManager.addPlant(new PlantRenderer(new Vector2(200, 100), PlantType.carrot));
-
-
-        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler, camera);
+        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
         playerImageManagerNew = new PlayerImageManager();
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
-        gameRenderer = new GameRenderer(playerRendererNew, camera, map);
-//        // Khởi tạo menu và setting
-//        mainMenu = new MainMenu(); // Khởi tạo main menu
-//        settingGame = new SettingGame(); // Khởi tạo setting menu
-//        // Khởi tạo mainMenu và settingGame
-//        mainMenu = new MainMenu();
-//        settingGame = new SettingGame();
-//        // Khởi tạo Inventory
-//        inventory = new Inventory();
-//        // Thêm một số item mẫu vào inventory
-//        // Thêm một số item mẫu vào inventory
+        gameRenderer = new GameRenderer(playerRendererNew, camera,map);
+        // Khởi tạo mainMenu và settingGame
+        mainMenu = new MainMenu();
+        settingGame = new SettingGame();
 
-//        backpackTexture = new Texture(Gdx.files.internal("inventory/balo.png"));
-//        backpackBounds = new Rectangle(10, 10, backpackTexture.getWidth(), backpackTexture.getHeight());
 
-//        // Khởi tạo InputHandler
-//        inputHandler = new InputHandlerInventory(camera, backpackBounds, inventory, isInGame);
-//        Gdx.input.setInputProcessor(inputHandler);
+
+
+
+        weather = new Weather(); // Khởi tạo Weather
 
     }
 
     @Override
     public void render() {
-        BuffaloManager.getbuffalomanager().update();
-        WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
-        //gameRenderer.addanimal(buffaloManager,wolfManager);
-        // Kiểm tra xem menu có đang hoạt động không
-//        if (mainMenu.isMenuActive()) {
-//            mainMenu.handleInput();
-//            Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
-//            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//            mainMenu.render(batch);
-//        } else {
-//            settingGame.handleInput();
-//            // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
-//            if (settingGame.isActive()) {
-//
-//                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
-//                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//                mapRenderer.setView(camera);
-//                mapRenderer.render();
-//
-//
-//                settingGame.render(batch, playerControllerNew.getPosition());
-//            } else {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (mainMenu.isMenuActive()) {
+            mainMenu.handleInput();
+            Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            mainMenu.render(batch);
+        } else {
+            settingGame.handleInput();
+            if (settingGame.isActive()) {
+                batch.setColor(Color.WHITE);
+                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                mapRenderer.setView(camera);
+                mapRenderer.render();
+                settingGame.render(batch, playerControllerNew.getPosition());
+            } else {
 
-        camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
-        camera.update();
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        mapRenderer.setView(camera);
-        mapRenderer.render();
+                camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
+                camera.update();
 
-//                weather.update(Gdx.graphics.getDeltaTime());
-        batch.begin();
-//                weather.render(batch);
-        batch.end();
+                mapRenderer.setView(camera);
+                mapRenderer.render();
 
-        world.step(1 / 60f, 6, 2);
+                weather.update(Gdx.graphics.getDeltaTime());
+                batch.begin();
+                weather.render(batch);
+                batch.end();
 
-        float deltaTime = Gdx.graphics.getDeltaTime();
+                world.step(1 / 60f, 6, 2);
 
-        debugRenderer.render(world, camera.combined);
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        Rectangle collider = playerControllerNew.getCollider();
-        shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
-        shapeRenderer.end();
+                float deltaTime = Gdx.graphics.getDeltaTime();
+
+                debugRenderer.render(world, camera.combined);
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(Color.RED);
+                Rectangle collider = playerControllerNew.getCollider();
+                shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
+                shapeRenderer.end();
 
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
@@ -207,25 +182,19 @@ public class Main extends ApplicationAdapter {
                     batch.setColor(Color.WHITE);
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
 
-//        batch.draw(backpackTexture, backpackBounds.x, backpackBounds.y);
-//        batch.end();
+                }
 
-//        // Vẽ inventory nếu đang ở trạng thái 'isInGame'
-//        if (inputHandler.isInGame()) {
-//            inventory.draw(batch, camera, playerControllerNew.getPosition());
-//        }
-}
-
-}
-
-
-
+            }
+        }
+    }
 
     @Override
     public void dispose() {
-            WolfManager.getwolfmanage().dispose();
-//        batch.dispose();
-//        map.dispose();
-//        inventory.dispose(); // Giải phóng tài nguyên của inventory
+        batch.dispose();
+        map.dispose();
+        Inventory.getInstance().dispose();
+        shapeRenderer.dispose();
+        debugRenderer.dispose();
+
     }
 }
