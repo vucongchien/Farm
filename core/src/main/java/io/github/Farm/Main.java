@@ -66,10 +66,6 @@ public class Main extends ApplicationAdapter {
 
 
 
-
-//____weather
-    private Weather weather;
-
     @Override
     public void create() {
 
@@ -122,14 +118,11 @@ public class Main extends ApplicationAdapter {
 
 
 
-
-
-        weather = new Weather(); // Khởi tạo Weather
-
     }
 
     @Override
     public void render() {
+        Weather.getInstance().update(Gdx.graphics.getDeltaTime());
         // Kiểm tra xem menu có đang hoạt động không
         if (mainMenu.isMenuActive()) {
             mainMenu.handleInput();
@@ -156,9 +149,13 @@ public class Main extends ApplicationAdapter {
                 mapRenderer.setView(camera);
                 mapRenderer.render();
 
-                weather.update(Gdx.graphics.getDeltaTime());
                 batch.begin();
-                weather.render(batch);
+                if(Weather.getInstance().getNight()){
+                    mapManager.setNightLayerVisible(true);
+                }else {
+                    mapManager.setNightLayerVisible(false);
+                }
+                Weather.getInstance().render(batch);
                 batch.end();
 
                 world.step(1 / 60f, 6, 2);
@@ -177,8 +174,6 @@ public class Main extends ApplicationAdapter {
                 PlantManager.getInstance().update(deltaTime);
                 playerControllerNew.update(deltaTime);
                 gameRenderer.render();
-
-
 
                 if (Inventory.getInstance().isOpened()) {
                     batch.setColor(Color.WHITE);
