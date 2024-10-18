@@ -88,8 +88,6 @@ public class Main extends ApplicationAdapter {
         mainMenu = new MainMenu();
         settingGame = new SettingGame();
 
-
-
     }
 
     @Override
