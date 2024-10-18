@@ -15,13 +15,15 @@ public class SoundManager {
     private Sound moveSound;
     private Music gameMusic;
     private Music rainSound;
-    private Sound running;
+    private Music footStep;
+
 
     public SoundManager(){
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("soundgame/gamemusic.mp3"));
         rainSound = Gdx.audio.newMusic(Gdx.files.internal("soundgame/rain_2.mp3"));
-        running = Gdx.audio.newSound(Gdx.files.internal("soundgame/running.wav"));
+        footStep = Gdx.audio.newMusic(Gdx.files.internal("soundgame/running-in-grass-6237.mp3"));
+
     }
 
     public void playMoveSound(){
@@ -30,7 +32,7 @@ public class SoundManager {
     public void playGameMusic(){
         gameMusic.play();
         gameMusic.setLooping(true);
-        gameMusic.setVolume(0.3f);
+        gameMusic.setVolume(0f);
     }
     public void pauseGameMusic(){
         gameMusic.pause();
@@ -39,22 +41,31 @@ public class SoundManager {
         return gameMusic.isPlaying();
     }
     public void playRainSound(){
+        rainSound.setVolume(0.1f);
         rainSound.play();
     }
     public void stopRainSound(){
         rainSound.stop();
     }
-    public void playRunningSound(){
-        running.play();
+    public void playFootStep() {
+        if(footStep.isPlaying())return;
+        footStep.play();
+        footStep.setLooping(true);
+        footStep.setVolume(5f);
     }
-    public void pauseRunningSound(){
-        running.pause();
+
+
+    public void stopFootStep() {
+        footStep.stop();
     }
+
+
 
     public void dispose(){
         moveSound.dispose();
         gameMusic.dispose();
         rainSound.dispose();
+        footStep.dispose();
     }
 
 }
