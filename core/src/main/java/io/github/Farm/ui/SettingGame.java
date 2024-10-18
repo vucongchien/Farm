@@ -1,7 +1,6 @@
 package io.github.Farm.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -11,7 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.audio.Music;
+import io.github.Farm.SoundManager;
 
 
 public class SettingGame {
@@ -21,10 +20,8 @@ public class SettingGame {
     private String[] options;
     private int selectedOption;
     private Texture panelBackground;
-    private Sound moveSound; // Biến để lưu âm thanh di chuyển
     private Texture settingsIcon;  // Icon cài đặt
     private float iconSize = 64;   // Kích thước icon
-    public Music gameMusic; // Biến lưu nhạc nền
     private boolean isMusicPlaying; // Biến để theo dõi trạng thái âm thanh
 
     public SettingGame() {
@@ -43,16 +40,10 @@ public class SettingGame {
         layout = new GlyphLayout();
         options = new String[]{"Continue", "Sound", "Exit"};
         selectedOption = 0;
-        panelBackground = new Texture("Setting/table.png"); // Hình nền của bảng (nếu có)
+        panelBackground = new Texture("Setting/table.png");
 
-        // Khởi tạo âm thanh di chuyển
-         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
-        // Khởi tạo nhạc nền
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("soundgame/gamemusic.mp3"));
         isMusicPlaying = true; // Khởi tạo nhạc đang phát
-        gameMusic.play(); // Phát nhạc khi vào game
-        gameMusic.setLooping(true);
-        gameMusic.setVolume(0.3f);
+        SoundManager.getInstance().playGameMusic();
     }
 
     public boolean isActive() {
@@ -65,20 +56,17 @@ public class SettingGame {
 
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            // Phát âm thanh ngay lập tức để kiểm tra
-            moveSound.play(0.05f);
+            SoundManager.getInstance().playMoveSound();
             isActive = !isActive;
         }
 
         if (isActive) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                // Phát âm thanh ngay lập tức để kiểm tra
-                moveSound.play(0.05f);
+                SoundManager.getInstance().playMoveSound();
                 selectedOption = (selectedOption - 1 + options.length) % options.length;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                 // Phát âm thanh ngay lập tức để kiểm tra
-                moveSound.play(0.05f);
+                SoundManager.getInstance().playMoveSound();
                 selectedOption = (selectedOption + 1) % options.length;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
@@ -97,11 +85,11 @@ public class SettingGame {
                 // Tùy chọn âm thanh
                 isMusicPlaying = !isMusicPlaying; // Đổi trạng thái âm thanh
                 options[1] = isMusicPlaying ? "Sound: ON" : "Sound: OFF";
-                if (gameMusic.isPlaying()) {
-                    gameMusic.pause();
+                if (SoundManager.getInstance().isGameMusicPlaying()) {
+                    SoundManager.getInstance().pauseGameMusic();
                     // Phát nhạc nền nếu âm thanh bật
                 } else {
-                    gameMusic.play(); // Dừng nhạc nền nếu âm thanh tắt
+                    SoundManager.getInstance().playGameMusic();
                 }
                 break;
             case 2:
@@ -168,16 +156,6 @@ public class SettingGame {
         // Giải phóng hình nền bảng
         if (panelBackground != null) {
             panelBackground.dispose();
-        }
-
-        // Giải phóng âm thanh di chuyển
-        if (moveSound != null) {
-            moveSound.dispose(); // Giải phóng âm thanh
-        }
-
-        // Giải phóng nhạc nền
-        if (gameMusic != null) {
-            gameMusic.dispose(); // Giải phóng nhạc nền
         }
     }
 }

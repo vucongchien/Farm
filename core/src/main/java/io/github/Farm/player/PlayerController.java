@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
+import io.github.Farm.SoundManager;
 import io.github.Farm.ui.inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
 

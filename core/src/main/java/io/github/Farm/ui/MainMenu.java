@@ -13,8 +13,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
-
-
+import io.github.Farm.SoundManager;
 
 
 public class MainMenu {
@@ -26,8 +25,6 @@ public class MainMenu {
     private float maxTextWidth;
     private float totalMenuHeight;
     private float itemSpacing = 10; // Khoảng cách giữa các mục menu
-    private Sound moveSound; // Biến để lưu âm thanh di chuyển
-    private Sound SoundEnter; // Biến để lưu âm thanh enter
     private Animation<TextureRegion> backgroundAnimation; // Animation cho background
     private boolean isDemoActive; // Biến để kiểm soát trạng thái màn hình demo
     private Animation<TextureRegion> demoAnimation; // Animation cho demo
@@ -62,8 +59,7 @@ public class MainMenu {
         }
         // Thêm khoảng cách giữa các mục menu
         totalMenuHeight += (menuItems.length - 1) * itemSpacing; // Tổng chiều cao của menu cộng với khoảng cách giữa các mục
-        // Khởi tạo âm thanh di chuyển
-        moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
+
 
 
 
@@ -126,10 +122,10 @@ public class MainMenu {
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
             selectedIndex = (selectedIndex + 1) % menuItems.length;
-            moveSound.play(0.05f); // Phát âm thanh ngay lập tức để kiểm tra
+            SoundManager.getInstance().playMoveSound();
         } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.UP)) {
             selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
-            moveSound.play(0.05f); // Phát âm thanh ngay lập tức để kiểm tra
+            SoundManager.getInstance().playMoveSound();
         } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
             switch (selectedIndex) {
 
@@ -162,15 +158,6 @@ public class MainMenu {
         if (font != null) {
             font.dispose(); // Giải phóng tài nguyên font
         }
-
-        // Giải phóng âm thanh
-        if (moveSound != null) {
-            moveSound.dispose(); // Giải phóng âm thanh di chuyển
-        }
-        if (SoundEnter != null) {
-            SoundEnter.dispose(); // Giải phóng âm thanh enter
-        }
-
         // Giải phóng tài nguyên cho các texture trong animation
         for (TextureRegion frame : backgroundAnimation.getKeyFrames()) {
             if (frame.getTexture() != null) {
