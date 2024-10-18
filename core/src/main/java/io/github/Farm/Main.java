@@ -20,6 +20,8 @@ import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.WolfManager;
 import io.github.Farm.data.*;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
@@ -93,17 +95,6 @@ public class Main extends ApplicationAdapter {
 
         GameSaveManager saveManager = new GameSaveManager();
 
-//        PlayerData playerData = new PlayerData(800, 900, 100);
-//        saveManager.savePlayerData(playerData);
-//
-//        List<PlantData> plants = new ArrayList<>();
-//        plants.add(new PlantData("POTATO", 1, new Vector2(5, 5)));
-//        saveManager.savePlantsData(plants);
-//
-//        InventoryData inventoryData = new InventoryData();
-//        inventoryData.getItems().add(new InventoryData.Item("pumpkin", 1));
-//        saveManager.saveInventoryData(inventoryData);
-
         PlayerData loadedPlayerData = saveManager.loadPlayerData();
         List<PlantData> loadedPlantsData = saveManager.loadPlantsData();
         InventoryData loadedInventoryData = saveManager.loadInventoryData();
@@ -145,7 +136,8 @@ public class Main extends ApplicationAdapter {
                 mapRenderer.render();
                 settingGame.render(batch, playerControllerNew.getPosition());
             } else {
-
+                BuffaloManager.getbuffalomanager().update(playerControllerNew);
+                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);

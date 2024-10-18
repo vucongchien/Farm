@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.Interface.Animal;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.PetState;
+import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,7 +20,6 @@ public class BuffaloManager  {
     private long breedingTime;
     private Vector2 targetLocation = null;
 //    private long collisionStopTime = 0;
-    private long stopTime = 0;
     private long hptime=0;
 
     private static BuffaloManager buffalomanager;
@@ -68,13 +68,13 @@ public class BuffaloManager  {
             }
 
     }
-    public void update(){
+    public void update(PlayerController playerController){
         checkquantity();
         checkHungry();
-        activate();;
-//        for(Buffalo buffalo:buffaloManager){
-//            buffalo.activate(buffaloManager);
-//        }
+        activate();
+        for(Buffalo buffalo:buffaloManager){
+            buffalo.plow(playerController);
+        }
     }
     public void activate(){
         for(Buffalo buffalo:buffaloManager){
@@ -84,41 +84,21 @@ public class BuffaloManager  {
                 }
             }
             if(buffalo.gethungry()<=0){
-                switch (buffalo.getBeside()) {
-                    case 1:
-                        buffalo.setcrencurrentState(PetState.SLEEP_FACE);
-                        break;
-                    case 2:
-                        buffalo.setcrencurrentState(PetState.SLEEP_BACK);
-                        break;
-                    case 3:
-                        buffalo.setcrencurrentState(PetState.SLEEP_LEFT);
-                        break;
-                    default:
-                        buffalo.setcrencurrentState(PetState.SLEEP_RIGHT);
-                        break;
+                if (buffalo.getBeside() == 3) {
+                    buffalo.setcrencurrentState(PetState.SLEEP_LEFT);
+                } else {
+                    buffalo.setcrencurrentState(PetState.SLEEP_RIGHT);
                 }
             }else {
                 if (buffalo.getIsStopped()) {
                     if (TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()) >= 5000) {
                         buffalo.setIsStopped(false);
                         buffalo.settargetLocation(buffalo.randomlocation()) ;
-                        stopTime = TimeUtils.millis();
-                        buffalo.setcheck(true);
                     } else {
-                        switch (buffalo.getBeside()) {
-                            case 1:
-                                buffalo.setcrencurrentState(PetState.IDLE_FACE);
-                                break;
-                            case 2:
-                                buffalo.setcrencurrentState(PetState.IDLE_BACK);
-                                break;
-                            case 3:
-                                buffalo.setcrencurrentState(PetState.IDLE_LEFT);
-                                break;
-                            default:
-                                buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
-                                break;
+                        if (buffalo.getBeside() == 3) {
+                            buffalo.setcrencurrentState(PetState.IDLE_LEFT);
+                        } else {
+                            buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
                         }
                     }
                 } else {
@@ -130,21 +110,12 @@ public class BuffaloManager  {
                         if (TimeUtils.timeSinceMillis(buffalo.getStopTime()) >= 5000 && buffalo.gethungry() > 0) {
                             buffalo.settargetLocation(buffalo.randomlocation()) ;
                             buffalo.setStopTime(0);
-                            buffalo.setcheck(true);
+
                         } else {
-                            switch (buffalo.getBeside()) {
-                                case 1:
-                                    buffalo.setcrencurrentState(PetState.IDLE_FACE);
-                                    break;
-                                case 2:
-                                    buffalo.setcrencurrentState(PetState.IDLE_BACK);
-                                    break;
-                                case 3:
-                                    buffalo.setcrencurrentState(PetState.IDLE_LEFT);
-                                    break;
-                                default:
-                                    buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
-                                    break;
+                            if (buffalo.getBeside() == 3) {
+                                buffalo.setcrencurrentState(PetState.IDLE_LEFT);
+                            } else {
+                                buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
                             }
                         }
                     }else {

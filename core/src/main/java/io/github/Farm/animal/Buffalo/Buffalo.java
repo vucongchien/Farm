@@ -21,6 +21,7 @@ import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.Pet;
 import io.github.Farm.animal.PetState;
+import io.github.Farm.player.PlayerController;
 
 
 public class Buffalo extends Pet implements RenderableEntity {
@@ -41,11 +42,10 @@ public class Buffalo extends Pet implements RenderableEntity {
     private Vector2 targetLocation = null;
     private int direction;
     private Vector2 previousLocation;
-    private int beside = 1;
+    private int beside = 3;
     //  dat 1 truoc 2 sau 3 trai 4 phai
     ShapeRenderer shapeRenderer;
     // vẽ hoạt động
-    private boolean check = false;
     private long stopTime = 0;
     private PetState crencurrentState;
     //////////////////////////////////////////
@@ -54,12 +54,13 @@ public class Buffalo extends Pet implements RenderableEntity {
     ///// vacham
     private long collisionStopTime = 0;
     private boolean isStopped = false;
+    private boolean checkplow;
 
     public Buffalo(Vector2 location, long hungry, boolean killed) {
         super(location, hungry, killed);
         box = new Rectangle(getlocation().x + 10f, getlocation().y + 5f, 10, 15);
         imageManager = new BuffaloImageManager();
-        direction = 1;
+//        direction = 1;
         this.previousLocation = new Vector2(location);
         height = box.getHeight();
         width = box.getWidth();
@@ -76,9 +77,6 @@ public class Buffalo extends Pet implements RenderableEntity {
 
     public Vector2 getTargetLocation(){return targetLocation;}
 
-    public  boolean getcheck(){return check;}
-
-    public void setcheck(boolean a){check=a;}
 
     public  long getCollisionStopTime(){return collisionStopTime;}
 
@@ -104,25 +102,10 @@ public class Buffalo extends Pet implements RenderableEntity {
         box.setPosition(x, y);
     }
 
-    public void setBoxSize(float width, float height) {
-        box.setSize(width, height);
-    }
-
     public Rectangle getbox() {
         return box;
     }
 
-    public Vector2 getStartpoint() {
-        return startpoint;
-    }
-
-    public void setDirection(int a) {
-        direction = a;
-    }
-
-    public int getdirection() {
-        return direction;
-    }
 
     public void setmau() {
         mau -= 25;
@@ -137,7 +120,7 @@ public class Buffalo extends Pet implements RenderableEntity {
 
 
     public boolean collide(Buffalo a) {
-
+        if(checkplow){return false;}
         if (getbox().overlaps(a.getbox())) {
             if (!isStopped) {
                 isStopped = true;
@@ -186,52 +169,49 @@ public class Buffalo extends Pet implements RenderableEntity {
 
     public void movelocation() {
         float deltaTime = Gdx.graphics.getDeltaTime();
-        if (check && targetLocation!=null) {
-            if (getlocation().x < targetLocation.x) {
-                setDirection(4);
-                getlocation().x += 10f * deltaTime;
-                setLocation(getlocation().x, getlocation().y);
-                box.setPosition(getlocation().x, getlocation().y);
-                setBoxSize(height,width);
-                setcrencurrentState(PetState.WALK_RIGHT);
-                beside = 4;
-            } else if (getlocation().x > targetLocation.x) {
-                setDirection(3);
-                getlocation().x -= 10f * deltaTime;
-                setLocation(getlocation().x, getlocation().y);
-                box.setPosition(getlocation().x, getlocation().y);
-                setBoxSize(height,width);
-                setcrencurrentState(PetState.WALK_LEFT);
-                beside = 3;
-            }
-        }
-
-        if(targetLocation!=null) {
-            if (Math.abs(getlocation().x - targetLocation.x) < 1f) {
-                if (getlocation().y < targetLocation.y) {
-                    setDirection(2);
-                    getlocation().y += 10f * deltaTime;
+        if(!checkplow) {
+            if(Math.abs(getlocation().x-targetLocation.x)>1f) {
+                if (getlocation().x < targetLocation.x) {
+                    getlocation().x += 10f * deltaTime;
                     setLocation(getlocation().x, getlocation().y);
                     box.setPosition(getlocation().x, getlocation().y);
-                    setBoxSize(width, height);
-                    setcrencurrentState(PetState.WALK_BACK);
-                    check = false;
-                    beside = 2;
-                } else if (getlocation().y > targetLocation.y) {
-                    setDirection(1);
-                    getlocation().y -= 10f * deltaTime;
+                    setcrencurrentState(PetState.WALK_RIGHT);
+                    beside = 4;
+                } else {
+                    getlocation().x -= 10f * deltaTime;
                     setLocation(getlocation().x, getlocation().y);
                     box.setPosition(getlocation().x, getlocation().y);
-                    setBoxSize(width, height);
-                    setcrencurrentState(PetState.WALK_FACE);
-                    check = false;
-                    beside = 1;
+                    setcrencurrentState(PetState.WALK_LEFT);
+                    beside = 3;
                 }
             }
+            if (getlocation().y < targetLocation.y) {
+                getlocation().y += 10f * deltaTime;
+                setLocation(getlocation().x, getlocation().y);
+                box.setPosition(getlocation().x, getlocation().y);
+
+            } else {
+
+                getlocation().y -= 10f * deltaTime;
+                setLocation(getlocation().x, getlocation().y);
+                box.setPosition(getlocation().x, getlocation().y);
+            }
+
+
+
         }
     }
 
-
+    public void plow(PlayerController playerController){
+        if(checkplow){
+            setLocation(playerController.getPosition().x,playerController.getPosition().y);
+            if(playerController.isFacingRight()){
+                setcrencurrentState(PetState.WALK_RIGHT);
+            }else{
+                setcrencurrentState(PetState.WALK_LEFT);
+            }
+        }
+    }
 
     public Vector2 randomlocation() {
         int randomIntx;
@@ -247,179 +227,7 @@ public class Buffalo extends Pet implements RenderableEntity {
         randomInty = ThreadLocalRandom.current().nextInt(950, 1050);
         return new Vector2(randomIntx, randomInty);
     }
-//    public void vavham(Rectangle a) {
-//        if (getbox().overlaps(a)) {
-//            if (!isStopped) {
-//                isStopped = true;
-//                collisionStopTime = TimeUtils.millis();
-//            }
-//        }
-//    }
-//    public void ve(SpriteBatch batch, int initialSize, float deltaTime, OrthographicCamera camera) {
-//
-//        if (gethungry() <= 0) {
-//            switch (beside) {
-//                case 1:
-//                    render(batch, initialSize, PetState.SLEEP_FACE, camera);
-//                    break;
-//                case 2:
-//                    render(batch, initialSize, PetState.SLEEP_BACK, camera);
-//                    break;
-//                case 3:
-//                    render(batch, initialSize, PetState.SLEEP_LEFT, camera);
-//                    break;
-//                default:
-//                    render(batch, initialSize, PetState.SLEEP_RIGHT, camera);
-//                    break;
-//            }
-//            return;
-//        }
-//        if (isStopped) {
-//            if (TimeUtils.timeSinceMillis(collisionStopTime) >= 5000) {
-//                isStopped = false;
-//                targetLocation = randomlocation();
-//                stopTime = TimeUtils.millis();
-//                check = true;
-//            } else {
-//                switch (beside) {
-//                    case 1:
-//                        render(batch, initialSize, PetState.IDLE_FACE, camera);
-//                        break;
-//                    case 2:
-//                        render(batch, initialSize, PetState.IDLE_BACK, camera);
-//                        break;
-//                    case 3:
-//                        render(batch, initialSize, PetState.IDLE_LEFT, camera);
-//                        break;
-//                    default:
-//                        render(batch, initialSize, PetState.IDLE_RIGHT, camera);
-//                        break;
-//                }
-//                return;
-//            }
-//        }
-//
-//        if (targetLocation == null || getlocation().epsilonEquals(targetLocation, 1f)) {
-//            if (stopTime == 0) {
-//                stopTime = TimeUtils.millis();
-//            }
-//
-//            if (TimeUtils.timeSinceMillis(stopTime) >= 5000 && gethungry() > 0) {
-//                targetLocation = randomlocation();
-//                stopTime = 0;
-//                check = true;
-//            } else {
-//                switch (beside) {
-//                    case 1:
-//                        render(batch, initialSize, PetState.IDLE_FACE, camera);
-//                        break;
-//                    case 2:
-//                        render(batch, initialSize, PetState.IDLE_BACK, camera);
-//                        break;
-//                    case 3:
-//                        render(batch, initialSize, PetState.IDLE_LEFT, camera);
-//                        break;
-//                    default:
-//                        render(batch, initialSize, PetState.IDLE_RIGHT, camera);
-//                        break;
-//                }
-//                return;
-//            }
-//        }
-//
-//
-//        if (check) {
-//            if (getlocation().x < targetLocation.x) {
-//                setDirection(4);
-//                getlocation().x += 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(height, width);
-//                render(batch, initialSize, PetState.WALK_RIGHT, camera);
-//                beside = 4;
-//            } else if (getlocation().x > targetLocation.x) {
-//                setDirection(3);
-//                getlocation().x -= 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(height, width);
-//                render(batch, initialSize, PetState.WALK_LEFT, camera);
-//                beside = 3;
-//            }
-//        }
-//
-//        if (Math.abs(getlocation().x - targetLocation.x) < 1f) {
-//            if (getlocation().y < targetLocation.y) {
-//                setDirection(2);
-//                getlocation().y += 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(width, height);
-//                render(batch, initialSize, PetState.WALK_BACK, camera);
-//                check = false;
-//                beside = 2;
-//            } else if (getlocation().y > targetLocation.y) {
-//                setDirection(1);
-//                getlocation().y -= 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(width, height);
-//                render(batch, initialSize, PetState.WALK_FACE, camera);
-//                check = false;
-//                beside = 1;
-//            }
-//        }
-//    }
-//    public void movelocation(Vector2 targetLocation) {
-//        float deltaTime = Gdx.graphics.getDeltaTime();
-//        if (Math.abs(getlocation().x - targetLocation.x) > 1f) {
-//            if (getlocation().x < targetLocation.x) {
-//                setDirection(4);
-//                getlocation().x += 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(height, width);
-//                setcrencurrentState(PetState.WALK_RIGHT);
-//                beside = 4;
-//            } else if (getlocation().x > targetLocation.x) {
-//                setDirection(3);
-//                getlocation().x -= 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(height, width);
-//
-//                setcrencurrentState(PetState.WALK_LEFT);
-//                beside = 3;
-//            }
-//
-//            setLocation(getlocation().x, getlocation().y);
-//            box.setPosition(getlocation().x, getlocation().y);
-//            setBoxSize(height, width);
-//        }else if (Math.abs(getlocation().y - targetLocation.y) > 1f) {
-//
-//            if (getlocation().y < targetLocation.y) {
-//                setDirection(2);
-//                getlocation().y += 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(width, height);
-//                setcrencurrentState(PetState.WALK_BACK);
-//                check = false;
-//                beside = 2;
-//            } else if (getlocation().y > targetLocation.y) {
-//                setDirection(1);
-//                getlocation().y -= 10f * deltaTime;
-//                setLocation(getlocation().x, getlocation().y);
-//                box.setPosition(getlocation().x, getlocation().y);
-//                setBoxSize(width, height);
-//                setcrencurrentState(PetState.WALK_FACE);
-//                check = false;
-//                beside = 1;
-//            }
-//
-//        }
-//
-//     }
+
 
 
     public void xaychuong(Vector2 a) {

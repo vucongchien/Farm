@@ -59,7 +59,7 @@ public class WolfRender implements Collider, RenderableEntity {
     public WolfRender(Vector2 location, boolean thulinh) {
         this.location = location;
         this.thulinh = thulinh;
-        box=new Rectangle(location.x+15, location.y+15, 15,15);
+        box=new Rectangle(location.cpy().x-10, location.cpy().y-15, 15,15);
         crencurrentState= PetState.IDLE_LEFT;
         imageManager = new WolfImageManager();
         this.hp=new Heath(100);

@@ -38,18 +38,7 @@ public class WolfImageManager implements Disposable {
         return animations.get(petState);
     }
 
-//    @Override
-//    public void dispose() {
-//        for (Animation<TextureRegion> animation : animations.values()) {
-//            if (animation != null) {
-//                for (TextureRegion frame : animation.getKeyFrames()) {
-//                    if (frame.getTexture() != null) {
-//                        frame.getTexture().dispose();
-//                    }
-//                }
-//            }
-//        }
-//    }
+
 @Override
 public void dispose() {
     // Giải phóng tất cả các Texture trong các Animation
