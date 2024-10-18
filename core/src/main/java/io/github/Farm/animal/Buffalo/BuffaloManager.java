@@ -1,25 +1,17 @@
 package io.github.Farm.animal.Buffalo;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.TimeUtils;
-import io.github.Farm.Interface.Animal;
-import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.PetState;
 import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class BuffaloManager  {
     private ArrayList<Buffalo> buffaloManager;
     private long breedingTime;
-    private Vector2 targetLocation = null;
-//    private long collisionStopTime = 0;
     private long hptime=0;
 
     private static BuffaloManager buffalomanager;
@@ -36,7 +28,6 @@ public class BuffaloManager  {
         buffaloManager=new ArrayList<>();
     }
 
-//    @Override
     public  void checkquantity(){
         if (buffaloManager.size() < 2) {
             if (breedingTime == 0) {
@@ -56,6 +47,7 @@ public class BuffaloManager  {
             }
         }
     }
+
     public void checkHungry(){
             if(hptime==0){
                 hptime=TimeUtils.millis();
@@ -68,6 +60,7 @@ public class BuffaloManager  {
             }
 
     }
+
     public void update(PlayerController playerController){
         checkquantity();
         checkHungry();
@@ -77,6 +70,7 @@ public class BuffaloManager  {
             buffalo.update(Gdx.graphics.getDeltaTime());
         }
     }
+
     public void activate(){
         for(Buffalo buffalo:buffaloManager){
             for(Buffalo buffalo1:buffaloManager){
@@ -85,7 +79,7 @@ public class BuffaloManager  {
                 }
             }
             if(buffalo.gethungry()<=0){
-                if (buffalo.getBeside() == 3) {
+                if (buffalo.getLeft()) {
                     buffalo.setcrencurrentState(PetState.SLEEP_LEFT);
                 } else {
                     buffalo.setcrencurrentState(PetState.SLEEP_RIGHT);
@@ -96,7 +90,7 @@ public class BuffaloManager  {
                         buffalo.setIsStopped(false);
                         buffalo.settargetLocation(buffalo.randomlocation()) ;
                     } else {
-                        if (buffalo.getBeside() == 3) {
+                        if (buffalo.getLeft()) {
                             buffalo.setcrencurrentState(PetState.IDLE_LEFT);
                         } else {
                             buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
@@ -113,7 +107,7 @@ public class BuffaloManager  {
                             buffalo.setStopTime(0);
 
                         } else {
-                            if (buffalo.getBeside() == 3) {
+                            if (buffalo.getLeft()) {
                                 buffalo.setcrencurrentState(PetState.IDLE_LEFT);
                             } else {
                                 buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
@@ -129,13 +123,10 @@ public class BuffaloManager  {
         }
     }
 
-
-
-
-
     public ArrayList<Buffalo> getBuffaloManager(){
         return (buffaloManager);
     }
+
     public void dispose() {
         for (Buffalo buffalo : buffaloManager) {
             buffalo.dispose(); // Nếu lớp Buffalo có hàm dispose

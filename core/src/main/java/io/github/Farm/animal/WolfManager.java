@@ -1,6 +1,8 @@
 package io.github.Farm.animal;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -9,10 +11,8 @@ import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.badlogic.gdx.math.MathUtils.random;
 
 public class WolfManager {
     private static WolfManager wolfManager;
@@ -22,18 +22,21 @@ public class WolfManager {
         }
         return wolfManager;
     }
-    private ArrayList< WolfRender> wolfmanager;
-    private ArrayList<WolfRender> storagewolfmanager;
+    //........mảng dự tru
+    private final ArrayList<WolfRender> storagewolfmanager;
+
+    private final ArrayList< WolfRender> wolfmanager;
+
     private Vector2 home = new Vector2(0, 0);
     private long breedingTime;
     private long starttime = 0, endtime = 0;
     private Vector2 preyleader = new Vector2(0, 0);
-    //    private float deltaTime=Gdx.graphics.getDeltaTime();
     private boolean acttack;
     private float radius;
     private float angle;
     private  int fistcheck=2;
     private PetState currentState;
+    private long timeacttacked;
 
 
 
@@ -42,7 +45,6 @@ public class WolfManager {
         wolfmanager = new ArrayList<>();
         storagewolfmanager = new ArrayList<>();
         home =new Vector2(850,850);
-
         for(int i=0;i<5;i++) {
             radius = ThreadLocalRandom.current().nextFloat(20, 40);
             angle = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(-90, 90));
@@ -54,25 +56,22 @@ public class WolfManager {
         }
     }
 
-
     public void setBoss(BuffaloManager buffaloManager) {
         boolean checkboss = false;
-        if (wolfmanager.size() != 0) {
+        if (!wolfmanager.isEmpty()) {
             for (WolfRender x : wolfmanager) {
-                if (x.getthulinh() == true) {
+                if (x.getthulinh()) {
                     checkboss = true;
                 }
             }
-            if (checkboss == false) {
+            if (!checkboss) {
                 wolfmanager.get(0).setthulinh(true);
                 wolfmanager.get(0).setcheck(2);
             }
         }
     }
 
-
     public void checkquantity() {
-
         if (wolfmanager.size() < 5) {
                 if (breedingTime == 0) {
                     breedingTime = TimeUtils.millis();
@@ -84,6 +83,7 @@ public class WolfManager {
                 }
 
         }
+
         Iterator<WolfRender> iterator = wolfmanager.iterator();
         while (iterator.hasNext()) {
             WolfRender wolfremove = iterator.next();
@@ -109,9 +109,10 @@ public class WolfManager {
     }
 
     public void activate(BuffaloManager buffaloManager) {
-        if(acttack==false) {
+        if(!acttack) {
+            timeacttacked=0;
             for (WolfRender wolf : wolfmanager) {
-                if (wolf.getthulinh() == true) {
+                if (wolf.getthulinh()) {
                     if (Math.abs(wolf.getlocation().x - home.x) < 1f && Math.abs(wolf.getlocation().y - home.y) < 1f) {
                         if (starttime == 0) {
                             starttime = TimeUtils.millis();
@@ -136,8 +137,10 @@ public class WolfManager {
                             }
                             if (TimeUtils.timeSinceMillis(endtime) < 20000) {
                                 wolf.setCrencurrentState(PetState.IDLE_RIGHT);
+                                wolf.getSpeak().setCurrent("UI/other/expression_chat.png");
                                 wolf.setcheck(0);
                             } else {
+                                wolf.getSpeak().setCurrent(null);
                                 wolf.setTrangthaitancong(false);
                                 wolf.setcheck(2);
                                 fistcheck=wolf.getcheck();
@@ -166,7 +169,7 @@ public class WolfManager {
                     bossAttack = wolfmanager.get(0).gettrangthaitancon();
                     wolf.setprey(buffaloManager);
                     if (bossLocation != null) {
-                        if (bossAttack == false || wolf.getPrey() == null) {
+                        if (!bossAttack || wolf.getPrey() == null) {
                             if (Math.abs(bossLocation.x - home.x) < 1f && Math.abs(bossLocation.y - home.y) < 1f) {
                                 wolf.setCrencurrentState(PetState.IDLE_RIGHT);
                                 movelocation(wolf, new Vector2(bossLocation.x + wolf.getdistancefrombossx(), bossLocation.y + wolf.getDistancefrombossy()), 1f, 1f,0.021f);
@@ -223,44 +226,57 @@ public class WolfManager {
         }
         if(acttack){
             for(WolfRender wolfRender:wolfmanager){
-                if(wolfRender.getlocation().x>playerController.getPosition().x) {
-                    if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
-                        wolfRender.setCrencurrentState(PetState.ATTACK_LEFT);
-                        wolfRender.setKill(true);
-                        if(wolfRender.getTimeActack() <0.32f){
-                            wolfRender.setTimeActack(wolfRender.getTimeActack() + Gdx.graphics.getDeltaTime());
-                        }else {
-                            playerController.setHurt(true);
-                            playerController.setEnemyDirection("RIGHT");
-                        }
-
-                        wolfRender.setanimationattack(true);
-                        while (wolfRender.getcooldown()>0) {
-                            wolfRender.setcooldown();
-                        }
-                    } else {
-                        movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.021f);
-                        wolfRender.setKill(false);
-                        wolfRender.recoverycooldown();
-                    }
+                if(timeacttacked==0){
+                    timeacttacked=TimeUtils.millis();
                 }
-                else{
-                    if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
-                        wolfRender.setCrencurrentState(PetState.ATTACK_RIGHT);
-                        wolfRender.setKill(true);
-                        if(wolfRender.getTimeActack() <0.32f){
-                            wolfRender.setTimeActack(wolfRender.getTimeActack() + Gdx.graphics.getDeltaTime());
-                        }else {
-                            playerController.setHurt(true);
-                            playerController.setEnemyDirection("LEFT");
-                        }
-                        while (wolfRender.getcooldown()>0) {
-                            wolfRender.setcooldown();
+                if(TimeUtils.timeSinceMillis(timeacttacked)<200){
+                    if(wolfRender.getlocation().x<playerController.getPosition().x){
+                        wolfRender.setCrencurrentState(PetState.IDLE_RIGHT);
+                    }else{
+                        wolfRender.setCrencurrentState(PetState.IDLE_LEFT);
+                    }
+                    wolfRender.getSpeak().setCurrent("UI/other/expression_alerted.png");
+
+                }else {
+                    wolfRender.getSpeak().setCurrent(null);
+                    if (wolfRender.getlocation().x > playerController.getPosition().x) {
+                        if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
+                            wolfRender.setCrencurrentState(PetState.ATTACK_LEFT);
+                            wolfRender.setKill(true);
+                            if (wolfRender.getTimeActack() < 0.32f) {
+                                wolfRender.setTimeActack(wolfRender.getTimeActack() + Gdx.graphics.getDeltaTime());
+                            } else {
+                                playerController.setHurt(true);
+                                playerController.setEnemyDirection("RIGHT");
+                            }
+
+                            wolfRender.setanimationattack(true);
+                            while (wolfRender.getcooldown() > 0) {
+                                wolfRender.setcooldown();
+                            }
+                        } else {
+                            movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.021f);
+                            wolfRender.setKill(false);
+                            wolfRender.recoverycooldown();
                         }
                     } else {
-                        wolfRender.setKill(false);
-                        movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.021f);
-                        wolfRender.recoverycooldown();
+                        if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
+                            wolfRender.setCrencurrentState(PetState.ATTACK_RIGHT);
+                            wolfRender.setKill(true);
+                            if (wolfRender.getTimeActack() < 0.32f) {
+                                wolfRender.setTimeActack(wolfRender.getTimeActack() + Gdx.graphics.getDeltaTime());
+                            } else {
+                                playerController.setHurt(true);
+                                playerController.setEnemyDirection("LEFT");
+                            }
+                            while (wolfRender.getcooldown() > 0) {
+                                wolfRender.setcooldown();
+                            }
+                        } else {
+                            wolfRender.setKill(false);
+                            movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.021f);
+                            wolfRender.recoverycooldown();
+                        }
                     }
                 }
             }
@@ -276,8 +292,6 @@ public class WolfManager {
                 }
             }
         }
-
-
     }
 
     public void movelocation(WolfRender a, Vector2 b) {
