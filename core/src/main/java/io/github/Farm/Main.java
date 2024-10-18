@@ -22,11 +22,13 @@ import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
+import io.github.Farm.ui.GameOverScreen;
+import io.github.Farm.ui.SettingGame;
+import io.github.Farm.ui.WinGame;
 import io.github.Farm.ui.inventory.Inventory;
 import io.github.Farm.ui.MainMenu;
-import io.github.Farm.ui.SettingGame;
-import io.github.Farm.ui.inventory.ItemManager;
 import io.github.Farm.weather.Weather;
+
 
 
 public class Main extends ApplicationAdapter {
@@ -49,14 +51,11 @@ public class Main extends ApplicationAdapter {
     private MapInteractionHandler mapInteractionHandler;
 
 
-
-    private MainMenu mainMenu;
-    private SettingGame settingGame;
-
     //------------------render
     private GameRenderer gameRenderer;
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
+    private boolean isWin;
 
 
 
@@ -84,9 +83,6 @@ public class Main extends ApplicationAdapter {
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
         gameRenderer = new GameRenderer(playerRendererNew, camera,map);
-        // Khởi tạo mainMenu và settingGame
-        mainMenu = new MainMenu();
-        settingGame = new SettingGame();
 
     }
 
@@ -94,22 +90,34 @@ public class Main extends ApplicationAdapter {
     public void render() {
         Weather.getInstance().update(Gdx.graphics.getDeltaTime());
         // Kiểm tra xem menu có đang hoạt động không
-        if (mainMenu.isMenuActive()) {
-            mainMenu.handleInput();
+        if (MainMenu.getInstance().isMenuActive()) {
+            MainMenu.getInstance().handleInput();
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            mainMenu.render(batch);
-        } else {
-            settingGame.handleInput();
+            MainMenu.getInstance().render(batch);
+            WinGame.getInstance().handleInput();
+            WinGame.getInstance().render(batch);
+        }
+        else {
+            SettingGame.getInstance().handleInput();
+            GameOverScreen.getInstance().handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
-            if (settingGame.isActive()) {
+            if (SettingGame.getInstance().isActive()) {
                 batch.setColor(Color.WHITE);
                 Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 mapRenderer.setView(camera);
                 mapRenderer.render();
-                settingGame.render(batch, playerControllerNew.getPosition());
-            } else {
+                SettingGame.getInstance().render(batch, playerControllerNew.getPosition());
+            }else if (GameOverScreen.getInstance().isGameOverActive()) {
+                batch.setColor(Color.WHITE);
+                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                mapRenderer.setView(camera);
+                mapRenderer.render();
+                mapManager.setNightLayerVisible(true);
+                GameOverScreen.getInstance().render(batch, playerControllerNew.getPosition());
+            }else {
 
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -150,8 +158,8 @@ public class Main extends ApplicationAdapter {
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
 
                 }
-
             }
+
         }
     }
 

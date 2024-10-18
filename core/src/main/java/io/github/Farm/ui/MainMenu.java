@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -17,18 +16,21 @@ import io.github.Farm.SoundManager;
 
 
 public class MainMenu {
+    private static MainMenu instance;
+    public static MainMenu getInstance() {
+        if (instance == null) {
+            instance = new MainMenu();
+        }
+        return instance;
+    }
     private BitmapFont font;
-    private Texture background; // Biến để lưu background
     private String[] menuItems;
-    private String[] menuItemsNew;
     private int selectedIndex;
     private boolean isMenuActive;
     private float maxTextWidth;
     private float totalMenuHeight;
     private float itemSpacing = 10; // Khoảng cách giữa các mục menu
     private Animation<TextureRegion> backgroundAnimation; // Animation cho background
-    private boolean isDemoActive; // Biến để kiểm soát trạng thái màn hình demo
-    private Animation<TextureRegion> demoAnimation; // Animation cho demo
     private float elapsedTime;
     private String controlsText; // Text chứa nội dung điều khiển
     private boolean isControlsActive;
@@ -45,7 +47,7 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
-        isDataFileExists = false;
+        isDataFileExists = true;
 
         if (isDataFileExists) {
             this.menuItems = new String[] {"Continue", "New Game", "Controls", "Exit"};
@@ -64,7 +66,6 @@ public class MainMenu {
             "ESC: Open Settings";
         this.isControlsActive = false; // Mặc định bảng điều khiển không hiển thị
 
-
         // Tính toán độ rộng lớn nhất của các text và tổng chiều cao của menu
         GlyphLayout layout = new GlyphLayout();
         for (String item : menuItems) {
@@ -74,9 +75,6 @@ public class MainMenu {
         }
         // Thêm khoảng cách giữa các mục menu
         totalMenuHeight += (menuItems.length - 1) * itemSpacing; // Tổng chiều cao của menu cộng với khoảng cách giữa các mục
-
-
-
 
         // Tạo một mảng để lưu các frame
         Array<TextureRegion> frames = new Array<>();
@@ -158,7 +156,7 @@ public class MainMenu {
                         break;
 
                     case "New Game":
-
+                        isMenuActive = false;
                         break;
 
                     case "Continue":

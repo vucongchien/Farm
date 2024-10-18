@@ -14,6 +14,13 @@ import io.github.Farm.SoundManager;
 
 
 public class SettingGame {
+    private static SettingGame instance;
+    public static SettingGame getInstance() {
+        if (instance == null) {
+            instance = new SettingGame();
+        }
+        return instance;
+    }
     private boolean isActive;
     private BitmapFont font;
     private GlyphLayout layout;
@@ -54,9 +61,11 @@ public class SettingGame {
     }
 
     public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            SoundManager.getInstance().playMoveSound();
-            isActive = !isActive;
+        if(GameOverScreen.getInstance().isNotGameOverActive() ){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                SoundManager.getInstance().playMoveSound();
+                isActive = !isActive;
+            }
         }
 
         if (isActive) {
