@@ -27,7 +27,7 @@ public class PlayerController implements Collider, Disposable {
     private boolean isFishing = false;
     private boolean isSwim = false;
     private boolean isPlanting = false;
-    private boolean isHurt = false;
+    private boolean isHurt = false; StringBuilder enemyDirection;
 
     private final InputHandler inputHandler;
     private final CollisionHandler collisionHandler;
@@ -82,10 +82,10 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void update(float deltaTime) {
-        //state
         updatePlayerState(deltaTime);
         updateExpress();
-        //update may bien tao lao
+
+
         collider.setPosition(isFacingRight ? body.getPosition().x + 5 : body.getPosition().x - 20, body.getPosition().y - 5);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -94,14 +94,10 @@ public class PlayerController implements Collider, Disposable {
             Inventory.getInstance().addItem("FOOD_pumpkin", 1);
             Inventory.getInstance().addItem("SEED_kale", 1);
             Inventory.getInstance().addItem("SEED_carrot", 1);
-
         }
 
-//---------------------------all input
-        //move
         updateMovement(deltaTime);
 
-        //logic swim
         if (isSwim) return;
         collisionHandler.checkCollisions();
     }
@@ -145,7 +141,18 @@ public class PlayerController implements Collider, Disposable {
         }
         String direction = isFacingRight ? "RIGHT" : "LEFT";
 
-        //check swim
+        //hurt any whereeeeeeeeeeeeeeeeeeeeee
+        if(isHurt){
+            stateManager.changeState(this,new HurtState(direction,enemyDirection.toString()));
+            return;
+        }
+
+        //frezeeeeeeeeeeeeeeeeeeeee
+        if(Inventory.getInstance().isOpened()) return;
+
+
+
+        //returnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
         Vector2 positionCheckSwim = new Vector2((int) (body.getPosition().x / 16), (int) (body.getPosition().y / 16));
         if (collisionHandler.getMapInteractionHandler().checkTile(positionCheckSwim, "water")) {
             stateManager.changeState(this, new SwimState(direction));
@@ -167,19 +174,25 @@ public class PlayerController implements Collider, Disposable {
             {
                 System.out.println("del duoc cau ca dume m");
             }
-        } else if (inputHandler.isWatering()) {
+        }
+
+
+        else if (inputHandler.isWatering()) {
             stateManager.changeState(this, new WaterState(direction));
-        } else if (inputHandler.isHitting()) {
+        }
+        else if (inputHandler.isHitting()) {
             stateManager.changeState(this, new HitState(direction));
-        } else if (inputHandler.isPlowing()) {
+        }
+        else if (inputHandler.isPlowing()) {
             stateManager.changeState(this, new DigState(direction));
-        } else if (inputHandler.isMoving()) {
+        }
+        else if (inputHandler.isMoving()) {
             stateManager.changeState(this, new WalkState(direction));
-        } else if(Gdx.input.isKeyPressed(Input.Keys.T)){
-            stateManager.changeState(this,new HurtState(direction));
-        } else if (isPlanting) {
+        }
+        else if (isPlanting) {
             stateManager.changeState(this, new DoingState(direction));
-        } else if (!isFishing&&!stateManager.getCurrentStateName().startsWith("HURT_")) {
+        }
+        else if (!isFishing&&!stateManager.getCurrentStateName().startsWith("HURT_")) {
             stateManager.changeState(this, new IdleState(direction));
         }
         //is fishing
@@ -281,5 +294,17 @@ public class PlayerController implements Collider, Disposable {
 
     public Body getBody() {
         return body;
+    }
+
+    public boolean isHurt() {
+        return isHurt;
+    }
+
+    public void setHurt(boolean hurt) {
+        isHurt = hurt;
+    }
+
+    public void setEnemyDirection(String enemyDirection) {
+        this.enemyDirection = new StringBuilder(enemyDirection);
     }
 }

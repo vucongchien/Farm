@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import io.github.Farm.Interface.Animal;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.WolfManager;
 import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.weather.Weather;
@@ -15,11 +18,14 @@ import io.github.Farm.Map.MapManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.List;
 
 public class GameRenderer {
     private SpriteBatch batch;
     private PlayerRenderer player;
+    private List<Animal> animal;
+    private PlantManager plantManager;
     private Camera camera;
     private TiledMap map;
     private Weather weather;
@@ -34,6 +40,7 @@ public class GameRenderer {
         this.player =player;
         this.camera=camera;
         this.map=map;
+        this.animal= new ArrayList<>();
     }
 
     public void render() {
@@ -45,6 +52,8 @@ public class GameRenderer {
         renderAllEntities(batch);
     }
 
+
+
     private void renderAllEntities(SpriteBatch batch) {
         renderableEntities.clear();
 
@@ -53,6 +62,10 @@ public class GameRenderer {
         renderableEntities.addAll(PlantManager.getInstance().getListPlants());
 
         renderableEntities.addAll(ItemManager.getInstance().getItemList());
+
+        renderableEntities.addAll(BuffaloManager.getbuffalomanager().getBuffaloManager());
+
+        renderableEntities.addAll(WolfManager.getwolfmanage().getwolfmanafer());
 
 
         renderableEntities.sort(new Comparator<RenderableEntity>() {

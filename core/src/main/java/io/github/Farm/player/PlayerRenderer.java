@@ -34,11 +34,11 @@ public class PlayerRenderer implements RenderableEntity {
     @Override
     public void render(SpriteBatch batch, Camera camera) {
         batch.setProjectionMatrix(camera.combined);
-        batch.begin();
         stateTime += player.getDeltaTime();
         updateAnimation();
+        batch.begin();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
-
+        batch.setProjectionMatrix(camera.combined);
         batch.draw(frame, player.getPosition().x-32, player.getPosition().y-30, size, size);
         batch.end();
     }

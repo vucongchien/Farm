@@ -20,6 +20,8 @@ import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.WolfManager;
 import io.github.Farm.data.*;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
@@ -66,6 +68,13 @@ public class Main extends ApplicationAdapter {
 
 
 
+<<<<<<< HEAD
+=======
+
+    //____weather
+    private Weather weather;
+
+>>>>>>> hungngu
     @Override
     public void create() {
 
@@ -89,17 +98,6 @@ public class Main extends ApplicationAdapter {
 
         GameSaveManager saveManager = new GameSaveManager();
 
-//        PlayerData playerData = new PlayerData(800, 900, 100);
-//        saveManager.savePlayerData(playerData);
-//
-//        List<PlantData> plants = new ArrayList<>();
-//        plants.add(new PlantData("POTATO", 1, new Vector2(5, 5)));
-//        saveManager.savePlantsData(plants);
-//
-//        InventoryData inventoryData = new InventoryData();
-//        inventoryData.getItems().add(new InventoryData.Item("pumpkin", 1));
-//        saveManager.saveInventoryData(inventoryData);
-
         PlayerData loadedPlayerData = saveManager.loadPlayerData();
         List<PlantData> loadedPlantsData = saveManager.loadPlantsData();
         InventoryData loadedInventoryData = saveManager.loadInventoryData();
@@ -120,8 +118,11 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
+<<<<<<< HEAD
         Weather.getInstance().update(Gdx.graphics.getDeltaTime());
         // Kiểm tra xem menu có đang hoạt động không
+=======
+>>>>>>> hungngu
         if (mainMenu.isMenuActive()) {
             mainMenu.handleInput();
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
@@ -129,7 +130,6 @@ public class Main extends ApplicationAdapter {
             mainMenu.render(batch);
         } else {
             settingGame.handleInput();
-            // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (settingGame.isActive()) {
                 batch.setColor(Color.WHITE);
                 Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
@@ -170,7 +170,11 @@ public class Main extends ApplicationAdapter {
 
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
+                BuffaloManager.getbuffalomanager().update(playerControllerNew);
+                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
+
+
                 gameRenderer.render();
 
                 if (Inventory.getInstance().isOpened()) {

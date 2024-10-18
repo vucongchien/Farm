@@ -10,10 +10,8 @@ public class Pet {
     private long quantity;
     private boolean killed;
 
-    public Pet(Vector2 location, long hungry,long reproduction,long quantity,boolean killed){
-        this.quantity=quantity;
+    public Pet(Vector2 location, long hungry,boolean killed){
         this.hungry=hungry;
-        this.reproduction=reproduction;
         this.killed=killed;
         this.location=location;
     }
