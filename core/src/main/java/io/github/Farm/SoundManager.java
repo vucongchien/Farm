@@ -16,6 +16,10 @@ public class SoundManager {
     private Music gameMusic;
     private Music rainSound;
     private Music footStep;
+    private Music watering;
+    private Sound hurt;
+    private Sound shovel;
+
 
 
     public SoundManager(){
@@ -23,6 +27,10 @@ public class SoundManager {
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("soundgame/gamemusic.mp3"));
         rainSound = Gdx.audio.newMusic(Gdx.files.internal("soundgame/rain_2.mp3"));
         footStep = Gdx.audio.newMusic(Gdx.files.internal("soundgame/running-in-grass-6237.mp3"));
+        watering =Gdx.audio.newMusic(Gdx.files.internal("soundgame/watering.mp3"));
+        hurt = Gdx.audio.newSound(Gdx.files.internal("soundgame/hurt.mp3"));
+        shovel=Gdx.audio.newSound(Gdx.files.internal("soundgame/shovel.mp3"));
+
 
     }
 
@@ -55,11 +63,11 @@ public class SoundManager {
         footStep.setVolume(5f);
     }
 
-
     public void stopFootStep() {
         footStep.stop();
     }
 
+    
 
 
     public void dispose(){
@@ -67,6 +75,9 @@ public class SoundManager {
         gameMusic.dispose();
         rainSound.dispose();
         footStep.dispose();
+        hurt.dispose();
+        shovel.dispose();
+        watering.dispose();
     }
 
 }

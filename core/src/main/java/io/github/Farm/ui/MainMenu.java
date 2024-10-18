@@ -45,7 +45,7 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
-        isDataFileExists = false;
+        isDataFileExists = true;
 
         if (isDataFileExists) {
             this.menuItems = new String[] {"Continue", "New Game", "Controls", "Exit"};
@@ -158,7 +158,7 @@ public class MainMenu {
                         break;
 
                     case "New Game":
-
+                        isMenuActive = false;
                         break;
 
                     case "Continue":
