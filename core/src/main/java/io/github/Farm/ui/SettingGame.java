@@ -38,10 +38,9 @@ public class SettingGame {
 
         isActive = false;
         layout = new GlyphLayout();
-        options = new String[]{"Continue", "Sound", "Exit"};
+        options = new String[]{"Save Game", "Sound", "Exit"};
         selectedOption = 0;
         panelBackground = new Texture("Setting/table.png");
-
         isMusicPlaying = true; // Khởi tạo nhạc đang phát
         SoundManager.getInstance().playGameMusic();
     }
@@ -79,7 +78,7 @@ public class SettingGame {
     private void performAction(int option) {
         switch (option) {
             case 0:
-                isActive = false; // Tiếp tục trò chơi
+
                 break;
             case 1:
                 // Tùy chọn âm thanh

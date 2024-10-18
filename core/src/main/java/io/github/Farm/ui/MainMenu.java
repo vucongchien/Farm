@@ -20,6 +20,7 @@ public class MainMenu {
     private BitmapFont font;
     private Texture background; // Biến để lưu background
     private String[] menuItems;
+    private String[] menuItemsNew;
     private int selectedIndex;
     private boolean isMenuActive;
     private float maxTextWidth;
@@ -29,7 +30,9 @@ public class MainMenu {
     private boolean isDemoActive; // Biến để kiểm soát trạng thái màn hình demo
     private Animation<TextureRegion> demoAnimation; // Animation cho demo
     private float elapsedTime;
-
+    private String controlsText; // Text chứa nội dung điều khiển
+    private boolean isControlsActive;
+    private boolean isDataFileExists;
 
 
 
@@ -42,13 +45,25 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
+        isDataFileExists = false;
 
-
-        this.menuItems = new String[] {"Start Game", "Options", "Exit"};
+        if (isDataFileExists) {
+            this.menuItems = new String[] {"Continue", "New Game", "Controls", "Exit"};
+        } else {
+            this.menuItems = new String[] {"Start Game", "Controls", "Exit"};
+        }
         this.selectedIndex = 0;
         this.isMenuActive = true; // Mặc định menu đang hoạt động
         this.maxTextWidth = 0; // Khởi tạo maxTextWidth
         this.totalMenuHeight = 0; // Khởi tạo totalMenuHeight
+        this.controlsText = "W S A D: Move character\n" +
+            "C: Fish\n" +
+            "F: Dig\n" +
+            "R: Water\n" +
+            "I: Open Inventory\n" +
+            "ESC: Open Settings";
+        this.isControlsActive = false; // Mặc định bảng điều khiển không hiển thị
+
 
         // Tính toán độ rộng lớn nhất của các text và tổng chiều cao của menu
         GlyphLayout layout = new GlyphLayout();
@@ -97,53 +112,74 @@ public class MainMenu {
 
             // Tính toán startY sao cho menu căn giữa theo chiều dọc
             float startY = (screenHeight - totalMenuHeight) / 2;
+            if(!isControlsActive){
+                for (int i = 0; i < menuItems.length; i++) {
+                    String text = menuItems[i];
+                    GlyphLayout layout = new GlyphLayout(font, text); // Đặt text để tính toán
+                    if (i == selectedIndex) {
+                        font.setColor(Color.RED); // Màu đỏ cho mục được chọn
+                        text = "> " + text + " <"; // Highlight selected item
+                    } else {
+                        font.setColor(Color.WHITE); // Màu trắng cho mục không được chọn
+                    }
 
-            for (int i = 0; i < menuItems.length; i++) {
-                String text = menuItems[i];
-                GlyphLayout layout = new GlyphLayout(font, text); // Đặt text để tính toán
-                if (i == selectedIndex) {
-                    font.setColor(Color.RED); // Màu đỏ cho mục được chọn
-                    text = "> " + text + " <"; // Highlight selected item
-                } else {
-                    font.setColor(Color.WHITE); // Màu trắng cho mục không được chọn
+                    float x = startX; // Vị trí x để căn giữa theo chiều ngang
+                    // Điều chỉnh vị trí y để căn giữa các mục menu theo chiều dọc
+                    float y = startY + totalMenuHeight - (layout.height + itemSpacing) * (i + 1) + layout.height;
+
+                    font.draw(batch, text, x, y); // Vẽ từng mục menu
                 }
-
-                float x = startX; // Vị trí x để căn giữa theo chiều ngang
-                // Điều chỉnh vị trí y để căn giữa các mục menu theo chiều dọc
-                float y = startY + totalMenuHeight - (layout.height + itemSpacing) * (i + 1) + layout.height;
-
-                font.draw(batch, text, x, y); // Vẽ từng mục menu
+            }
+            else if(isControlsActive) {
+                // Hiển thị bảng điều khiển ở giữa màn hình
+                GlyphLayout layout = new GlyphLayout(font, controlsText);
+                float x = (Gdx.graphics.getWidth() - layout.width) / 2;
+                float y = (Gdx.graphics.getHeight() + layout.height) / 2;
+                font.draw(batch, controlsText, x, y);
             }
             batch.end();
         }
     }
 
-
     public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
-            selectedIndex = (selectedIndex + 1) % menuItems.length;
-            SoundManager.getInstance().playMoveSound();
-        } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.UP)) {
-            selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
-            SoundManager.getInstance().playMoveSound();
-        } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
-            switch (selectedIndex) {
+        if (!isControlsActive) {
+            if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
+                selectedIndex = (selectedIndex + 1) % menuItems.length;
+                SoundManager.getInstance().playMoveSound();
+            } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.UP)) {
+                selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
+                SoundManager.getInstance().playMoveSound();
+            } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
+                switch (menuItems[selectedIndex]) {
 
-                case 0:
-                    // Start game
-                    isMenuActive = false;
-                    break;
-                case 1:
-                    // Options
+                    case "Start Game":
+                        // Start game
+                        isMenuActive = false;
+                        break;
 
-                    break;
-                case 2:
-                    // Exit
-                    Gdx.app.exit();
-                    break;
+                    case "New Game":
+
+                        break;
+
+                    case "Continue":
+
+                        break;
+
+                    case "Controls":
+                        // Options
+                        isControlsActive = true;
+                        break;
+                    case "Exit":
+                        // Exit
+                        Gdx.app.exit();
+                        break;
+                }
             }
         }
-
+        if (isControlsActive && Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            isControlsActive = false;
+            isMenuActive = true;
+        }
     }
 
     public boolean isMenuActive() {

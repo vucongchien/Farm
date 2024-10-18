@@ -43,6 +43,7 @@ public class SoundManager {
     public void playRainSound(){
         rainSound.setVolume(0.1f);
         rainSound.play();
+        rainSound.setVolume(0.3f);
     }
     public void stopRainSound(){
         rainSound.stop();
