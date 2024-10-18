@@ -14,20 +14,16 @@ public class BuffaloImageManager implements Disposable {
     public BuffaloImageManager() {
         animations = new EnumMap<>(PetState.class);
 
-        animations.put(PetState.WALK_RIGHT, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowWalk_Right.png",4,1,0.1f));
-        animations.put(PetState.WALK_LEFT, BuffaloImageManager.flipAnimation(animations.get(PetState.WALK_RIGHT)));
-        animations.put(PetState.WALK_BACK, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowWalk_Backward.png",4,1,0.1f));
-        animations.put(PetState.WALK_FACE, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowWalk_Forward.png",4,1,0.1f));
+        animations.put(PetState.WALK_RIGHT, createAnimation("Animal_animation/cow/WhiteCowWalk_Right.png",4,1,0.1f));
+        animations.put(PetState.WALK_LEFT, flipAnimation(animations.get(PetState.WALK_RIGHT)));
 
-        animations.put(PetState.IDLE_RIGHT, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowIdle_Right.png",6,1,0.1f));
-        animations.put(PetState.IDLE_LEFT, BuffaloImageManager.flipAnimation(animations.get(PetState.IDLE_RIGHT)));
-        animations.put(PetState.IDLE_BACK, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowIdle_Back.png",6,1,0.1f));
-        animations.put(PetState.IDLE_FACE, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowIdle_Face.png",6,1,0.1f));
 
-        animations.put(PetState.SLEEP_RIGHT, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowSleeping_Right.png",4,1,0.1f));
-        animations.put(PetState.SLEEP_LEFT, BuffaloImageManager.flipAnimation(animations.get(PetState.SLEEP_RIGHT)));
-        animations.put(PetState.SLEEP_BACK, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowSleeping_Back.png",4,1,0.1f));
-        animations.put(PetState.SLEEP_FACE, BuffaloImageManager.createAnimation("Animal_animation/cow/WhiteCowSleeping_Face.png",4,1,0.1f));
+        animations.put(PetState.IDLE_RIGHT, createAnimation("Animal_animation/cow/WhiteCowIdle_Right.png",6,1,0.1f));
+        animations.put(PetState.IDLE_LEFT, flipAnimation(animations.get(PetState.IDLE_RIGHT)));
+
+
+        animations.put(PetState.SLEEP_RIGHT, createAnimation("Animal_animation/cow/WhiteCowSleeping_Right.png",4,1,0.1f));
+        animations.put(PetState.SLEEP_LEFT, flipAnimation(animations.get(PetState.SLEEP_RIGHT)));
 
     }
 

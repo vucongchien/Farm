@@ -25,7 +25,7 @@ import io.github.Farm.player.PlayerController;
 
 
 public class Buffalo extends Pet implements RenderableEntity {
-    private long mau;
+    private Heath mau;
     //...........
     private Rectangle mapbox;
     //.................chi so randum
@@ -39,7 +39,7 @@ public class Buffalo extends Pet implements RenderableEntity {
     private Animation<TextureRegion> currentAnimation;
     private float stateTime;
     private final Timer timer = new Timer();
-    private Vector2 targetLocation = null;
+    private Vector2 targetLocation = randomlocation();
     private int direction;
     private Vector2 previousLocation;
     private int beside = 3;
@@ -56,6 +56,14 @@ public class Buffalo extends Pet implements RenderableEntity {
     private boolean isStopped = false;
     private boolean checkplow;
 
+    //..........knockback
+    private Vector2 knockbackVelocity;
+    private float knockbackDuration;
+    private float knockbackTimeElapsed;
+    private float timehurt=0.31f;
+    private boolean checkhurt;
+    private boolean checkmove;
+
     public Buffalo(Vector2 location, long hungry, boolean killed) {
         super(location, hungry, killed);
         box = new Rectangle(getlocation().x + 10f, getlocation().y + 5f, 10, 15);
@@ -64,8 +72,8 @@ public class Buffalo extends Pet implements RenderableEntity {
         this.previousLocation = new Vector2(location);
         height = box.getHeight();
         width = box.getWidth();
-        mau = hungry;
-        crencurrentState =PetState.IDLE_FACE;
+        mau = new Heath(100);
+        crencurrentState =PetState.IDLE_LEFT;
     }
 
 
@@ -107,11 +115,7 @@ public class Buffalo extends Pet implements RenderableEntity {
     }
 
 
-    public void setmau() {
-        mau -= 25;
-    }
-
-    public long getmau() {
+    public Heath getmau() {
         return mau;
     }
 
@@ -168,38 +172,35 @@ public class Buffalo extends Pet implements RenderableEntity {
 
 
     public void movelocation() {
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        if(!checkplow) {
-            if(Math.abs(getlocation().x-targetLocation.x)>1f) {
-                if (getlocation().x < targetLocation.x) {
-                    getlocation().x += 10f * deltaTime;
-                    setLocation(getlocation().x, getlocation().y);
-                    box.setPosition(getlocation().x, getlocation().y);
-                    setcrencurrentState(PetState.WALK_RIGHT);
-                    beside = 4;
-                } else {
-                    getlocation().x -= 10f * deltaTime;
-                    setLocation(getlocation().x, getlocation().y);
-                    box.setPosition(getlocation().x, getlocation().y);
-                    setcrencurrentState(PetState.WALK_LEFT);
-                    beside = 3;
+        if(!checkmove) {
+            float deltaTime = Gdx.graphics.getDeltaTime();
+                if (Math.abs(getlocation().x - targetLocation.x) > 1f) {
+                    if (getlocation().x < targetLocation.x) {
+                        getlocation().x += 10f * deltaTime;
+                        setLocation(getlocation().x, getlocation().y);
+                        box.setPosition(getlocation().x, getlocation().y);
+                        setcrencurrentState(PetState.WALK_RIGHT);
+                        beside = 4;
+                    } else {
+                        getlocation().x -= 10f * deltaTime;
+                        setLocation(getlocation().x, getlocation().y);
+                        box.setPosition(getlocation().x, getlocation().y);
+                        setcrencurrentState(PetState.WALK_LEFT);
+                        beside = 3;
+                    }
                 }
+                if (getlocation().y < targetLocation.y) {
+                    getlocation().y += 10f * deltaTime;
+                    setLocation(getlocation().x, getlocation().y);
+                    box.setPosition(getlocation().x, getlocation().y);
+
+                } else {
+                    getlocation().y -= 10f * deltaTime;
+                    setLocation(getlocation().x, getlocation().y);
+                    box.setPosition(getlocation().x, getlocation().y);
+                }
+
             }
-            if (getlocation().y < targetLocation.y) {
-                getlocation().y += 10f * deltaTime;
-                setLocation(getlocation().x, getlocation().y);
-                box.setPosition(getlocation().x, getlocation().y);
-
-            } else {
-
-                getlocation().y -= 10f * deltaTime;
-                setLocation(getlocation().x, getlocation().y);
-                box.setPosition(getlocation().x, getlocation().y);
-            }
-
-
-
-        }
     }
 
     public void plow(PlayerController playerController){
@@ -255,7 +256,7 @@ public class Buffalo extends Pet implements RenderableEntity {
         batch.begin();
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
-        batch.draw(frame, getlocation().x, getlocation().y, 32, 32);
+        batch.draw(frame, getlocation().x-25, getlocation().y, 32, 32);
         batch.end();
 
     }
@@ -268,4 +269,67 @@ public class Buffalo extends Pet implements RenderableEntity {
         }
     }
 
+    public Vector2 getKnockbackVelocity() {
+        return knockbackVelocity;
+    }
+
+    public void setKnockbackVelocity(Vector2 knockbackVelocity) {
+        this.knockbackVelocity = knockbackVelocity;
+    }
+
+    public float getKnockbackDuration() {
+        return knockbackDuration;
+    }
+
+    public void setKnockbackDuration(float knockbackDuration) {
+        this.knockbackDuration = knockbackDuration;
+    }
+
+    public float getKnockbackTimeElapsed() {
+        return knockbackTimeElapsed;
+    }
+
+    public void setKnockbackTimeElapsed(float knockbackTimeElapsed) {
+        this.knockbackTimeElapsed = knockbackTimeElapsed;
+    }
+
+    public float getTimehurt() {
+        return timehurt;
+    }
+
+    public void setTimehurt(float timehurt) {
+        this.timehurt = timehurt;
+    }
+
+    public boolean isCheckhurt() {
+        return checkhurt;
+    }
+
+    public void setCheckhurt(boolean checkhurt) {
+        this.checkhurt = checkhurt;
+    }
+
+    public void update(float deltaTime) {
+        // Xử lý knockback
+        if (knockbackDuration > 0) {
+            getlocation().add(knockbackVelocity.cpy().scl(deltaTime));
+            knockbackTimeElapsed += deltaTime;
+            knockbackDuration -= deltaTime;
+
+            if (knockbackDuration <= 0) {
+                knockbackVelocity.set(0, 0);
+            }
+        } else {
+            movelocation();
+        }
+        box.setPosition(getlocation().x + 10, getlocation().y + 5);
+    }
+
+    public boolean isCheckmove() {
+        return checkmove;
+    }
+
+    public void setCheckmove(boolean checkmove) {
+        this.checkmove = checkmove;
+    }
 }

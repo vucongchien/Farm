@@ -50,7 +50,7 @@ public class BuffaloManager  {
         Iterator<Buffalo> iterator = buffaloManager.iterator();
         while (iterator.hasNext()) {
             Buffalo buffalo = iterator.next();
-            if (buffalo.getmau() <= 0) {
+            if (buffalo.getmau().getCurrHp() <= 0) {
                 System.out.println("xoa");
                 iterator.remove();
             }
@@ -74,6 +74,7 @@ public class BuffaloManager  {
         activate();
         for(Buffalo buffalo:buffaloManager){
             buffalo.plow(playerController);
+            buffalo.update(Gdx.graphics.getDeltaTime());
         }
     }
     public void activate(){

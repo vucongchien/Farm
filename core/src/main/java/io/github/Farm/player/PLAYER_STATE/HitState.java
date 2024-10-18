@@ -47,10 +47,7 @@ public class HitState implements InterfacePlayerState {
         while (iteratorwolf.hasNext()){
             WolfRender wolf=iteratorwolf.next();
             if (player.getCollider().overlaps(wolf.getCollider())) {
-
-
                 wolf.onCollision(player);
-                wolf.getHp().damaged(20);
             }
         }
 

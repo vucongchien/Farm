@@ -40,24 +40,6 @@ public class GameRenderer {
         renderAllEntities(batch);
     }
 
-//    public void addanimal(BuffaloManager buffaloManager,WolfManager wolfManager){
-//
-//            if(checkquantitybuffalo<buffaloManager.getBuffaloManager().size()) {
-//                for(;checkquantitybuffalo<buffaloManager.getBuffaloManager().size();checkquantitybuffalo++){
-//                    animal.add(buffaloManager.getBuffaloManager().get((int) checkquantitybuffalo));
-//                }
-//            }
-//            if(checkquantitywolf<wolfManager.getwolfmanafer().size()) {
-//                for(;checkquantitywolf<wolfManager.getwolfmanafer().size();checkquantitywolf++) {
-//                    animal.add(wolfManager.getwolfmanafer().get((int) checkquantitywolf));
-//                }
-//            }
-//            if(checkquantitybuffalo<buffaloManager.getBuffaloManager().size()){
-//
-//            }
-//
-//
-//    }
 
 
     private void renderAllEntities(SpriteBatch batch) {

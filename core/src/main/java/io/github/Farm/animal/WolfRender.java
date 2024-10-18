@@ -16,6 +16,7 @@ import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.player.PLAYER_STATE.PlayerState;
 import io.github.Farm.player.PlayerController;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,6 +30,7 @@ public class WolfRender implements Collider, RenderableEntity {
     private boolean trangthaitancong=false;
     private Buffalo prey;
     private PetState crencurrentState;
+    private PetState lastState;
     private float   distancefrombossx;
     private float   distancefrombossy;
     private ShapeRenderer shapeRenderer;
@@ -36,15 +38,15 @@ public class WolfRender implements Collider, RenderableEntity {
     private WolfImageManager imageManager;
     private  float stateTime =0;
     private  Heath hp;
-    private boolean isknockback;
-    private long timeknockback;
-    private boolean attacked;
-    private long timeattacked;
     private int check = 2;
-//    private Vector2 preyphayeright;
-//    private Vector2 preyphayerleft;
     private boolean idright;
     private boolean animationattack;
+    private float timeActack;
+
+    //.........hunt
+    private float timehunt;
+    private double checkhunt;
+    private int elementhunt;
 
 
 
@@ -54,23 +56,32 @@ public class WolfRender implements Collider, RenderableEntity {
     private boolean kill;
     private float cooldown;
 
+    //........knockback
+    private Vector2 knockbackVelocity;
+    private float knockbackDuration;
+    private float knockbackTimeElapsed;
+    private float timehurt=0.31f;
+    private boolean checkhurt;
 
 
     public WolfRender(Vector2 location, boolean thulinh) {
         this.location = location;
         this.thulinh = thulinh;
-        box=new Rectangle(location.cpy().x-10, location.cpy().y-15, 15,15);
-        crencurrentState= PetState.IDLE_LEFT;
+        box=new Rectangle(location.cpy().x-5, location.cpy().y, 15,15);
+        lastState=crencurrentState= PetState.IDLE_LEFT;
         imageManager = new WolfImageManager();
         this.hp=new Heath(100);
     }
 
-    public boolean getattacked(){return attacked;}
 
     public void reset(Vector2 a){
+        knockbackVelocity =null;
+        knockbackDuration=0f;
+        knockbackTimeElapsed=0f;
         hp.heal(100);
         location.x=a.x+distancefrombossx;
         location.y=a.y+distancefrombossy;
+        check=2;
     }
 
     public  int getcheck(){return check;}
@@ -124,19 +135,22 @@ public class WolfRender implements Collider, RenderableEntity {
         crencurrentState= stare;
     }
 
+    public PetState getCrencurrentState(){return  crencurrentState;}
+
 
     public void setprey(BuffaloManager buffaloManager){
-        if(buffaloManager.getBuffaloManager().size()==0){
-            prey =null;
-        }else {
-            Buffalo min = buffaloManager.getBuffaloManager().get(0);
-            for (Buffalo x : buffaloManager.getBuffaloManager()) {
-                if (x.getlocation().dst(getlocation())<min.getlocation().dst(getlocation())) {
-                    min = x;
+            if (buffaloManager.getBuffaloManager().size() == 0) {
+                prey = null;
+            } else {
+                Buffalo min = buffaloManager.getBuffaloManager().get(0);
+                for (Buffalo x : buffaloManager.getBuffaloManager()) {
+                    if (x.getlocation().dst(getlocation()) < min.getlocation().dst(getlocation())) {
+                        min = x;
+                    }
                 }
+                prey = min;
             }
-            prey = min;
-        }
+
     }
 
     public void setanimationattack(boolean a){animationattack=a;}
@@ -149,12 +163,22 @@ public class WolfRender implements Collider, RenderableEntity {
 
     @Override
     public void onCollision(Collider other) {
-
-
         if(other instanceof PlayerController){
             PlayerController playerController =(PlayerController) other;
             if(playerController.getCurrentState().startsWith("HIT_")){
-                System.out.println("hit");
+                hp.damaged(20);
+                Vector2 playerPosition = playerController.getPosition();
+                Vector2 direction = new Vector2(location).sub(playerPosition).nor();
+                float knockbackForce = 200f;
+                knockbackVelocity = direction.scl(knockbackForce);
+                knockbackDuration = 0.1f;
+                knockbackTimeElapsed = 0f;
+                checkhurt=true;
+                if(location.x>playerController.getPosition().x) {
+                    crencurrentState = PetState.HURT_LEFT;
+                }else{
+                    crencurrentState = PetState.HURT_RIGHT;
+                }
             }
         }
 
@@ -165,7 +189,7 @@ public class WolfRender implements Collider, RenderableEntity {
     }
 
 
-    @Override
+        @Override
     public float getY(){
         return location.y;
     }
@@ -173,22 +197,32 @@ public class WolfRender implements Collider, RenderableEntity {
     @Override
     public void render(SpriteBatch batch, Camera camera) {
         stateTime += Gdx.graphics.getDeltaTime();
+        updateAnimation();
         currentAnimation = imageManager.getAnimation(crencurrentState);
         if (currentAnimation == null) {
             currentAnimation = imageManager.getAnimation(PetState.IDLE_RIGHT); // Example
         }
         batch.begin();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
-        batch.draw(frame, getlocation().x-24, getlocation().y-18, 48, 48);
+        batch.draw(frame, getlocation().x-30, getlocation().y-25, 64, 64);
         batch.end();
 
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(box.x, box.y, box.width, box.height);
-        shapeRenderer.end();
+//        shapeRenderer = new ShapeRenderer();
+//        shapeRenderer.setProjectionMatrix(camera.combined);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(Color.RED);
+//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+//        shapeRenderer.end();
 
+    }
+
+    private void updateAnimation() {
+        if (crencurrentState !=lastState) {
+            stateTime = 0f;
+            currentAnimation = imageManager.getAnimation(crencurrentState);
+            lastState=crencurrentState;
+            timeActack=0;
+        }
     }
 
     public float getcooldown(){return cooldown;}
@@ -199,7 +233,7 @@ public class WolfRender implements Collider, RenderableEntity {
 
     public void dispose(){
         if (imageManager != null) {
-            imageManager.dispose(); // Giải phóng tài nguyên của BuffaloImageManager
+            imageManager.dispose();
         }
         if (shapeRenderer != null) {
             shapeRenderer.dispose();
@@ -211,7 +245,7 @@ public class WolfRender implements Collider, RenderableEntity {
                     TextureRegion frame = (TextureRegion) keyFrame;
                     Texture texture = frame.getTexture();
                     if (texture != null) {
-                        texture.dispose(); // Giải phóng Texture
+                        texture.dispose();
                     }
                 }
             }
@@ -231,7 +265,6 @@ public class WolfRender implements Collider, RenderableEntity {
         }
     }
 
-//    public boolean getidright(){return idright;}
 
     public void checkHit(Collider other){
         if(other instanceof PlayerController){
@@ -249,5 +282,63 @@ public class WolfRender implements Collider, RenderableEntity {
 
     public boolean getKill(){return kill;}
 
+    public float getTimeActack() {
+        return timeActack;
+    }
+
+    public void setTimeActack(float timeActack) {
+        this.timeActack = timeActack;
+    }
+
+    public void update(float deltaTime) {
+
+        if (knockbackDuration > 0) {
+            location.add(knockbackVelocity.cpy().scl(deltaTime));
+            knockbackTimeElapsed += deltaTime;
+            knockbackDuration -= deltaTime;
+            if (knockbackDuration <= 0) {
+                knockbackVelocity.set(0, 0);
+            }
+        }
+        box.setPosition(location.x - 5, location.y);
+    }
+
+    public float getTimehurt() {
+        return timehurt;
+    }
+
+    public void setTimehurt(float timehurt) {
+        this.timehurt = timehurt;
+    }
+
+    public boolean isCheckhurt() {
+        return checkhurt;
+    }
+
+    public void setCheckhurt(boolean checkhurt) {
+        this.checkhurt = checkhurt;
+    }
+
+    public float getTimehunt() {
+        return timehunt;
+    }
+
+    public void setTimehunt(float timehunt) {
+        this.timehunt = timehunt;
+    }
+
+    public double getCheckhunt() {
+        return checkhunt;
+    }
+
+    public void setCheckhunt(double checkhunt) {
+        this.checkhunt = checkhunt;
+    }
+
+    public void setElementhunt(int elementhunt) {
+        this.elementhunt = elementhunt;
+    }
+
+    public int getElementhunt(){return elementhunt;}
 }
 
