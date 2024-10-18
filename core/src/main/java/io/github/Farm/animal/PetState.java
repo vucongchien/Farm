@@ -12,6 +12,10 @@ public enum PetState {
     SLEEP_LEFT,
     SLEEP_RIGHT,
     SLEEP_BACK,
-    SLEEP_FACE
+    SLEEP_FACE,
+    ATTACK_LEFT,
+    ATTACK_RIGHT,
+    HURT_LEFT,
+    HURT_RIGHT
 
 }

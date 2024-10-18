@@ -226,7 +226,16 @@ public class WolfManager {
                     if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
                         wolfRender.setCrencurrentState(PetState.IDLE_LEFT);
                         wolfRender.setKill(true);
-                        playerController.changeState(new HurtState("LEFT"));
+
+
+
+
+                        playerController.setHurt(true);
+                        playerController.setEnemyDirection("RIGHT");
+
+
+
+
                         wolfRender.setanimationattack(true);
                         while (wolfRender.getcooldown()>0) {
                             wolfRender.setcooldown();
@@ -241,8 +250,14 @@ public class WolfManager {
                     if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
                         wolfRender.setCrencurrentState(PetState.IDLE_RIGHT);
                         wolfRender.setKill(true);
-                        playerController.changeState(new HurtState("RIGHT"));
-                        wolfRender.setanimationattack(true);
+
+
+
+                        playerController.setHurt(true);
+                        playerController.setEnemyDirection("LEFT");
+
+
+
                         while (wolfRender.getcooldown()>0) {
                             wolfRender.setcooldown();
                         }

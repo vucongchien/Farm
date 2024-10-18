@@ -39,23 +39,23 @@ public class WolfImageManager implements Disposable {
     }
 
 
-@Override
-public void dispose() {
-    // Giải phóng tất cả các Texture trong các Animation
-    for (Animation<TextureRegion> animation : animations.values()) {
-        if (animation != null) {
-            // Lấy mảng các key frames từ Animation
-            Object[] keyFrames = animation.getKeyFrames();
-            for (Object keyFrame : keyFrames) {
-                if (keyFrame instanceof TextureRegion) {
-                    TextureRegion frame = (TextureRegion) keyFrame;
-                    Texture texture = frame.getTexture();
-                    if (texture != null) {
-                        texture.dispose(); // Giải phóng Texture
+    @Override
+    public void dispose() {
+        // Giải phóng tất cả các Texture trong các Animation
+        for (Animation<TextureRegion> animation : animations.values()) {
+            if (animation != null) {
+                // Lấy mảng các key frames từ Animation
+                Object[] keyFrames = animation.getKeyFrames();
+                for (Object keyFrame : keyFrames) {
+                    if (keyFrame instanceof TextureRegion) {
+                        TextureRegion frame = (TextureRegion) keyFrame;
+                        Texture texture = frame.getTexture();
+                        if (texture != null) {
+                            texture.dispose(); // Giải phóng Texture
+                        }
                     }
                 }
             }
         }
     }
-}
 }

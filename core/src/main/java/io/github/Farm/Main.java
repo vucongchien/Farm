@@ -136,8 +136,7 @@ public class Main extends ApplicationAdapter {
                 mapRenderer.render();
                 settingGame.render(batch, playerControllerNew.getPosition());
             } else {
-                BuffaloManager.getbuffalomanager().update(playerControllerNew);
-                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
+
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 camera.position.set(playerControllerNew.getPosition().x, playerControllerNew.getPosition().y, 0);
@@ -165,7 +164,11 @@ public class Main extends ApplicationAdapter {
 
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
+                BuffaloManager.getbuffalomanager().update(playerControllerNew);
+                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
+
+
                 gameRenderer.render();
 
 

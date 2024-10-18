@@ -149,23 +149,21 @@ public class WolfRender implements Collider, RenderableEntity {
 
     @Override
     public void onCollision(Collider other) {
+
+
         if(other instanceof PlayerController){
             PlayerController playerController =(PlayerController) other;
-
+            if(playerController.getCurrentState().startsWith("HIT_")){
+                System.out.println("hit");
+            }
         }
+
+
         if(other instanceof Buffalo){
             Buffalo buffalo=(Buffalo) other;
         }
     }
-    private Vector2 knockback(PlayerController playerController){
-        if(playerController.isFacingRight()) {
-            Vector2 endloction = new Vector2(location.x + 50, location.y);
-            return endloction.cpy().sub(location).nor();
-        }else{
-            Vector2 endloction = new Vector2(location.x - 50, location.y);
-            return endloction.cpy().sub(location).nor();
-        }
-     }
+
 
     @Override
     public float getY(){
@@ -176,16 +174,21 @@ public class WolfRender implements Collider, RenderableEntity {
     public void render(SpriteBatch batch, Camera camera) {
         stateTime += Gdx.graphics.getDeltaTime();
         currentAnimation = imageManager.getAnimation(crencurrentState);
+        if (currentAnimation == null) {
+            currentAnimation = imageManager.getAnimation(PetState.IDLE_RIGHT); // Example
+        }
         batch.begin();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
-        batch.draw(frame, getlocation().x-18, getlocation().y-22, 32, 32);
+        batch.draw(frame, getlocation().x-24, getlocation().y-18, 48, 48);
         batch.end();
-//        shapeRenderer = new ShapeRenderer();
-//        shapeRenderer.setProjectionMatrix(camera.combined);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(Color.RED);
-//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
-//        shapeRenderer.end();
+
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+        shapeRenderer.end();
+
     }
 
     public float getcooldown(){return cooldown;}
@@ -199,7 +202,7 @@ public class WolfRender implements Collider, RenderableEntity {
             imageManager.dispose(); // Giải phóng tài nguyên của BuffaloImageManager
         }
         if (shapeRenderer != null) {
-            shapeRenderer.dispose(); // Giải phóng ShapeRenderer nếu đã được khởi tạo
+            shapeRenderer.dispose();
         }
         if (currentAnimation != null) {
             Object[] keyFrames = currentAnimation.getKeyFrames();
