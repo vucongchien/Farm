@@ -15,6 +15,7 @@ import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.SoundManager;
 import io.github.Farm.data.*;
 import io.github.Farm.inventory.Inventory;
+import io.github.Farm.inventory.InventorySlot;
 import io.github.Farm.player.PlayerController;
 
 import java.util.List;
@@ -32,11 +33,12 @@ public class SettingGame {
     private boolean isMusicPlaying;
 
     private GameData gameData;
+    private PlayerController playerController;
 
-    public SettingGame(GameData gameData) {
+    public SettingGame(GameData gameData,PlayerController playerController) {
 
         this.gameData=gameData;
-
+        this.playerController=playerController;
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -91,9 +93,9 @@ public class SettingGame {
         switch (option) {
             case 0:
 
-//                updatePlayerData(gameData.getPlayer(), playerControllerNew);
-//                updatePlantsData(gameData.getPlants(), PlantManager.getInstance());
-//                updateInventoryData(gameData.getInventory(), Inventory.getInstance());
+                updatePlayerData(gameData.getPlayer(), playerController);
+                updatePlantsData(gameData.getPlants());
+                updateInventoryData(gameData.getInventory());
 
                 GameSaveManager.getInstance().savePlayerData(gameData.getPlayer());
                 GameSaveManager.getInstance().savePlantsData(gameData.getPlants());
@@ -176,22 +178,29 @@ public class SettingGame {
 
     private void updatePlantsData(List<PlantData> plantDataList) {
         List<PlantRenderer> plants = PlantManager.getInstance().getListPlants();
-        plantDataList.clear();
+
+        if(!plantDataList.isEmpty()) {
+            plantDataList.clear();
+        }
         for (PlantRenderer plant : plants) {
 
             PlantData plantData = new PlantData();
-//            plantData.setType(plant.getType());
-//            plantData.setGrowthStage(plant.getGrowthStage());
+            plantData.setType(plant.getType().toString());
+            plantData.setStage(plant.getStage().toString());
             plantData.setPosition(plant.getPosition());
 
             plantDataList.add(plantData);
         }
     }
 
-//    private void updateInventoryData(InventoryData inventoryData) {
-//        inventoryData.setItems(Inventory.getInstance().getSlots());
-//        inventoryData.setGold(inventory.getGold());
-//    }
+    private void updateInventoryData(InventoryData inventoryData) {
+        inventoryData.getItems().clear();
+        List<InventorySlot> slots=Inventory.getInstance().getSlots();
+
+        for(InventorySlot inventorySlot:slots) {
+            inventoryData.addItem(inventorySlot.getFULL_NAME(), inventorySlot.getQuantity());
+        }
+    }
 
 
 

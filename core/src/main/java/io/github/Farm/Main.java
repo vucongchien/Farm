@@ -103,7 +103,7 @@ public class Main extends ApplicationAdapter {
         gameRenderer = new GameRenderer(playerRendererNew, camera,map);
 
         mainMenu = new MainMenu();
-        settingGame = new SettingGame(gameData);
+        settingGame = new SettingGame(gameData,playerControllerNew);
 
 
     }

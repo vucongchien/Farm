@@ -27,8 +27,8 @@
         "Map.tmx": {
             "expandedGroupLayers": [
                 16,
-                20,
-                31
+                31,
+                20
             ],
             "scale": 2,
             "selectedLayer": 1,
