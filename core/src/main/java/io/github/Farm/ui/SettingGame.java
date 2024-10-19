@@ -10,7 +10,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
+import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.SoundManager;
+import io.github.Farm.data.*;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.player.PlayerController;
+
+import java.util.List;
 
 
 public class SettingGame {
@@ -20,20 +27,25 @@ public class SettingGame {
     private String[] options;
     private int selectedOption;
     private Texture panelBackground;
-    private Texture settingsIcon;  // Icon cài đặt
-    private float iconSize = 64;   // Kích thước icon
-    private boolean isMusicPlaying; // Biến để theo dõi trạng thái âm thanh
+    private Texture settingsIcon;
+    private float iconSize = 64;
+    private boolean isMusicPlaying;
 
-    public SettingGame() {
-        // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
+    private GameData gameData;
+
+    public SettingGame(GameData gameData) {
+
+        this.gameData=gameData;
+
+
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 36; // Kích thước chữ lớn hơn
-//        parameter.color = Color.BLACK; // Màu đen
-        parameter.borderWidth = 2; // Độ dày của viền để tạo cảm giác in đậm
-        parameter.borderColor = Color.BLACK; // Màu viền
-        this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
-        generator.dispose(); // Giải phóng tài nguyên của generator
+        parameter.size = 36;
+
+        parameter.borderWidth = 2;
+        parameter.borderColor = Color.BLACK;
+        this.font = generator.generateFont(parameter);
+        generator.dispose();
 
 
         isActive = false;
@@ -41,7 +53,7 @@ public class SettingGame {
         options = new String[]{"Save Game", "Sound", "Exit"};
         selectedOption = 0;
         panelBackground = new Texture("Setting/table.png");
-        isMusicPlaying = true; // Khởi tạo nhạc đang phát
+        isMusicPlaying = true;
         SoundManager.getInstance().playGameMusic();
     }
 
@@ -79,27 +91,35 @@ public class SettingGame {
         switch (option) {
             case 0:
 
+//                updatePlayerData(gameData.getPlayer(), playerControllerNew);
+//                updatePlantsData(gameData.getPlants(), PlantManager.getInstance());
+//                updateInventoryData(gameData.getInventory(), Inventory.getInstance());
+
+                GameSaveManager.getInstance().savePlayerData(gameData.getPlayer());
+                GameSaveManager.getInstance().savePlantsData(gameData.getPlants());
+                GameSaveManager.getInstance().saveInventoryData(gameData.getInventory());
+
+                System.out.println("Game Saved!");
                 break;
             case 1:
-                // Tùy chọn âm thanh
-                isMusicPlaying = !isMusicPlaying; // Đổi trạng thái âm thanh
+
+                isMusicPlaying = !isMusicPlaying;
                 options[1] = isMusicPlaying ? "Sound: ON" : "Sound: OFF";
                 if (SoundManager.getInstance().isGameMusicPlaying()) {
                     SoundManager.getInstance().pauseGameMusic();
-                    // Phát nhạc nền nếu âm thanh bật
+
                 } else {
                     SoundManager.getInstance().playGameMusic();
                 }
                 break;
             case 2:
-                Gdx.app.exit(); // Thoát game
+                Gdx.app.exit();
                 break;
         }
     }
 
     public void render(SpriteBatch batch, Vector2 playerPosition) {
 
-        // Nếu menu cài đặt đang hoạt động, vẽ bảng tùy chọn
         if (isActive) {
             batch.begin();
 
@@ -145,6 +165,35 @@ public class SettingGame {
             batch.end();
         }
     }
+
+    private void updatePlayerData(PlayerData playerData, PlayerController playerController) {
+
+        playerData.setPosition(playerController.getPosition());
+
+        playerData.setHealth(playerController.getHeath().getCurrHp());
+
+    }
+
+    private void updatePlantsData(List<PlantData> plantDataList) {
+        List<PlantRenderer> plants = PlantManager.getInstance().getListPlants();
+        plantDataList.clear();
+        for (PlantRenderer plant : plants) {
+
+            PlantData plantData = new PlantData();
+//            plantData.setType(plant.getType());
+//            plantData.setGrowthStage(plant.getGrowthStage());
+            plantData.setPosition(plant.getPosition());
+
+            plantDataList.add(plantData);
+        }
+    }
+
+//    private void updateInventoryData(InventoryData inventoryData) {
+//        inventoryData.setItems(Inventory.getInstance().getSlots());
+//        inventoryData.setGold(inventory.getGold());
+//    }
+
+
 
     public void dispose() {
         // Giải phóng tài nguyên font

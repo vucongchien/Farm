@@ -157,6 +157,10 @@ public class Inventory {
         isOpened=!isOpened;
     }
 
+    public List<InventorySlot> getSlots() {
+        return slots;
+    }
+
     // Giải phóng tài nguyên
     public void dispose() {
         font.dispose();

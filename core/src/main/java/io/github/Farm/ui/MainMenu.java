@@ -166,11 +166,9 @@ public class MainMenu {
                         break;
 
                     case "Controls":
-                        // Options
                         isControlsActive = true;
                         break;
                     case "Exit":
-                        // Exit
                         Gdx.app.exit();
                         break;
                 }

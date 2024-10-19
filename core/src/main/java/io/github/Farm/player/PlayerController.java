@@ -126,12 +126,7 @@ public class PlayerController implements Collider, Disposable {
 
     public void updatePlayerState(float deltaTime) {
         if(Inventory.getInstance().isOpened()) return;
-        if(inputHandler.isMoving()){
-            SoundManager.getInstance().playFootStep();
-        }
-        else {
-            SoundManager.getInstance().stopFootStep();
-        }
+
 
         Vector2 movement = inputHandler.handleMovementInput();
         if (movement.x > 0) {
@@ -157,9 +152,18 @@ public class PlayerController implements Collider, Disposable {
         if (collisionHandler.getMapInteractionHandler().checkTile(positionCheckSwim, "water")) {
             stateManager.changeState(this, new SwimState(direction));
             isSwim = true;
+            SoundManager.getInstance().stopFootStep();
             return;
         } else {
             isSwim = false;
+        }
+
+        //sound moveeeeeeeeeeeeeeeeeeeeee
+        if(inputHandler.isMoving()&&!isSwim){
+            SoundManager.getInstance().playFootStep();
+        }
+        else {
+            SoundManager.getInstance().stopFootStep();
         }
 
 

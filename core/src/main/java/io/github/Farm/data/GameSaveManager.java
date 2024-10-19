@@ -8,6 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameSaveManager {
+    private static GameSaveManager instance;
+
+    public static GameSaveManager getInstance() {
+        if(instance==null){
+            instance=new GameSaveManager();
+        }
+        return instance;
+    }
+
     private Json json;
 
     public GameSaveManager() {

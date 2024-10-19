@@ -40,8 +40,6 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private World world;
     private OrthographicCamera camera;
-    private GameSaveManager saveManager;
-    private GameData gameData;
 
     //-------------player
 
@@ -60,6 +58,7 @@ public class Main extends ApplicationAdapter {
 
     private MainMenu mainMenu;
     private SettingGame settingGame;
+    private GameData gameData;
 
     //------------------render
     private GameRenderer gameRenderer;
@@ -68,13 +67,6 @@ public class Main extends ApplicationAdapter {
 
 
 
-<<<<<<< HEAD
-=======
-
-    //____weather
-    private Weather weather;
-
->>>>>>> hungngu
     @Override
     public void create() {
 
@@ -96,13 +88,12 @@ public class Main extends ApplicationAdapter {
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
 
 
-        GameSaveManager saveManager = new GameSaveManager();
+        gameData = new GameData();
+        gameData.setPlayer(GameSaveManager.getInstance().loadPlayerData());
+        gameData.setPlants(GameSaveManager.getInstance().loadPlantsData());
+        gameData.setInventory(GameSaveManager.getInstance().loadInventoryData());
 
-        PlayerData loadedPlayerData = saveManager.loadPlayerData();
-        List<PlantData> loadedPlantsData = saveManager.loadPlantsData();
-        InventoryData loadedInventoryData = saveManager.loadInventoryData();
 
-        System.out.println(loadedPlayerData.getPosition());
 
 
         playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
@@ -110,19 +101,15 @@ public class Main extends ApplicationAdapter {
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
 
         gameRenderer = new GameRenderer(playerRendererNew, camera,map);
-        // Khởi tạo mainMenu và settingGame
+
         mainMenu = new MainMenu();
-        settingGame = new SettingGame();
+        settingGame = new SettingGame(gameData);
+
 
     }
 
     @Override
     public void render() {
-<<<<<<< HEAD
-        Weather.getInstance().update(Gdx.graphics.getDeltaTime());
-        // Kiểm tra xem menu có đang hoạt động không
-=======
->>>>>>> hungngu
         if (mainMenu.isMenuActive()) {
             mainMenu.handleInput();
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
@@ -147,12 +134,8 @@ public class Main extends ApplicationAdapter {
                 mapRenderer.setView(camera);
                 mapRenderer.render();
 
+                Weather.getInstance().update(Gdx.graphics.getDeltaTime());
                 batch.begin();
-                if(Weather.getInstance().getNight()){
-                    mapManager.setNightLayerVisible(true);
-                }else {
-                    mapManager.setNightLayerVisible(false);
-                }
                 Weather.getInstance().render(batch);
                 batch.end();
 
@@ -176,7 +159,6 @@ public class Main extends ApplicationAdapter {
 
 
                 gameRenderer.render();
-
                 if (Inventory.getInstance().isOpened()) {
                     batch.setColor(Color.WHITE);
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
