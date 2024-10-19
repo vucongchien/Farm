@@ -69,9 +69,6 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
-
-
-
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 450);
@@ -92,6 +89,7 @@ public class Main extends ApplicationAdapter {
         gameData.setPlayer(GameSaveManager.getInstance().loadPlayerData());
         gameData.setPlants(GameSaveManager.getInstance().loadPlantsData());
         gameData.setInventory(GameSaveManager.getInstance().loadInventoryData());
+        gameData.setAnimal(GameSaveManager.getInstance().loadAnimalData());
 
 
 

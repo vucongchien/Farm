@@ -1,47 +1,41 @@
 package io.github.Farm.animal;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.Plants.PlantType;
+import io.github.Farm.Interface.Heath;
+
+import java.util.logging.Handler;
 
 public class Pet {
     private Vector2 location;
     private long hungry;
-    private long reproduction;
-    private long quantity;
-    private boolean killed;
+    private final Heath heath;
 
-    public Pet(Vector2 location, long hungry,boolean killed){
-        this.hungry=hungry;
-        this.killed=killed;
-        this.location=location;
+    public Pet(Vector2 location, long hungry,int a) {
+        heath=new Heath(a);
+        this.hungry = hungry;
+        this.location = location;
     }
-    public Vector2 getlocation(){return location;}
-    public void setLocation(float tmpx,float tmpy){this.location=new Vector2(tmpx,tmpy);}
-    public void sethungry(long a){
-        hungry-=a;
+
+    public Vector2 getlocation() {
+        return location;
     }
-    public long gethungry(){return hungry;}
-    public void setReproduction(long a){
-        reproduction=a;
+
+    public void setLocation(float tmpx, float tmpy) {
+        this.location = new Vector2(tmpx, tmpy);
     }
-    public long getReproduction(){return reproduction;}
-    public void setKilled(boolean a){
-        killed=a;
+
+    public void sethungry(long a) {
+        hungry -= a;
     }
-//    public void eat(PlantType input){
-//         switch (input){
-//             case  TOMATO:
-//                 sethungry(gethungry()+10);
-//                 break;
-//             case POTATO:
-//                 sethungry(gethungry()+20);
-//                 break;
-//             case CARROT:
-//                 sethungry(gethungry()+50);
-//                 break;
-//             default:
-//                 break;
-//         }
-//    }
+
+    public long gethungry() {
+        return hungry;
+    }
+
+    public Heath getHeath() {
+        return heath;
+    }
 
 }
+
+

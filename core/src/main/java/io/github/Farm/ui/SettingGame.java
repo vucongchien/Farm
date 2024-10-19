@@ -13,11 +13,16 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.SoundManager;
+import io.github.Farm.animal.Buffalo.Buffalo;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.WolfManager;
+import io.github.Farm.animal.WolfRender;
 import io.github.Farm.data.*;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.InventorySlot;
 import io.github.Farm.player.PlayerController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -96,10 +101,12 @@ public class SettingGame {
                 updatePlayerData(gameData.getPlayer(), playerController);
                 updatePlantsData(gameData.getPlants());
                 updateInventoryData(gameData.getInventory());
+                updateAnimalData(gameData.getAnimal());
 
                 GameSaveManager.getInstance().savePlayerData(gameData.getPlayer());
                 GameSaveManager.getInstance().savePlantsData(gameData.getPlants());
                 GameSaveManager.getInstance().saveInventoryData(gameData.getInventory());
+                GameSaveManager.getInstance().saveAnimalData(gameData.getAnimal());
 
                 System.out.println("Game Saved!");
                 break;
@@ -200,6 +207,50 @@ public class SettingGame {
         for(InventorySlot inventorySlot:slots) {
             inventoryData.addItem(inventorySlot.getFULL_NAME(), inventorySlot.getQuantity());
         }
+    }
+
+    private void updateAnimalData(AnimalData animalData){
+        if(!animalData.getBuffalo().isEmpty()) {
+            animalData.getBuffalo().clear();
+        }
+        if(!animalData.getWolfRenders().isEmpty()) {
+            animalData.getWolfRenders().clear();
+        }
+        if(!animalData.getStorageWolfRenders().isEmpty()){
+            animalData.getStorageWolfRenders().clear();
+        }
+
+        List<AnimalData.Wolf> list= new ArrayList<>();
+        for(WolfRender wolfRender: WolfManager.getwolfmanage().getwolfmanafer()){
+            AnimalData.Wolf wolf =new AnimalData.Wolf();
+            wolf.setPosition(wolfRender.getlocation());
+            wolf.setHealth(wolfRender.getHp().getCurrHp());
+            list.add(wolf);
+        }
+        animalData.setWolfRenders(list);
+        if(!list.isEmpty()) {
+            list.clear();
+        }
+        for(WolfRender wolfRender: WolfManager.getwolfmanage().getStoragewolfmanager()){
+            AnimalData.Wolf wolf =new AnimalData.Wolf();
+            wolf.setPosition(wolfRender.getlocation());
+            wolf.setHealth(wolfRender.getHp().getCurrHp());
+            list.add(wolf);
+        }
+        animalData.setStorageWolfRenders(list);
+        for(AnimalData.Wolf wolf: animalData.getWolfRenders()){
+            System.out.println(wolf.getHealth());
+        }
+        if(!list.isEmpty()) {
+            list.clear();
+        }
+        for(Buffalo buffalo: BuffaloManager.getbuffalomanager().getBuffaloManager()){
+            AnimalData.Wolf wolf =new AnimalData.Wolf();
+            wolf.setPosition(buffalo.getlocation());
+            wolf.setHealth(buffalo.getmau().getCurrHp());
+            list.add(wolf);
+        }
+        animalData.setBuffalo(list);
     }
 
 

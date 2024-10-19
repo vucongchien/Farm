@@ -16,12 +16,15 @@ import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.player.PlayerController;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class WolfRender implements Collider, RenderableEntity {
     private boolean thulinh;
     private Vector2 location;
     private final Rectangle box;
     private boolean trangthaitancong=false;
     private Buffalo prey;
+    private Buffalo fistprey;
     private PetState crencurrentState;
     private PetState lastState;
     private float   distancefrombossx;
@@ -47,6 +50,11 @@ public class WolfRender implements Collider, RenderableEntity {
 
     //........thongbao
     private final chatbox speak;
+
+    //................check goc can bo
+    private int checkCoer;
+    //1.tren phai,2.duoi phai,3.duoitrai,4.trentrai
+    private float radius;
 
 
     public WolfRender(Vector2 location, boolean thulinh) {
@@ -289,5 +297,55 @@ public class WolfRender implements Collider, RenderableEntity {
         return speak;
     }
 
+    public int getCheckCoer() {
+        return checkCoer;
+    }
+
+    public void setCheckCoer(int checkCoer) {
+        this.checkCoer = checkCoer;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public void checkCoer(Buffalo a) {
+        if (a != null) {
+            if (location.x > a.getlocation().x) {System.out.println("npoopooo");
+                if (location.y > a.getlocation().y) {
+                    checkCoer = 1;
+                    if (radius == 0 || prey!=fistprey) {
+                        fistprey=prey;
+                        radius = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(0, 90));
+                    }
+                } else {
+                    checkCoer = 2;
+                    if (radius == 0 || prey!=fistprey) {
+                        fistprey=prey;
+                        radius = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(270, 360));
+                    }
+                }
+            } else {System.out.println("npoopo1111");
+                if (location.y > a.getlocation().y) {
+
+                    checkCoer = 4;
+                    if (radius == 0 || prey!=fistprey) {
+                        fistprey=prey;
+                        radius = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(90, 180));
+                    }
+                } else {
+                    checkCoer = 3;
+                    if (radius == 0 || prey!=fistprey) {
+                        fistprey=prey;
+                        radius = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(180, 270));
+                    }
+                }
+            }
+        }
+    }
 }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.animal.PetState;
 import io.github.Farm.player.PlayerController;
+import io.github.Farm.ui.MainMenu;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,7 +25,6 @@ public class BuffaloManager  {
     }
 
     public BuffaloManager(){
-
         buffaloManager=new ArrayList<>();
     }
 
@@ -34,7 +34,7 @@ public class BuffaloManager  {
                 breedingTime = TimeUtils.millis();
             }
             if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-                buffaloManager.add(new Buffalo(new Vector2(650,1050),100,false));
+                buffaloManager.add(new Buffalo(new Vector2(650,1050),100));
                 breedingTime = 0;
             }
         }
@@ -65,6 +65,11 @@ public class BuffaloManager  {
         checkHungry();
         activate();
         for(Buffalo buffalo:buffaloManager){
+            for(Buffalo buffalo1:buffaloManager){
+                if(buffalo!=buffalo1){
+                    buffalo.collide(buffalo1);
+                }
+            }
             buffalo.plow(playerController);
             buffalo.update(Gdx.graphics.getDeltaTime());
         }
@@ -72,22 +77,20 @@ public class BuffaloManager  {
 
     public void activate(){
         for(Buffalo buffalo:buffaloManager){
-            for(Buffalo buffalo1:buffaloManager){
-                if(buffalo!=buffalo1){
-                    buffalo.collide(buffalo1);
-                }
-            }
             if(buffalo.gethungry()<=0){
                 if (buffalo.getLeft()) {
                     buffalo.setcrencurrentState(PetState.SLEEP_LEFT);
                 } else {
                     buffalo.setcrencurrentState(PetState.SLEEP_RIGHT);
                 }
-            }else {
+                return;
+            }
+            else {
                 if (buffalo.getIsStopped()) {
                     if (TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()) >= 5000) {
                         buffalo.setIsStopped(false);
                         buffalo.settargetLocation(buffalo.randomlocation()) ;
+                        System.out.println(TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()));
                     } else {
                         if (buffalo.getLeft()) {
                             buffalo.setcrencurrentState(PetState.IDLE_LEFT);
@@ -95,7 +98,10 @@ public class BuffaloManager  {
                             buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
                         }
                     }
-                } else {
+
+                }
+                else {
+                    System.out.println(buffalo.getIsStopped());
                     if (buffalo.getTargetLocation() == null || buffalo.getlocation().epsilonEquals(buffalo.getTargetLocation(), 1f)) {
                         if (buffalo.getStopTime() == 0) {
                             buffalo.setStopTime(TimeUtils.millis()) ;

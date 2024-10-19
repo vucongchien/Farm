@@ -2,18 +2,12 @@ package io.github.Farm.data;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.util.List;
 
 public class GameSaveManager {
     private static GameSaveManager instance;
@@ -45,6 +39,11 @@ public class GameSaveManager {
         file.writeString(gson.toJson(inventoryData), false);
     }
 
+    public void saveAnimalData(AnimalData animalData) {
+        FileHandle file = Gdx.files.local("animalData.json");
+        file.writeString(gson.toJson(animalData), false);
+    }
+
     public PlayerData loadPlayerData() {
         FileHandle file = Gdx.files.local("playerData.json");
         return file.exists() ? gson.fromJson(file.readString(), PlayerData.class) : new PlayerData();
@@ -58,6 +57,10 @@ public class GameSaveManager {
     public InventoryData loadInventoryData() {
         FileHandle file = Gdx.files.local("inventoryData.json");
         return file.exists() ? gson.fromJson(file.readString(), InventoryData.class) : new InventoryData();
+    }
+    public AnimalData loadAnimalData() {
+        FileHandle file = Gdx.files.local("animalData.json");
+        return file.exists() ? gson.fromJson(file.readString(), AnimalData.class) : new AnimalData();
     }
 }
 

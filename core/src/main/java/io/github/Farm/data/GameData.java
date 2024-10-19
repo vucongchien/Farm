@@ -7,11 +7,13 @@ public class GameData {
     private PlayerData player;
     private List<PlantData> plants;
     private InventoryData inventory;
+    private AnimalData animal;
 
     public GameData() {
         this.player = new PlayerData();
         this.plants = new ArrayList<>();
         this.inventory = new InventoryData();
+        this.animal=new AnimalData();
     }
 
     public PlayerData getPlayer() {
@@ -38,5 +40,11 @@ public class GameData {
         this.inventory = inventory;
     }
 
+    public AnimalData getAnimal() {
+        return animal;
+    }
 
+    public void setAnimal(AnimalData animal) {
+        this.animal = animal;
+    }
 }
