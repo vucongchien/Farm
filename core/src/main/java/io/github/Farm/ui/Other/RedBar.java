@@ -35,6 +35,12 @@ public class RedBar {
         return Math.min(index, redBar.length-1);
     }
 
+    public  void renderGoblin(Vector2 position,SpriteBatch batch,float currHp,float maxHp, float width, float height){
+        int index=getIndex(currHp,maxHp);
+        batch.begin();
+        batch.draw(redBar[index],position.x-height,position.y+width,width, height);
+        batch.end();
+    }
     public void render(Vector2 position, Camera camera, float currHp,float maxHp, float width, float height){
         int index=getIndex(currHp,maxHp);
         batch.setProjectionMatrix(camera.combined);
