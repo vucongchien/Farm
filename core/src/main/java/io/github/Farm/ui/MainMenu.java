@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import io.github.Farm.SoundManager;
 
 
-public class MainMenu {
+public  class MainMenu {
     private BitmapFont font;
     private Texture background; // Biến để lưu background
     private String[] menuItems;
@@ -33,6 +33,7 @@ public class MainMenu {
     private String controlsText; // Text chứa nội dung điều khiển
     private boolean isControlsActive;
     private boolean isDataFileExists;
+
 
 
 
@@ -162,7 +163,6 @@ public class MainMenu {
                         break;
 
                     case "Continue":
-
                         break;
 
                     case "Controls":

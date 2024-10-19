@@ -39,7 +39,7 @@ public class DoingState implements InterfacePlayerState{
         }
         greenBar.render( player.getPosition(), player.getCamera(), time,2, 14, 7);
 
-        
+
         doSomeThing(player);
 
 

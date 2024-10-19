@@ -22,7 +22,6 @@ import io.github.Farm.player.PlayerController;
 
 
 public class Buffalo extends Pet implements RenderableEntity, Collider {
-    private Heath mau;
     private Rectangle box;
     //.....animation
     private BuffaloImageManager imageManager;
@@ -40,8 +39,6 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     ///// vacham
     private long collisionStopTime = 0;
     private boolean isStopped = false;
-    //......check cay chua dung
-    private boolean checkplow;
 
     //..........knockback
     private Vector2 knockbackVelocity;
@@ -50,13 +47,12 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     private float timehurt=0.31f;
     //.....check di chuyen
     private boolean checkmove;
+    private boolean checkeating;
 
-    public Buffalo(Vector2 location, long hungry, boolean killed) {
-        super(location, hungry, killed);
+    public Buffalo(Vector2 location, long hungry) {
+        super(location, hungry,100);
         box = new Rectangle(getlocation().x + 10f, getlocation().y + 5f, 15, 10);
         imageManager = new BuffaloImageManager();
-//        direction = 1;
-        mau = new Heath(100);
         crencurrentState =PetState.IDLE_LEFT;
     }
 
@@ -88,7 +84,7 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     }
 
     public Heath getmau() {
-        return mau;
+        return getHeath();
     }
 
     public void setKnockbackVelocity(Vector2 knockbackVelocity) {
@@ -125,7 +121,6 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     }
 
     public boolean collide(Buffalo a) {
-        if(checkplow){return false;}
         if (getbox().overlaps(a.getbox())) {
             if (!isStopped) {
                 isStopped = true;
@@ -141,7 +136,7 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
             float overlapY = this.box.height / 2 + a.box.height / 2 - Math.abs(deltaY);
 
            if (overlapX > 0 && overlapY > 0) {
-            float pushFactor = 3f;
+            float pushFactor = 5f;
 
             if (Math.abs(overlapX) < Math.abs(overlapY)) {
                 if (deltaX > 0) {
@@ -213,17 +208,6 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
             }
     }
 
-    public void plow(PlayerController playerController){
-        if(checkplow){
-            setLocation(playerController.getPosition().x,playerController.getPosition().y);
-            if(playerController.isFacingRight()){
-                setcrencurrentState(PetState.WALK_RIGHT);
-            }else{
-                setcrencurrentState(PetState.WALK_LEFT);
-            }
-        }
-    }
-
     public void update(float deltaTime) {
         if (knockbackDuration > 0) {
             getlocation().add(knockbackVelocity.cpy().scl(deltaTime));
@@ -233,9 +217,10 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
             if (knockbackDuration <= 0) {
                 knockbackVelocity.set(0, 0);
             }
-        } else {
-            movelocation();
         }
+//        else {
+//            movelocation();
+//        }
         box.setPosition(getlocation().x + 10, getlocation().y + 5);
     }
 
@@ -283,8 +268,9 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
             if(other instanceof PlayerController){
                 PlayerController playerController=(PlayerController) other;
                 if(playerController.getCurrentState().startsWith("DOING_")) {
-                    mau.heal(20);
+                    getHeath().heal(20);
                 }
             }
     }
+
 }
