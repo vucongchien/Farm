@@ -19,7 +19,7 @@ public class MapManager {
 
     public MapManager(TiledMap map) {
         this.map = map;
-
+        setNightLayerVisible(false);
     }
 
     public String getTileClass(Vector2 positonInMap) {
@@ -58,14 +58,10 @@ public class MapManager {
         }
     }
 
-    public void toggleNightLayer() {
-        MapLayer nightLayer = map.getLayers().get("NIGHT");
+    public void setNightLayerVisible(boolean visible) {
+        TiledMapTileLayer nightLayer =(TiledMapTileLayer) map.getLayers().get("NIGHT");
         if (nightLayer != null) {
-            nightLayer.setVisible(!nightLayer.isVisible());
-            nightLayerVisible = nightLayer.isVisible();
-        }
-        else{
-            System.out.println("del co night layer");
+            nightLayer.setVisible(visible);
         }
     }
 

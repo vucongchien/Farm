@@ -4,15 +4,15 @@ import com.badlogic.gdx.math.Vector2;
 
 public class PlantData {
     private String type;
-    private int growthStage;
+    private String stage;
     private Vector2 position;
 
     public PlantData() {
     }
 
-    public PlantData(String type, int growthStage, Vector2 position) {
+    public PlantData(String type, String stage, Vector2 position) {
         this.type = type;
-        this.growthStage = growthStage;
+        this.stage = stage;
         this.position = position;
     }
 
@@ -24,12 +24,12 @@ public class PlantData {
         this.type = type;
     }
 
-    public int getGrowthStage() {
-        return growthStage;
+    public String getStage() {
+        return stage;
     }
 
-    public void setGrowthStage(int growthStage) {
-        this.growthStage = growthStage;
+    public void setStage(String stage) {
+        this.stage = stage;
     }
 
     public Vector2 getPosition() {

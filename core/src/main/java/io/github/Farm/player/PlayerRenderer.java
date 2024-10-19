@@ -1,6 +1,7 @@
 package io.github.Farm.player;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,6 +23,7 @@ public class PlayerRenderer implements RenderableEntity {
         this.size = initialSize;
         this.currentAnimation = imageManager.getAnimation(PlayerState.IDLE_RIGHT);
         this.lastState=PlayerState.IDLE_RIGHT;
+
     }
 
     @Override

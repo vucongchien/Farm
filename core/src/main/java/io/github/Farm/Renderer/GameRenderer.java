@@ -1,16 +1,20 @@
 package io.github.Farm.Renderer;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import io.github.Farm.Interface.Animal;
 import io.github.Farm.Interface.RenderableEntity;
+import io.github.Farm.Map.MapManager;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.WolfManager;
 import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
+import io.github.Farm.weather.Weather;
+import io.github.Farm.Map.MapManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,6 +28,9 @@ public class GameRenderer {
     private PlantManager plantManager;
     private Camera camera;
     private TiledMap map;
+    private Weather weather;
+    private MapManager mapManager;
+
 
     List<RenderableEntity> renderableEntities = new ArrayList<>();
 
@@ -37,6 +44,11 @@ public class GameRenderer {
     }
 
     public void render() {
+        if(Weather.getInstance().getNight()){
+            batch.setColor(Color.GRAY);
+        }else{
+            batch.setColor(Color.WHITE);
+        }
         renderAllEntities(batch);
     }
 

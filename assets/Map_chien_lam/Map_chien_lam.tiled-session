@@ -26,17 +26,15 @@
         },
         "Map.tmx": {
             "expandedGroupLayers": [
-                29,
-                20,
-                31,
                 16,
-                37
+                31,
+                20
             ],
-            "scale": 3,
-            "selectedLayer": 14,
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 687.5,
-                "y": 198.16666666666669
+                "x": 717.75,
+                "y": 161.25
             }
         },
         "Other.tsx": {
@@ -46,13 +44,13 @@
         },
         "tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 1.5,
             "scaleInEditor": 1
         },
         "tileset_vippp.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
-            "scaleInEditor": 2
+            "scaleInDock": 2,
+            "scaleInEditor": 5.5
         }
     },
     "frame.defaultDuration": 100,
@@ -64,14 +62,15 @@
     "map.tileWidth": 16,
     "openFiles": [
         "Map.tmx",
-        "tileset.tsx"
+        "tileset.tsx",
+        "tileset_vippp.tsx"
     ],
     "project": "Map_chien_lam.tiled-project",
     "property.type": "object",
     "recentFiles": [
+        "tileset_vippp.tsx",
         "tileset.tsx",
         "Map.tmx",
-        "tileset_vippp.tsx",
         "Other.tsx",
         "D:/Java_oop/Farm/assets/tile_map/map.tmx"
     ],

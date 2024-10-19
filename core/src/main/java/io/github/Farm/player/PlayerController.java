@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
+import io.github.Farm.SoundManager;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
 import io.github.Farm.ui.Other.Expression;
@@ -44,7 +45,7 @@ public class PlayerController implements Collider, Disposable {
     public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
 
         this.heath = new Heath(100);
-        this.speed = 150f;
+        this.speed = 100f;
         this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
 
         this.inputHandler = new InputHandler(this);
@@ -124,7 +125,9 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void updatePlayerState(float deltaTime) {
-        //directionnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+        if(Inventory.getInstance().isOpened()) return;
+
+
         Vector2 movement = inputHandler.handleMovementInput();
         if (movement.x > 0) {
             isFacingRight = true;
@@ -149,9 +152,18 @@ public class PlayerController implements Collider, Disposable {
         if (collisionHandler.getMapInteractionHandler().checkTile(positionCheckSwim, "water")) {
             stateManager.changeState(this, new SwimState(direction));
             isSwim = true;
+            SoundManager.getInstance().stopFootStep();
             return;
         } else {
             isSwim = false;
+        }
+
+        //sound moveeeeeeeeeeeeeeeeeeeeee
+        if(inputHandler.isMoving()&&!isSwim){
+            SoundManager.getInstance().playFootStep();
+        }
+        else {
+            SoundManager.getInstance().stopFootStep();
         }
 
 
@@ -212,7 +224,7 @@ public class PlayerController implements Collider, Disposable {
 
     public void updateSpeed(){
         if(isSwim){
-            speed=100f;
+            speed=40f;
         }
         else{
             speed=150f;

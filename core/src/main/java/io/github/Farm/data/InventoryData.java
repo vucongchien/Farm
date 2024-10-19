@@ -18,6 +18,10 @@ public class InventoryData {
         this.items = items;
     }
 
+    public void addItem(String name,int quantity){
+        items.add(new Item(name,quantity));
+    }
+
     public static class Item {
         private String name;
         private int quantity;

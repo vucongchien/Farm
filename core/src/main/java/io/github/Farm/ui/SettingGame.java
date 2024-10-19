@@ -1,7 +1,6 @@
 package io.github.Farm.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -11,7 +10,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.audio.Music;
+import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantRenderer;
+import io.github.Farm.SoundManager;
+import io.github.Farm.data.*;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.inventory.InventorySlot;
+import io.github.Farm.player.PlayerController;
+
+import java.util.List;
 
 
 public class SettingGame {
@@ -21,38 +28,35 @@ public class SettingGame {
     private String[] options;
     private int selectedOption;
     private Texture panelBackground;
-    private Sound moveSound; // Biến để lưu âm thanh di chuyển
-    private Texture settingsIcon;  // Icon cài đặt
-    private float iconSize = 64;   // Kích thước icon
-    public Music gameMusic; // Biến lưu nhạc nền
-    private boolean isMusicPlaying; // Biến để theo dõi trạng thái âm thanh
+    private Texture settingsIcon;
+    private float iconSize = 64;
+    private boolean isMusicPlaying;
 
-    public SettingGame() {
-        // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
+    private GameData gameData;
+    private PlayerController playerController;
+
+    public SettingGame(GameData gameData,PlayerController playerController) {
+
+        this.gameData=gameData;
+        this.playerController=playerController;
+
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 36; // Kích thước chữ lớn hơn
-//        parameter.color = Color.BLACK; // Màu đen
-        parameter.borderWidth = 2; // Độ dày của viền để tạo cảm giác in đậm
-        parameter.borderColor = Color.BLACK; // Màu viền
-        this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
-        generator.dispose(); // Giải phóng tài nguyên của generator
+        parameter.size = 36;
+
+        parameter.borderWidth = 2;
+        parameter.borderColor = Color.BLACK;
+        this.font = generator.generateFont(parameter);
+        generator.dispose();
 
 
         isActive = false;
         layout = new GlyphLayout();
-        options = new String[]{"Continue", "Sound", "Exit"};
+        options = new String[]{"Save Game", "Sound", "Exit"};
         selectedOption = 0;
-        panelBackground = new Texture("Setting/table.png"); // Hình nền của bảng (nếu có)
-
-        // Khởi tạo âm thanh di chuyển
-         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
-        // Khởi tạo nhạc nền
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("soundgame/gamemusic.mp3"));
-        isMusicPlaying = true; // Khởi tạo nhạc đang phát
-        gameMusic.play(); // Phát nhạc khi vào game
-        gameMusic.setLooping(true);
-        gameMusic.setVolume(0.3f);
+        panelBackground = new Texture("Setting/table.png");
+        isMusicPlaying = true;
+        SoundManager.getInstance().playGameMusic();
     }
 
     public boolean isActive() {
@@ -65,20 +69,17 @@ public class SettingGame {
 
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            // Phát âm thanh ngay lập tức để kiểm tra
-            moveSound.play(0.05f);
+            SoundManager.getInstance().playMoveSound();
             isActive = !isActive;
         }
 
         if (isActive) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                // Phát âm thanh ngay lập tức để kiểm tra
-                moveSound.play(0.05f);
+                SoundManager.getInstance().playMoveSound();
                 selectedOption = (selectedOption - 1 + options.length) % options.length;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                 // Phát âm thanh ngay lập tức để kiểm tra
-                moveSound.play(0.05f);
+                SoundManager.getInstance().playMoveSound();
                 selectedOption = (selectedOption + 1) % options.length;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
@@ -91,28 +92,36 @@ public class SettingGame {
     private void performAction(int option) {
         switch (option) {
             case 0:
-                isActive = false; // Tiếp tục trò chơi
+
+                updatePlayerData(gameData.getPlayer(), playerController);
+                updatePlantsData(gameData.getPlants());
+                updateInventoryData(gameData.getInventory());
+
+                GameSaveManager.getInstance().savePlayerData(gameData.getPlayer());
+                GameSaveManager.getInstance().savePlantsData(gameData.getPlants());
+                GameSaveManager.getInstance().saveInventoryData(gameData.getInventory());
+
+                System.out.println("Game Saved!");
                 break;
             case 1:
-                // Tùy chọn âm thanh
-                isMusicPlaying = !isMusicPlaying; // Đổi trạng thái âm thanh
+
+                isMusicPlaying = !isMusicPlaying;
                 options[1] = isMusicPlaying ? "Sound: ON" : "Sound: OFF";
-                if (gameMusic.isPlaying()) {
-                    gameMusic.pause();
-                    // Phát nhạc nền nếu âm thanh bật
+                if (SoundManager.getInstance().isGameMusicPlaying()) {
+                    SoundManager.getInstance().pauseGameMusic();
+
                 } else {
-                    gameMusic.play(); // Dừng nhạc nền nếu âm thanh tắt
+                    SoundManager.getInstance().playGameMusic();
                 }
                 break;
             case 2:
-                Gdx.app.exit(); // Thoát game
+                Gdx.app.exit();
                 break;
         }
     }
 
     public void render(SpriteBatch batch, Vector2 playerPosition) {
 
-        // Nếu menu cài đặt đang hoạt động, vẽ bảng tùy chọn
         if (isActive) {
             batch.begin();
 
@@ -159,6 +168,42 @@ public class SettingGame {
         }
     }
 
+    private void updatePlayerData(PlayerData playerData, PlayerController playerController) {
+
+        playerData.setPosition(playerController.getPosition());
+
+        playerData.setHealth(playerController.getHeath().getCurrHp());
+
+    }
+
+    private void updatePlantsData(List<PlantData> plantDataList) {
+        List<PlantRenderer> plants = PlantManager.getInstance().getListPlants();
+
+        if(!plantDataList.isEmpty()) {
+            plantDataList.clear();
+        }
+        for (PlantRenderer plant : plants) {
+
+            PlantData plantData = new PlantData();
+            plantData.setType(plant.getType().toString());
+            plantData.setStage(plant.getStage().toString());
+            plantData.setPosition(plant.getPosition());
+
+            plantDataList.add(plantData);
+        }
+    }
+
+    private void updateInventoryData(InventoryData inventoryData) {
+        inventoryData.getItems().clear();
+        List<InventorySlot> slots=Inventory.getInstance().getSlots();
+
+        for(InventorySlot inventorySlot:slots) {
+            inventoryData.addItem(inventorySlot.getFULL_NAME(), inventorySlot.getQuantity());
+        }
+    }
+
+
+
     public void dispose() {
         // Giải phóng tài nguyên font
         if (font != null) {
@@ -168,16 +213,6 @@ public class SettingGame {
         // Giải phóng hình nền bảng
         if (panelBackground != null) {
             panelBackground.dispose();
-        }
-
-        // Giải phóng âm thanh di chuyển
-        if (moveSound != null) {
-            moveSound.dispose(); // Giải phóng âm thanh
-        }
-
-        // Giải phóng nhạc nền
-        if (gameMusic != null) {
-            gameMusic.dispose(); // Giải phóng nhạc nền
         }
     }
 }

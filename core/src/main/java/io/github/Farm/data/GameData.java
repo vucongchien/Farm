@@ -37,4 +37,6 @@ public class GameData {
     public void setInventory(InventoryData inventory) {
         this.inventory = inventory;
     }
+
+
 }
