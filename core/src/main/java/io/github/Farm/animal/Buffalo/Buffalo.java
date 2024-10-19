@@ -274,4 +274,11 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
             }
     }
 
+    public boolean isCheckeating() {
+        return checkeating;
+    }
+
+    public void setCheckeating(boolean checkeating) {
+        this.checkeating = checkeating;
+    }
 }

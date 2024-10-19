@@ -70,7 +70,7 @@ public class BuffaloManager  {
                     buffalo.collide(buffalo1);
                 }
             }
-            buffalo.plow(playerController);
+
             buffalo.update(Gdx.graphics.getDeltaTime());
         }
     }
@@ -90,7 +90,6 @@ public class BuffaloManager  {
                     if (TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()) >= 5000) {
                         buffalo.setIsStopped(false);
                         buffalo.settargetLocation(buffalo.randomlocation()) ;
-                        System.out.println(TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()));
                     } else {
                         if (buffalo.getLeft()) {
                             buffalo.setcrencurrentState(PetState.IDLE_LEFT);
@@ -101,7 +100,7 @@ public class BuffaloManager  {
 
                 }
                 else {
-                    System.out.println(buffalo.getIsStopped());
+
                     if (buffalo.getTargetLocation() == null || buffalo.getlocation().epsilonEquals(buffalo.getTargetLocation(), 1f)) {
                         if (buffalo.getStopTime() == 0) {
                             buffalo.setStopTime(TimeUtils.millis()) ;

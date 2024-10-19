@@ -180,7 +180,6 @@ public class WolfManager {
                                 }
                             }
                         } else {
-                            System.out.println(wolf.getRadius());
                             suppotativate(wolf,wolf.getPrey().getlocation().cpy().add((float) Math.cos(wolf.getRadius()) * 20,(float) Math.sin(wolf.getRadius()) * 20));
                         }
                     } else {

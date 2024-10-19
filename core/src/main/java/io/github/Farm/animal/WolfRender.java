@@ -315,7 +315,7 @@ public class WolfRender implements Collider, RenderableEntity {
 
     public void checkCoer(Buffalo a) {
         if (a != null) {
-            if (location.x > a.getlocation().x) {System.out.println("npoopooo");
+            if (location.x > a.getlocation().x) {
                 if (location.y > a.getlocation().y) {
                     checkCoer = 1;
                     if (radius == 0 || prey!=fistprey) {
@@ -329,7 +329,7 @@ public class WolfRender implements Collider, RenderableEntity {
                         radius = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(270, 360));
                     }
                 }
-            } else {System.out.println("npoopo1111");
+            } else {
                 if (location.y > a.getlocation().y) {
 
                     checkCoer = 4;

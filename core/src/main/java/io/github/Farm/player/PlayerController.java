@@ -253,10 +253,9 @@ public class PlayerController implements Collider, Disposable {
         if (other instanceof Buffalo){
             Buffalo buffalo=(Buffalo) other;
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                if(Inventory.getInstance().useItem("FOOD_wheat")) {
-
+                if(Inventory.getInstance().useItem("FOOD_pumpkin")) {
+                    buffalo.setCheckeating(true);
                     buffalo.getmau().damaged(20);
-
                 }
             }
         }
