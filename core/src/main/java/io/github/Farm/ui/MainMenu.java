@@ -10,9 +10,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import io.github.Farm.SoundManager;
+import com.badlogic.gdx.graphics.GL20;
 
 
 public class MainMenu {
@@ -38,12 +40,13 @@ public class MainMenu {
 
 
 
+
     public MainMenu() {
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 36; // Kích thước chữ lớn hơn
-        parameter.borderWidth = 2; // Độ dày của viền để tạo cảm giác in đậm
+        parameter.borderWidth = 1; // Độ dày của viền để tạo cảm giác in đậm
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
@@ -96,16 +99,18 @@ public class MainMenu {
 
     public void render(SpriteBatch batch) {
         if (isMenuActive) {
-            batch.begin();
             // Cập nhật thời gian đã trôi qua
             elapsedTime += Gdx.graphics.getDeltaTime();
 
             // Vẽ background hoạt ảnh
+
             TextureRegion currentFrame = backgroundAnimation.getKeyFrame(elapsedTime);
+            batch.begin();
             batch.draw(currentFrame, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
             float screenWidth = Gdx.graphics.getWidth(); // Lấy chiều rộng màn hình
             float screenHeight = Gdx.graphics.getHeight(); // Lấy chiều cao màn hình
+
             float startX = (screenWidth - maxTextWidth) / 2; // Tính toán vị trí x để căn giữa theo chiều ngang
 
             // Tính toán startY sao cho menu căn giữa theo chiều dọc
@@ -139,6 +144,7 @@ public class MainMenu {
         }
     }
 
+
     public void handleInput() {
         if (!isControlsActive) {
             if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
@@ -152,11 +158,15 @@ public class MainMenu {
 
                     case "Start Game":
                         // Start game
+                        IntroGame.getInstance().setIntro(true);
+
                         isMenuActive = false;
                         break;
 
                     case "New Game":
+                        IntroGame.getInstance().setIntro(true);
                         isMenuActive = false;
+
                         break;
 
                     case "Continue":
@@ -178,6 +188,15 @@ public class MainMenu {
             isControlsActive = false;
             isMenuActive = true;
         }
+    }
+    public String getControlsText() {
+        return controlsText;
+    }
+    public boolean isControlsActive(){
+        return isControlsActive;
+    }
+    public void setIsControlsActive(boolean isControlsActive) {
+        this.isControlsActive = isControlsActive;
     }
 
     public boolean isMenuActive() {

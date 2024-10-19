@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
@@ -27,29 +26,24 @@ public class SettingGame {
     private String[] options;
     private int selectedOption;
     private Texture panelBackground;
-    private Texture settingsIcon;  // Icon cài đặt
-    private float iconSize = 64;   // Kích thước icon
     private boolean isMusicPlaying; // Biến để theo dõi trạng thái âm thanh
 
     public SettingGame() {
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 36; // Kích thước chữ lớn hơn
-//        parameter.color = Color.BLACK; // Màu đen
-        parameter.borderWidth = 2; // Độ dày của viền để tạo cảm giác in đậm
-        parameter.borderColor = Color.BLACK; // Màu viền
+        parameter.size = 23; // Kích thước chữ lớn hơn
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
 
-
         isActive = false;
         layout = new GlyphLayout();
-        options = new String[]{"Save Game", "Sound", "Exit"};
+        options = new String[]{"Save Game", "Sound", "Controls", "Exit"};
         selectedOption = 0;
-        panelBackground = new Texture("Setting/table.png");
+        panelBackground = new Texture("Setting/Menu_2.png");
         isMusicPlaying = true; // Khởi tạo nhạc đang phát
         SoundManager.getInstance().playGameMusic();
+        MainMenu.getInstance().setIsControlsActive(false);
     }
 
     public boolean isActive() {
@@ -68,7 +62,7 @@ public class SettingGame {
             }
         }
 
-        if (isActive) {
+        if (isActive && !MainMenu.getInstance().isControlsActive()) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                 SoundManager.getInstance().playMoveSound();
                 selectedOption = (selectedOption - 1 + options.length) % options.length;
@@ -80,6 +74,10 @@ public class SettingGame {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 performAction(selectedOption);
             }
+        }
+        if (MainMenu.getInstance().isControlsActive() && Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            MainMenu.getInstance().setIsControlsActive(false);
+            isActive = true;
         }
 
     }
@@ -101,6 +99,9 @@ public class SettingGame {
                 }
                 break;
             case 2:
+                MainMenu.getInstance().setIsControlsActive(true);
+                break;
+            case 3:
                 Gdx.app.exit(); // Thoát game
                 break;
         }
@@ -109,46 +110,54 @@ public class SettingGame {
     public void render(SpriteBatch batch, Vector2 playerPosition) {
 
         // Nếu menu cài đặt đang hoạt động, vẽ bảng tùy chọn
-        if (isActive) {
+        if (isActive && !WinGame.getInstance().isWin()) {
             batch.begin();
 
-            // Lấy kích thước của màn hình
-            float screenWidth = Gdx.graphics.getWidth();
-            float screenHeight = Gdx.graphics.getHeight();
-
             // Kích thước của bảng (panel)
-            float panelWidth = 400;
-            float panelHeight = 300;
+            float panelWidth = 300;
+            float panelHeight = 200;
 
             // Vị trí của bảng (căn giữa nhân vật)
             float panelX = playerPosition.x - panelWidth / 2;
             float panelY = playerPosition.y - panelHeight / 2;
 
             // Vẽ hình nền của bảng
-            batch.draw(panelBackground, panelX, panelY, panelWidth, panelHeight);
+            if (!MainMenu.getInstance().isControlsActive()){
+                batch.draw(panelBackground, panelX, panelY, panelWidth, panelHeight);
+            }
 
             // Căn giữa các tùy chọn trong bảng
-            float optionHeight = 50;
+            float optionHeight = 30;
             float totalOptionsHeight = options.length * optionHeight; // Tổng chiều cao của tất cả các tùy chọn
             float startX = panelX + (panelWidth - layout.width) / 2; // Căn giữa theo chiều ngang của bảng
             float startY = panelY + (panelHeight + totalOptionsHeight) / 2; // Căn giữa theo chiều dọc của bảng
 
-            for (int i = 0; i < options.length; i++) {
-                // Tính toán chiều rộng của text để căn giữa theo chiều ngang
-                layout.setText(font, options[i]);
-                float textWidth = layout.width;
+            if(!MainMenu.getInstance().isControlsActive()){
+                for (int i = 0; i < options.length; i++) {
+                    // Tính toán chiều rộng của text để căn giữa theo chiều ngang
+                    layout.setText(font, options[i]);
+                    float textWidth = layout.width;
 
-                // Căn giữa text theo chiều ngang của bảng
-                float x = panelX + (panelWidth - textWidth) / 2;
-                float y = startY - i * optionHeight;
+                    // Căn giữa text theo chiều ngang của bảng
+                    float x = panelX + (panelWidth - textWidth) / 2;
+                    float y = startY - i * optionHeight;
 
-                if (i == selectedOption) {
-                    font.setColor(1, 1, 0, 1); // Màu vàng cho tùy chọn được chọn
-                } else {
-                    font.setColor(1, 1, 1, 1); // Màu trắng cho các tùy chọn khác
+                    if (i == selectedOption) {
+                        font.setColor(1, 1, 0, 1); // Màu vàng cho tùy chọn được chọn
+                    } else {
+                        font.setColor(1, 1, 1, 1); // Màu trắng cho các tùy chọn khác
+                    }
+
+                    font.draw(batch, options[i], x, y);
                 }
-
-                font.draw(batch, options[i], x, y);
+                System.out.println(MainMenu.getInstance().isControlsActive());
+            } else if(MainMenu.getInstance().isControlsActive()) {
+                // Vẽ nội dung điều khiển
+                GlyphLayout layout = new GlyphLayout(font, MainMenu.getInstance().getControlsText());
+                float x = playerPosition.x - layout.width / 2;
+                float y = playerPosition.y + layout.height/ 2;
+                font.draw(batch, MainMenu.getInstance().getControlsText(), x, y);
+                System.out.println(MainMenu.getInstance().isControlsActive());
             }
 
             batch.end();

@@ -14,8 +14,8 @@ public class Weather {
         }
         return instance;
     }
-    private String currentWeather; // Nắng, Mưa, Mây
-    private float timeOfDay; // Giá trị từ 0.0 (đêm) đến 1.0 (ngày)
+    private String currentWeather;
+    private float timeOfDay;
     private float weatherDuration; // Thời gian duy trì thời tiết hiện tại
     private final float minWeatherDuration = 3f; // Thời gian tối thiểu của mỗi thời tiết
     private final float maxWeatherDuration = 5f; // Thời gian tối đa của mỗi thời tiết

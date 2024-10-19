@@ -2,6 +2,7 @@ package io.github.Farm;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,17 +23,13 @@ import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
-import io.github.Farm.ui.GameOverScreen;
-import io.github.Farm.ui.SettingGame;
-import io.github.Farm.ui.WinGame;
+import io.github.Farm.ui.*;
 import io.github.Farm.ui.inventory.Inventory;
-import io.github.Farm.ui.MainMenu;
 import io.github.Farm.weather.Weather;
 
 
 
 public class Main extends ApplicationAdapter {
-
     private SpriteBatch batch;
     private World world;
     private OrthographicCamera camera;
@@ -55,8 +52,6 @@ public class Main extends ApplicationAdapter {
     private GameRenderer gameRenderer;
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
-    private boolean isWin;
-
 
 
     @Override
@@ -84,23 +79,58 @@ public class Main extends ApplicationAdapter {
 
         gameRenderer = new GameRenderer(playerRendererNew, camera,map);
 
+        IntroGame.getInstance();
+        WinGame.getInstance();
+
     }
 
     @Override
     public void render() {
         Weather.getInstance().update(Gdx.graphics.getDeltaTime());
+        GameOverScreen.getInstance().handleInput();
+
+        if(WinGame.getInstance().isWin()){
+            batch.setColor(Color.WHITE);
+            Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            WinGame.getInstance().render(batch,playerControllerNew.getPosition());
+        }
+        else if (GameOverScreen.getInstance().isGameOverActive()) {
+            batch.setColor(Color.WHITE);
+            Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            mapRenderer.setView(camera);
+            mapRenderer.render();
+            mapManager.setNightLayerVisible(true);
+            GameOverScreen.getInstance().render(batch, playerControllerNew.getPosition());
+        }
         // Kiểm tra xem menu có đang hoạt động không
-        if (MainMenu.getInstance().isMenuActive()) {
-            MainMenu.getInstance().handleInput();
+        else if (MainMenu.getInstance().isMenuActive()) {
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             MainMenu.getInstance().render(batch);
-            WinGame.getInstance().handleInput();
-            WinGame.getInstance().render(batch);
+            MainMenu.getInstance().handleInput();
+        }
+        else if(IntroGame.getInstance().isIntro()){
+            if(!MainMenu.getInstance().isMenuActive()){
+                SoundManager.getInstance().playInTroGame();
+                SoundManager.getInstance().playInTroGame1();
+                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                IntroGame.getInstance().render(batch);
+            }
+            if (IntroGame.getInstance().getElapsedTime() > 16.1) {
+                IntroGame.getInstance().setIntro(false);// Kết thúc intro
+                SoundManager.getInstance().stopInTroGame();
+            }else if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                IntroGame.getInstance().setIntro(false);
+                SoundManager.getInstance().stopInTroGame1();
+                SoundManager.getInstance().stopInTroGame();
+            }
         }
         else {
             SettingGame.getInstance().handleInput();
-            GameOverScreen.getInstance().handleInput();
+            WinGame.getInstance().handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (SettingGame.getInstance().isActive()) {
                 batch.setColor(Color.WHITE);
@@ -109,14 +139,6 @@ public class Main extends ApplicationAdapter {
                 mapRenderer.setView(camera);
                 mapRenderer.render();
                 SettingGame.getInstance().render(batch, playerControllerNew.getPosition());
-            }else if (GameOverScreen.getInstance().isGameOverActive()) {
-                batch.setColor(Color.WHITE);
-                Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                mapRenderer.setView(camera);
-                mapRenderer.render();
-                mapManager.setNightLayerVisible(true);
-                GameOverScreen.getInstance().render(batch, playerControllerNew.getPosition());
             }else {
 
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

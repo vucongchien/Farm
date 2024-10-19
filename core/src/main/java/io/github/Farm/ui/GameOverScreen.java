@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.SoundManager;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import io.github.Farm.player.PlayerController;
+import io.github.Farm.player.PlayerRenderer;
 
 public class GameOverScreen {
     private static GameOverScreen INSTANCE;
@@ -23,10 +25,9 @@ public class GameOverScreen {
     private Texture gameOverPanel;
     private BitmapFont optionsFont;
     private GlyphLayout layout;
-    private String[] options = {"Play Again", "Exit"};
+    private String options = "Exit";
     private int selectedIndex = 0;
     private boolean isGameOverActive = false;
-    private float spacing = 20f; // Khoảng cách giữa các tùy chọn
 
     public GameOverScreen() {
         gameOverPanel = new Texture(Gdx.files.internal("ui1/GameOver.png"));
@@ -42,7 +43,7 @@ public class GameOverScreen {
     }
 
     public void render(SpriteBatch batch, Vector2 playerPosition) {
-        if (isGameOverActive) {
+        if (isGameOverActive && !WinGame.getInstance().isWin()) {
             batch.begin();
 
             // Tính toán vị trí panel Game Over dựa trên vị trí của nhân vật
@@ -53,14 +54,11 @@ public class GameOverScreen {
 
             // Vẽ panel Game Over với kích thước mới
             batch.draw(gameOverPanel, panelX, panelY, panelWidth, panelHeight);
-            // Vẽ các tùy chọn
-            for (int i = 0; i < options.length; i++) {
-                layout.setText(optionsFont, options[i]);
-                float optionX = playerPosition.x - layout.width / 2; // Giữa nhân vật
-                float optionY = playerPosition.y - (i * (spacing + layout.height)) - 60;
-                optionsFont.setColor(i == selectedIndex ? Color.YELLOW : Color.WHITE); // Highlight tùy chọn được chọn
-                optionsFont.draw(batch, options[i], optionX, optionY);
-            }
+            // Vẽ tùy chọn "Exit"
+            layout.setText(optionsFont, options);
+            float optionX = playerPosition.x - layout.width / 2; // Giữa nhân vật
+            float optionY = panelY - 30;
+            optionsFont.draw(batch, options, optionX, optionY);
 
             batch.end();
         }
@@ -68,36 +66,17 @@ public class GameOverScreen {
 
     public void handleInput() {
         if (isGameOverActive) {
-            if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.UP)) {
-                selectedIndex = (selectedIndex - 1 + options.length) % options.length;
-                SoundManager.getInstance().playMoveSound();
-            } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
-                selectedIndex = (selectedIndex + 1) % options.length;
-                SoundManager.getInstance().playMoveSound();
-            } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
-                if (selectedIndex == 0) {
-                    // "Play Again" được chọn: Chơi lại game
-                    restartGame();
-                } else if (selectedIndex == 1) {
-                    // "Exit" được chọn: Thoát khỏi game
-                    Gdx.app.exit();
-                }
+            if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
+                Gdx.app.exit();
             }
         }
 
         // Nhấn phím L để hiển thị màn hình Game Over
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.L)) {
             isGameOverActive = !isGameOverActive;
+            SoundManager.getInstance().stopGameMusic();
+            SoundManager.getInstance().playGameOver();
         }
-    }
-
-    public void restartGame() {
-        // Đặt lại các biến và trạng thái cần thiết để khởi động lại game
-        isGameOverActive = false;
-
-        // Code để khởi động lại game
-        // Ví dụ: có thể gọi lại màn hình chính hoặc reset trạng thái game
-        // GameScreen.reset(); // Gọi phương thức reset trong GameScreen nếu có
     }
 
     public boolean isGameOverActive() {
