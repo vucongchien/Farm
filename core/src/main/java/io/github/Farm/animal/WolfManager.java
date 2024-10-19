@@ -112,6 +112,7 @@ public class WolfManager {
         if(!acttack) {
             timeacttacked=0;
             for (WolfRender wolf : wolfmanager) {
+                wolf.getSpeak().setCurrent(null,8,8);
                 if (wolf.getthulinh()) {
                     if (Math.abs(wolf.getlocation().x - home.x) < 1f && Math.abs(wolf.getlocation().y - home.y) < 1f) {
                         if (starttime == 0) {
@@ -137,15 +138,13 @@ public class WolfManager {
                             }
                             if (TimeUtils.timeSinceMillis(endtime) < 20000) {
                                 wolf.setCrencurrentState(PetState.IDLE_RIGHT);
-                                wolf.getSpeak().setCurrent("UI/other/expression_chat.png");
+                                wolf.getSpeak().setCurrent("UI/other/expression_chat.png",8,8);
                                 wolf.setcheck(0);
                             } else {
-                                wolf.getSpeak().setCurrent(null);
+                                wolf.getSpeak().setCurrent(null,8,8);
                                 wolf.setTrangthaitancong(false);
                                 wolf.setcheck(2);
                                 fistcheck=wolf.getcheck();
-
-
                             }
                         } else {
                             endtime = 0;
@@ -181,7 +180,7 @@ public class WolfManager {
                                 }
                             }
                         } else {
-                                if(wolf.getlocation().epsilonEquals(wolf.getPrey().getlocation().cpy().add(wolf.getdistancefrombossx(),wolf.getDistancefrombossy()),5f)||wolf.getlocation().epsilonEquals(wolf.getPrey().getlocation().cpy().add(-wolf.getdistancefrombossx(),-wolf.getDistancefrombossy()),5f)){
+                                if(wolf.getlocation().epsilonEquals(wolf.getPrey().getlocation().cpy().add(wolf.getdistancefrombossx()+10f,wolf.getDistancefrombossy()+5f),5f)||wolf.getlocation().epsilonEquals(wolf.getPrey().getlocation().cpy().add(-wolf.getdistancefrombossx()-10f,-wolf.getDistancefrombossy()-5f),5f)){
                                     wolf.getPrey().setCheckmove(true);
                                     if(wolf.getTimeActack() <0.32f){
                                         wolf.setTimeActack(wolf.getTimeActack() + Gdx.graphics.getDeltaTime());
@@ -202,9 +201,9 @@ public class WolfManager {
                                 }else{
                                     wolf.getPrey().setCheckmove(false);
                                     if(wolf.getPrey().getlocation().x<wolf.getlocation().x) {
-                                        movelocation(wolf, wolf.getPrey().getlocation().cpy().add(wolf.getdistancefrombossx(), wolf.getDistancefrombossy()), 1f, 1f, 0.021f);
+                                        movelocation(wolf, wolf.getPrey().getlocation().cpy().add(wolf.getdistancefrombossx()+10f, wolf.getDistancefrombossy()+5f), 1f, 1f, 0.021f);
                                     }else{
-                                        movelocation(wolf, wolf.getPrey().getlocation().cpy().add(-wolf.getdistancefrombossx(), -wolf.getDistancefrombossy()), 1f, 1f, 0.021f);
+                                        movelocation(wolf, wolf.getPrey().getlocation().cpy().add(-wolf.getdistancefrombossx()-10f, -wolf.getDistancefrombossy()-5f), 1f, 1f, 0.021f);
                                     }
                                 }
 
@@ -229,16 +228,16 @@ public class WolfManager {
                 if(timeacttacked==0){
                     timeacttacked=TimeUtils.millis();
                 }
-                if(TimeUtils.timeSinceMillis(timeacttacked)<200){
+                if(TimeUtils.timeSinceMillis(timeacttacked)<500){
                     if(wolfRender.getlocation().x<playerController.getPosition().x){
                         wolfRender.setCrencurrentState(PetState.IDLE_RIGHT);
                     }else{
                         wolfRender.setCrencurrentState(PetState.IDLE_LEFT);
                     }
-                    wolfRender.getSpeak().setCurrent("UI/other/expression_alerted.png");
+                    wolfRender.getSpeak().setCurrent("UI/other/expression_alerted.png",3,8);
 
                 }else {
-                    wolfRender.getSpeak().setCurrent(null);
+                    wolfRender.getSpeak().setCurrent(null,3,8);
                     if (wolfRender.getlocation().x > playerController.getPosition().x) {
                         if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
                             wolfRender.setCrencurrentState(PetState.ATTACK_LEFT);

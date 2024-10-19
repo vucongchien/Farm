@@ -2,6 +2,7 @@ package io.github.Farm.animal.Buffalo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import com.badlogic.gdx.math.Rectangle;
+import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.Pet;
@@ -19,7 +21,7 @@ import io.github.Farm.animal.PetState;
 import io.github.Farm.player.PlayerController;
 
 
-public class Buffalo extends Pet implements RenderableEntity {
+public class Buffalo extends Pet implements RenderableEntity, Collider {
     private Heath mau;
     private Rectangle box;
     //.....animation
@@ -51,7 +53,7 @@ public class Buffalo extends Pet implements RenderableEntity {
 
     public Buffalo(Vector2 location, long hungry, boolean killed) {
         super(location, hungry, killed);
-        box = new Rectangle(getlocation().x + 10f, getlocation().y + 5f, 10, 15);
+        box = new Rectangle(getlocation().x + 10f, getlocation().y + 5f, 15, 10);
         imageManager = new BuffaloImageManager();
 //        direction = 1;
         mau = new Heath(100);
@@ -257,7 +259,7 @@ public class Buffalo extends Pet implements RenderableEntity {
         batch.begin();
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
-        batch.draw(frame, getlocation().x-25, getlocation().y, 32, 32);
+        batch.draw(frame, getlocation().x-10f, getlocation().y-5f, 32, 32);
         batch.end();
 
     }
@@ -271,8 +273,18 @@ public class Buffalo extends Pet implements RenderableEntity {
     }
 
 
+    @Override
+    public Rectangle getCollider() {
+        return null;
+    }
 
-
-
-
+    @Override
+    public void onCollision(Collider other) {
+            if(other instanceof PlayerController){
+                PlayerController playerController=(PlayerController) other;
+                if(playerController.getCurrentState().startsWith("DOING_")) {
+                    mau.heal(20);
+                }
+            }
+    }
 }

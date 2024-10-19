@@ -68,6 +68,7 @@ public class WolfRender implements Collider, RenderableEntity {
         location.y=a.y+distancefrombossy;
         check=2;
         thulinh=false;
+        checkhurt=false;
     }
 
     public  int getcheck(){return check;}
@@ -228,6 +229,7 @@ public class WolfRender implements Collider, RenderableEntity {
                     crencurrentState = PetState.HURT_RIGHT;
                 }
             }
+
         }
 
 
@@ -248,7 +250,11 @@ public class WolfRender implements Collider, RenderableEntity {
         currentAnimation = imageManager.getAnimation(crencurrentState);
         speak.setBatch(batch);
         if (currentAnimation == null) {
-            currentAnimation = imageManager.getAnimation(PetState.IDLE_RIGHT); // Example
+            currentAnimation = imageManager.getAnimation(PetState.IDLE_RIGHT);
+        }
+        if(checkhurt) {
+            hp.getHealBar().renderGoblin(location.cpy().add(2, 4), batch, hp.getCurrHp(), hp.getMaxHp(), 12, 6);
+
         }
         batch.begin();
         if(speak.getCurrent()!=null) {
