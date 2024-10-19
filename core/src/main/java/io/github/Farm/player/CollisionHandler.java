@@ -5,6 +5,8 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
+import io.github.Farm.animal.Buffalo.Buffalo;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.inventory.Item;
 import io.github.Farm.inventory.ItemManager;
 
@@ -33,6 +35,18 @@ public class CollisionHandler implements Collider {
                 iterator.remove();
             }
         }
+
+        Iterator<Buffalo> buffaloIterator= BuffaloManager.getbuffalomanager().getBuffaloManager().iterator();
+        while (buffaloIterator.hasNext()){
+            Buffalo buffalo=buffaloIterator.next();
+            if(playerController.getCollider().overlaps(buffalo.getCollider())){
+                buffalo.onCollision(playerController);
+                playerController.onCollision(buffalo);
+                playerController.setCanFeed(true);
+                return;
+            }
+        }
+
 
         if(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap())!=null){
 

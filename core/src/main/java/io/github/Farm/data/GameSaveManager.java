@@ -27,7 +27,6 @@ public class GameSaveManager {
     }
 
     public GameSaveManager() {
-        // Sử dụng Gson với định dạng đẹp (pretty print)
         gson = new GsonBuilder().setPrettyPrinting().create();
     }
 

@@ -9,6 +9,13 @@ public class chatbox {
     private SpriteBatch batch;
     private int width;
     private int height;
+
+    public chatbox(){
+
+    }
+
+
+
     public void setCurrent(String a,int width,int height){
         current=a;
         this.width=width;

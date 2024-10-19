@@ -42,7 +42,6 @@ public class BuffaloManager  {
         while (iterator.hasNext()) {
             Buffalo buffalo = iterator.next();
             if (buffalo.getmau().getCurrHp() <= 0) {
-                System.out.println("xoa");
                 iterator.remove();
             }
         }

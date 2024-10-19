@@ -51,6 +51,7 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     //.....check di chuyen
     private boolean checkmove;
 
+
     public Buffalo(Vector2 location, long hungry, boolean killed) {
         super(location, hungry, killed);
         box = new Rectangle(getlocation().x + 10f, getlocation().y + 5f, 15, 10);
@@ -247,12 +248,12 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     @Override
     public void render(SpriteBatch batch, Camera camera) {
         box.setPosition(getlocation().x, getlocation().y);
-//        shapeRenderer = new ShapeRenderer();
-//        shapeRenderer.setProjectionMatrix(camera.combined);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(Color.RED);
-//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
-//        shapeRenderer.end();
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+        shapeRenderer.end();
         currentAnimation = imageManager.getAnimation(crencurrentState);
 
         batch.setProjectionMatrix(camera.combined);
@@ -275,16 +276,18 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
 
     @Override
     public Rectangle getCollider() {
-        return null;
+        return box;
     }
 
     @Override
     public void onCollision(Collider other) {
+
             if(other instanceof PlayerController){
                 PlayerController playerController=(PlayerController) other;
-                if(playerController.getCurrentState().startsWith("DOING_")) {
-                    mau.heal(20);
-                }
             }
+    }
+
+    public void eating(){
+
     }
 }

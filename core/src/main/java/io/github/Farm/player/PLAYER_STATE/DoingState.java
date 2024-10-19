@@ -22,15 +22,6 @@ public class DoingState implements InterfacePlayerState{
     public void enter(PlayerController player) {
     }
 
-    public void doSomeThing(PlayerController playerController){
-        Iterator<Buffalo> buffaloIterator=BuffaloManager.getbuffalomanager().getBuffaloManager().iterator();
-        while (buffaloIterator.hasNext()){
-            Buffalo buffalo=buffaloIterator.next();
-            if(playerController.getCollider().overlaps(buffalo.getCollider())){
-                buffalo.onCollision(playerController);
-            }
-        }
-    }
     @Override
     public void update(PlayerController player, float deltaTime) {
         time += player.getDeltaTime();
@@ -39,8 +30,6 @@ public class DoingState implements InterfacePlayerState{
         }
         greenBar.render( player.getPosition(), player.getCamera(), time,2, 14, 7);
 
-        
-        doSomeThing(player);
 
 
     }

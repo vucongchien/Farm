@@ -45,7 +45,6 @@ public class GreenBar {
     }
 
     public void render(Vector2 position, Camera camera, float time,float timeMax, float width, float height){
-        System.out.println("time: "+time+" time max: "+timeMax);
         int index=getIndex(time,timeMax);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();

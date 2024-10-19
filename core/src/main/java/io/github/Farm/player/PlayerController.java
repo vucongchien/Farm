@@ -12,6 +12,7 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.SoundManager;
+import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
 import io.github.Farm.ui.Other.Expression;
@@ -188,6 +189,7 @@ public class PlayerController implements Collider, Disposable {
             stateManager.changeState(this, new HitState(direction));
         }
         else if (inputHandler.isPlowing()) {
+
             stateManager.changeState(this, new DigState(direction));
         }
         else if (inputHandler.isMoving()) {
@@ -248,7 +250,16 @@ public class PlayerController implements Collider, Disposable {
 
     @Override
     public void onCollision(Collider other) {
+        if (other instanceof Buffalo){
+            Buffalo buffalo=(Buffalo) other;
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                if(Inventory.getInstance().useItem("FOOD_wheat")) {
 
+                    buffalo.getmau().damaged(20);
+
+                }
+            }
+        }
     }
 
 

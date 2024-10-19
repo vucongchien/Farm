@@ -154,7 +154,7 @@ public class Main extends ApplicationAdapter {
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
                 BuffaloManager.getbuffalomanager().update(playerControllerNew);
-                WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
+               // WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
 
 

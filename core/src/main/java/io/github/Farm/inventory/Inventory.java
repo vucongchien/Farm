@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Inventory {
@@ -55,6 +56,8 @@ public class Inventory {
     }
 
     public void useSelectedItem(PlayerController playerController) {
+
+
         InventorySlot selectedInventorySlot = getSelectedItem();
         if (selectedInventorySlot != null) {
             selectedInventorySlot.use(playerController);
@@ -69,6 +72,19 @@ public class Inventory {
             return slots.get(selectedItemIndex);
         }
         return null;
+    }
+
+    public boolean useItem(String Full_Name){
+        for(InventorySlot slot:slots){
+            if(Full_Name.equals(slot.getFULL_NAME())){
+                slot.reduceQuantity();
+                if (slot.getQuantity() <= 0) {
+                    slots.remove(slot);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
 

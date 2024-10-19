@@ -39,4 +39,5 @@ public class PlantData {
     public void setPosition(Vector2 position) {
         this.position = position;
     }
+    
 }
