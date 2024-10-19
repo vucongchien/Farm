@@ -1,1 +1,20 @@
-{"items":[{"name":"SEED_pumpkin","quantity":2},{"name":"FOOD_pumpkin","quantity":3},{"name":"SEED_kale","quantity":3},{"name":"SEED_carrot","quantity":3}]}
+{
+  "items": [
+    {
+      "name": "SEED_pumpkin",
+      "quantity": 2
+    },
+    {
+      "name": "FOOD_pumpkin",
+      "quantity": 2
+    },
+    {
+      "name": "SEED_kale",
+      "quantity": 2
+    },
+    {
+      "name": "SEED_carrot",
+      "quantity": 2
+    }
+  ]
+}
