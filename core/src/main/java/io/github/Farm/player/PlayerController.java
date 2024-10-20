@@ -29,6 +29,7 @@ public class PlayerController implements Collider, Disposable {
     private boolean isSwim = false;
     private boolean isPlanting = false;
     private boolean isHurt = false; StringBuilder enemyDirection;
+    private boolean canFeed=false;
 
     private final InputHandler inputHandler;
     private final CollisionHandler collisionHandler;
@@ -188,7 +189,7 @@ public class PlayerController implements Collider, Disposable {
         else if (inputHandler.isHitting()) {
             stateManager.changeState(this, new HitState(direction));
         }
-        else if (inputHandler.isPlowing()) {
+        else if (inputHandler.isPlowing()&&!canFeed) {
 
             stateManager.changeState(this, new DigState(direction));
         }
@@ -320,5 +321,13 @@ public class PlayerController implements Collider, Disposable {
 
     public void setEnemyDirection(String enemyDirection) {
         this.enemyDirection = new StringBuilder(enemyDirection);
+    }
+
+    public boolean isCanFeed() {
+        return canFeed;
+    }
+
+    public void setCanFeed(boolean canFeed) {
+        this.canFeed = canFeed;
     }
 }
