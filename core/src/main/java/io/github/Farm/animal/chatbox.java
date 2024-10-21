@@ -10,9 +10,7 @@ public class chatbox {
     private int width;
     private int height;
 
-    public chatbox(){
-
-    }
+    public chatbox(){}
 
 
 

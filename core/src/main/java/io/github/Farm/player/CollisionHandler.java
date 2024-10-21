@@ -42,7 +42,6 @@ public class CollisionHandler implements Collider {
             if(playerController.getCollider().overlaps(buffalo.getCollider())){
                 buffalo.onCollision(playerController);
                 playerController.onCollision(buffalo);
-                playerController.setCanFeed(true);
                 return;
             }
         }

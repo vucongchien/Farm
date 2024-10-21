@@ -10,6 +10,8 @@ public enum PetState {
     ATTACK_LEFT,
     ATTACK_RIGHT,
     HURT_LEFT,
-    HURT_RIGHT
+    HURT_RIGHT,
+    EAT_RIGHT,
+    EAT_LEFT
 
 }

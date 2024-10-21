@@ -1,37 +1,25 @@
-package io.github.Farm.animal.Buffalo;
+package io.github.Farm.animal;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.g2d.Animation;
-
-import java.util.concurrent.ThreadLocalRandom;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Interface.Collider;
-import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
-import io.github.Farm.animal.Pet;
-import io.github.Farm.animal.PetState;
-import io.github.Farm.animal.PigImageManager;
 import io.github.Farm.player.PlayerController;
 
-
-public class Buffalo extends Pet implements RenderableEntity, Collider {
-    //.....animation
-    private BuffaloImageManager imageManager;
+public class PigReander extends Pet implements RenderableEntity, Collider {
+    private PigImageManager imageManager;
     private Animation<TextureRegion> currentAnimation;
 
-    public Buffalo(Vector2 location, long hungry) {
+    public PigReander(Vector2 location, long hungry) {
         super(location, hungry,100);
-        imageManager = new BuffaloImageManager();
+        imageManager = new PigImageManager();
         setcrencurrentState(PetState.IDLE_LEFT);
-        settargetLocation(randomlocation(500,650,950,1050));
+        settargetLocation(randomlocation(300,450,850,950));
     }
 
     public void update(float deltaTime) {
@@ -54,7 +42,7 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
 
     @Override
     public void render(SpriteBatch batch, Camera camera) {
-         getbox().setPosition(location().x, location().y);
+        getbox().setPosition(location().x, location().y);
 //        shapeRenderer = new ShapeRenderer();
 //        shapeRenderer.setProjectionMatrix(camera.combined);
 //        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -84,11 +72,11 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     @Override
     public void onCollision(Collider other) {
 
-            if(other instanceof PlayerController){
-                PlayerController playerController=(PlayerController) other;
-                if(playerController.getCurrentState().startsWith("DOING_")) {
-                    getHeath().heal(20);
-                }
+        if(other instanceof PlayerController){
+            PlayerController playerController=(PlayerController) other;
+            if(playerController.getCurrentState().startsWith("DOING_")) {
+                getHeath().heal(20);
             }
+        }
     }
 }

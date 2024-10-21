@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
@@ -15,8 +17,11 @@ import io.github.Farm.SoundManager;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.player.PLAYER_STATE.*;
+import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.Other.Expression;
 import io.github.Farm.ui.Other.ExpressionManager;
+
+import java.io.*;
 
 public class PlayerController implements Collider, Disposable {
     private final Heath heath;
@@ -42,20 +47,29 @@ public class PlayerController implements Collider, Disposable {
 
     private final Camera camera;
     private ExpressionManager expressionManager;
+    //..................readfile
+    private final String link="playerData.json";
 
     public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
+        if(MainMenu.isCheckcontinue()){
+            System.out.println("da doc nha may");
+            System.out.println(MainMenu.isCheckcontinue());
+            this.heath = new Heath(100);
+            readPlayerData(this.getHeath(),startPosition);
+            this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
+            this.body = createBody(startPosition, world);
 
-        this.heath = new Heath(100);
+        }else {
+            this.heath = new Heath(100);
+            this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
+            this.body = createBody(startPosition, world);
+        }
         this.speed = 100f;
-        this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
-
         this.inputHandler = new InputHandler(this);
         this.collisionHandler = new CollisionHandler(mapInteractionHandler, this);
         this.world = world;
-        this.body = createBody(startPosition, world);
         this.camera = camera;
         this.stateManager = new PlayerStateManager(new IdleState("RIGHT"));
-
         this.collider = new Rectangle(body.getPosition().x, body.getPosition().y, 16, 16);
         this.shapeRenderer = new ShapeRenderer();
         this.expressionManager=new ExpressionManager();
@@ -223,7 +237,6 @@ public class PlayerController implements Collider, Disposable {
         expressionManager.render(body.getPosition(),camera);
     }
 
-
     public void updateSpeed(){
         if(isSwim){
             speed=40f;
@@ -253,8 +266,8 @@ public class PlayerController implements Collider, Disposable {
         if (other instanceof Buffalo){
             Buffalo buffalo=(Buffalo) other;
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                if(Inventory.getInstance().useItem("FOOD_wheat")) {
-
+                if(Inventory.getInstance().useItem("FOOD_pumpkin")) {
+                    buffalo.setCheckeating(true);
                     buffalo.getmau().damaged(20);
 
                 }
@@ -322,4 +335,19 @@ public class PlayerController implements Collider, Disposable {
     public void setEnemyDirection(String enemyDirection) {
         this.enemyDirection = new StringBuilder(enemyDirection);
     }
+
+    public void readPlayerData(Heath heath,Vector2 a) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode playerData = objectMapper.readTree(new File(link));
+                double posX = playerData.get("posX").asDouble();
+                double posY = playerData.get("posY").asDouble();
+                double health = playerData.get("health").asDouble();
+                a.set((float) posX,(float) posY);
+                heath.setCurrHp((float) health);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+    }
+
 }

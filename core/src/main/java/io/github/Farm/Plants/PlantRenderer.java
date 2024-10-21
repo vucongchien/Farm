@@ -92,6 +92,8 @@
             lastStageChangeTime = TimeUtils.millis();
         }
 
+        public void setStage(PlantStage a){stage=a;}
+
         public void water() {
             isWatered = true;
             needWaterTime = TimeUtils.millis();

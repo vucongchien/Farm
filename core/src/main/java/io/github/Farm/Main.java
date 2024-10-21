@@ -21,6 +21,9 @@ import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.ChickenManager;
+import io.github.Farm.animal.PetManager;
+import io.github.Farm.animal.PigManager;
 import io.github.Farm.animal.WolfManager;
 import io.github.Farm.data.*;
 import io.github.Farm.player.PlayerController;
@@ -44,7 +47,7 @@ public class Main extends ApplicationAdapter {
     //-------------player
 
     private PlayerRenderer playerRendererNew;
-    private PlayerController playerControllerNew;
+    private PlayerController playerControllerNew =null;
     private PlayerImageManager playerImageManagerNew;
 
 
@@ -94,16 +97,9 @@ public class Main extends ApplicationAdapter {
 
 
 
-        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
-        playerImageManagerNew = new PlayerImageManager();
-        playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
-
-        gameRenderer = new GameRenderer(playerRendererNew, camera,map);
-
+        gameRenderer = new GameRenderer(null, camera,map);
         mainMenu = new MainMenu();
-        settingGame = new SettingGame(gameData,playerControllerNew);
-
-
+        settingGame = new SettingGame(gameData,null);
     }
 
     @Override
@@ -114,6 +110,13 @@ public class Main extends ApplicationAdapter {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             mainMenu.render(batch);
         } else {
+            if(playerControllerNew==null){
+                playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
+                playerImageManagerNew = new PlayerImageManager();
+                playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
+                gameRenderer = new GameRenderer(playerRendererNew, camera,map);
+                settingGame = new SettingGame(gameData,playerControllerNew);
+            }
             settingGame.handleInput();
             if (settingGame.isActive()) {
                 batch.setColor(Color.WHITE);
@@ -152,7 +155,10 @@ public class Main extends ApplicationAdapter {
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
                 BuffaloManager.getbuffalomanager().update(playerControllerNew);
-               // WolfManager.getwolfmanage().update(BuffaloManager.getbuffalomanager(),playerControllerNew);
+                PigManager.getPigmanager().update(playerControllerNew);
+                ChickenManager.getChickenmanager().update(playerControllerNew);
+                PetManager.getPetmanager().update(BuffaloManager.getbuffalomanager(),ChickenManager.getChickenmanager(),PigManager.getPigmanager());
+                WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
 
 

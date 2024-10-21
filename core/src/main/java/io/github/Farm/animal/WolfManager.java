@@ -1,14 +1,18 @@
 package io.github.Farm.animal;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.player.PlayerController;
+import io.github.Farm.ui.MainMenu;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,26 +41,34 @@ public class WolfManager {
     private  int fistcheck=2;
     private PetState currentState;
     private long timeacttacked;
-
+    private final String link="animalData.json";
 
 
 
     public WolfManager() {
-        wolfmanager = new ArrayList<>();
-        storagewolfmanager = new ArrayList<>();
-        home =new Vector2(850,850);
-        for(int i=0;i<5;i++) {
-            radius = ThreadLocalRandom.current().nextFloat(20, 40);
-            angle = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(-90, 90));
-            float xOffset = (float) Math.cos(angle) * radius;
-            float yOffset = (float) Math.sin(angle) * radius;
-            storagewolfmanager.add(new WolfRender(new Vector2(home.x + xOffset, home.y + yOffset), false));
-            storagewolfmanager.get(storagewolfmanager.size()-1).setDistancefrombossx(xOffset);
-            storagewolfmanager.get(storagewolfmanager.size()-1).setDistancefrombossy(yOffset);
+        if(MainMenu.isCheckcontinue()){
+            System.out.println("yessir");
+            wolfmanager = new ArrayList<>();
+            storagewolfmanager = new ArrayList<>();
+            home =new Vector2(850,850);
+            readWolfManagerData(storagewolfmanager,wolfmanager);
+        }else {
+            wolfmanager = new ArrayList<>();
+            storagewolfmanager = new ArrayList<>();
+            home = new Vector2(850, 850);
+            for (int i = 0; i < 5; i++) {
+                radius = ThreadLocalRandom.current().nextFloat(20, 40);
+                angle = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(-90, 90));
+                float xOffset = (float) Math.cos(angle) * radius;
+                float yOffset = (float) Math.sin(angle) * radius;
+                storagewolfmanager.add(new WolfRender(new Vector2(home.x + xOffset, home.y + yOffset), false));
+                storagewolfmanager.get(storagewolfmanager.size() - 1).setDistancefrombossx(xOffset);
+                storagewolfmanager.get(storagewolfmanager.size() - 1).setDistancefrombossy(yOffset);
+            }
         }
     }
 
-    public void setBoss(BuffaloManager buffaloManager) {
+    public void setBoss() {
         boolean checkboss = false;
         if (!wolfmanager.isEmpty()) {
             for (WolfRender x : wolfmanager) {
@@ -95,8 +107,8 @@ public class WolfManager {
         }
     }
 
-    public void update(BuffaloManager buffaloManager,PlayerController playerController) {
-        setBoss(buffaloManager);
+    public void update(PetManager buffaloManager,PlayerController playerController) {
+        setBoss();
         checkquantity();
         activate(buffaloManager);
         for(WolfRender x:wolfmanager){
@@ -107,7 +119,7 @@ public class WolfManager {
         attackplayer(playerController);
     }
 
-    public void activate(BuffaloManager buffaloManager) {
+    public void activate(PetManager buffaloManager) {
         if(!acttack) {
             timeacttacked=0;
             for (WolfRender wolf : wolfmanager) {
@@ -122,7 +134,7 @@ public class WolfManager {
                             wolf.setCrencurrentState(PetState.IDLE_RIGHT);
                         } else {
                             wolf.setprey(buffaloManager);
-                            preyleader = wolf.getPrey().getlocation().cpy().add(50, 50);
+                            preyleader = wolf.getPrey().location().cpy().add(50, 50);
                             wolf.setcheck(1);
                             fistcheck=wolf.getcheck();
                         }
@@ -157,7 +169,7 @@ public class WolfManager {
                         movelocation(wolf, home, 1f, 1f,0.021f);
                         if (Math.abs(wolf.getlocation().x - home.x) < 1f && Math.abs(wolf.getlocation().y - home.y) < 1f) {
                             wolf.setprey(buffaloManager);
-                            preyleader = wolf.getPrey().getlocation().cpy().add(50, 50);
+                            preyleader = wolf.getPrey().location().cpy().add(50, 50);
                         }
                     }
                 } else {
@@ -180,8 +192,7 @@ public class WolfManager {
                                 }
                             }
                         } else {
-                            System.out.println(wolf.getRadius());
-                            suppotativate(wolf,wolf.getPrey().getlocation().cpy().add((float) Math.cos(wolf.getRadius()) * 20,(float) Math.sin(wolf.getRadius()) * 20));
+                            suppotativate(wolf,wolf.getPrey().location().cpy().add((float) Math.cos(wolf.getRadius()) * 20,(float) Math.sin(wolf.getRadius()) * 20));
                         }
                     } else {
                         wolf.setCrencurrentState(PetState.IDLE_RIGHT);
@@ -196,26 +207,24 @@ public class WolfManager {
             wolf.getPrey().setCheckmove(true);
             if(wolf.getTimeActack() <0.32f){
                 wolf.setTimeActack(wolf.getTimeActack() + Gdx.graphics.getDeltaTime());
-                if(wolf.getPrey().getlocation().x<wolf.getlocation().x) {
+                if(wolf.getPrey().location().x<wolf.getlocation().x) {
                     wolf.setCrencurrentState(PetState.ATTACK_LEFT);
                 }else{
                     wolf.setCrencurrentState(PetState.ATTACK_RIGHT);
                 }
             }else {
                 wolf.getPrey().getmau().damaged(20);
-                Vector2 playerPosition = wolf.getlocation();
-                Vector2 direction = new Vector2(wolf.getPrey().getlocation()).sub(playerPosition).nor();
+                Vector2 wolfPosition = wolf.getlocation();
+                Vector2 direction = new Vector2(wolf.getPrey().location()).sub(wolfPosition).nor();
                 float knockbackForce = 200f;
                 wolf.getPrey().setKnockbackVelocity(direction.scl(knockbackForce));
                 wolf.getPrey().setKnockbackDuration(0.2f);
-                wolf.getPrey().setKnockbackTimeElapsed(0f);
             }
         }else{
             wolf.getPrey().setCheckmove(false);
                 movelocation(wolf,prey, 1f, 1f, 0.021f);
             }
         }
-
 
     public void attackplayer(PlayerController playerController){
         for(WolfRender x:wolfmanager){
@@ -356,5 +365,47 @@ public class WolfManager {
         for(WolfRender wolfRender:wolfmanager){
             wolfRender.dispose();
         }
+    }
+
+    public void readWolfManagerData(ArrayList<WolfRender> storagewolf,ArrayList<WolfRender> wolf){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(new File(link));
+            JsonNode storageWolfArray = rootNode.get("storageWolfRenders");
+            if(!storageWolfArray.isEmpty()) {
+                for (JsonNode storageWolfNode : storageWolfArray) {
+                    float posX = (float) storageWolfNode.get("posX").asDouble();
+                    float posY = (float) storageWolfNode.get("posY").asDouble();
+                    float hp = (float) storageWolfNode.get("health").asDouble();
+                    boolean leader =storageWolfNode.get("leader").asBoolean();
+                    float distancefrombossx=(float) storageWolfNode.get("distancefrombossx").asDouble();
+                    float distancefrombossy=(float) storageWolfNode.get("distancefrombossy").asDouble();
+                    WolfRender wolfRender1 = new WolfRender(new Vector2(posX, posY),leader);
+                    wolfRender1.getHp().setCurrHp(hp);
+                    wolfRender1.setDistancefrombossx(distancefrombossx);
+                    wolfRender1.setDistancefrombossy(distancefrombossy);
+                    storagewolf.add(wolfRender1);
+                }
+            }
+            JsonNode wolfArray = rootNode.get("wolfRenders");
+            if(!wolfArray.isEmpty()) {
+                for (JsonNode wolfNode : wolfArray) {
+                    float posX = (float) wolfNode.get("posX").asDouble();
+                    float posY = (float) wolfNode.get("posY").asDouble();
+                    float hp = (float) wolfNode.get("health").asDouble();
+                    boolean leader =wolfNode.get("leader").asBoolean();
+                    float distancefrombossx=(float) wolfNode.get("distancefrombossx").asDouble();
+                    float distancefrombossy=(float) wolfNode.get("distancefrombossy").asDouble();
+                    WolfRender wolfRender = new WolfRender(new Vector2(posX, posY),leader);
+                    wolfRender.getHp().setCurrHp(hp);
+                    wolfRender.setDistancefrombossx(distancefrombossx);
+                    wolfRender.setDistancefrombossy(distancefrombossy);
+                    wolf.add(wolfRender);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Lỗi khi đọc file JSON", e);
+        }
+
     }
 }

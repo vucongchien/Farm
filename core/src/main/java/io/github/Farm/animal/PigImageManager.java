@@ -1,32 +1,32 @@
-package io.github.Farm.animal.Buffalo;
+package io.github.Farm.animal;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import io.github.Farm.animal.PetState;
 
 import java.util.EnumMap;
 
-public class BuffaloImageManager implements Disposable {
+public class PigImageManager implements Disposable {
     private final EnumMap<PetState, Animation<TextureRegion>> animations;
-    public BuffaloImageManager() {
+    public PigImageManager() {
         animations = new EnumMap<>(PetState.class);
 
-        animations.put(PetState.WALK_LEFT, createAnimation("Animal_animation/Cow_chien/Cow_Walk.png",3,1,0.2f));
-        animations.put(PetState.WALK_RIGHT, flipAnimation(animations.get(PetState.WALK_LEFT)));
+        animations.put(PetState.WALK_RIGHT, createAnimation("Animal_animation/Pig/Pig_1/BabyPigWalk_1.png",4,1,0.2f));
+        animations.put(PetState.WALK_LEFT, flipAnimation(animations.get(PetState.WALK_RIGHT)));
 
 
-        animations.put(PetState.IDLE_LEFT, createAnimation("Animal_animation/Cow_chien/Cow_Eating.png",2,1,0.1f));
-        animations.put(PetState.IDLE_RIGHT, flipAnimation(animations.get(PetState.IDLE_LEFT)));
+        animations.put(PetState.IDLE_RIGHT, createAnimation("Animal_animation/Pig/Pig_1/BabyPigSleep_1.png",2,1,0.1f));
+        animations.put(PetState.IDLE_LEFT, flipAnimation(animations.get(PetState.IDLE_RIGHT)));
 
 
-        animations.put(PetState.SLEEP_LEFT, createAnimation("Animal_animation/Cow_chien/Cow_Sleep.png",2,1,0.5f));
+        animations.put(PetState.SLEEP_LEFT, createAnimation("Animal_animation/Pig/Pig_1/BabyPigSleep_1.png",2,1,0.5f));
         animations.put(PetState.SLEEP_RIGHT, flipAnimation(animations.get(PetState.SLEEP_LEFT)));
 
-        animations.put(PetState.EAT_LEFT,createAnimation("Animal_animation/Cow_chien/Cow_Eating.png",2,1,0.1f));
+        animations.put(PetState.EAT_LEFT,createAnimation("Animal_animation/Pig/Pig_1/BabyPigEating_1.png",2,1,0.1f));
         animations.put(PetState.EAT_RIGHT,flipAnimation(animations.get(PetState.EAT_LEFT)));
+
 
     }
 
@@ -54,30 +54,29 @@ public class BuffaloImageManager implements Disposable {
         return new Animation<>(original.getFrameDuration(), flippedFrames);
     }
 
+
     public Animation<TextureRegion> getAnimation(PetState petState) {
         return animations.get(petState);
     }
 
 
-@Override
-public void dispose() {
-    // Giải phóng tất cả các Texture trong các Animation
-    for (Animation<TextureRegion> animation : animations.values()) {
-        if (animation != null) {
-            // Lấy mảng các key frames từ Animation
-            Object[] keyFrames = animation.getKeyFrames();
-            for (Object keyFrame : keyFrames) {
-                if (keyFrame instanceof TextureRegion) {
-                    TextureRegion frame = (TextureRegion) keyFrame;
-                    Texture texture = frame.getTexture();
-                    if (texture != null) {
-                        texture.dispose(); // Giải phóng Texture
+    @Override
+    public void dispose() {
+        // Giải phóng tất cả các Texture trong các Animation
+        for (Animation<TextureRegion> animation : animations.values()) {
+            if (animation != null) {
+                // Lấy mảng các key frames từ Animation
+                Object[] keyFrames = animation.getKeyFrames();
+                for (Object keyFrame : keyFrames) {
+                    if (keyFrame instanceof TextureRegion) {
+                        TextureRegion frame = (TextureRegion) keyFrame;
+                        Texture texture = frame.getTexture();
+                        if (texture != null) {
+                            texture.dispose(); // Giải phóng Texture
+                        }
                     }
                 }
             }
         }
     }
-}
-
-
 }

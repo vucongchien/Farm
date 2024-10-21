@@ -3,10 +3,14 @@ package io.github.Farm.animal.Buffalo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.Farm.animal.PetState;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.ui.MainMenu;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,6 +18,7 @@ public class BuffaloManager  {
     private ArrayList<Buffalo> buffaloManager;
     private long breedingTime;
     private long hptime=0;
+    private final String link="animalData.json";
 
     private static BuffaloManager buffalomanager;
 
@@ -25,7 +30,13 @@ public class BuffaloManager  {
     }
 
     public BuffaloManager(){
-        buffaloManager=new ArrayList<>();
+        if(MainMenu.isCheckcontinue()){
+            System.out.println("doc oke");
+            buffaloManager=new ArrayList<>();
+            readBuffaloData(buffaloManager);
+        }else {
+            buffaloManager = new ArrayList<>();
+        }
     }
 
     public  void checkquantity(){
@@ -63,70 +74,17 @@ public class BuffaloManager  {
     public void update(PlayerController playerController){
         checkquantity();
         checkHungry();
-        activate();
         for(Buffalo buffalo:buffaloManager){
             for(Buffalo buffalo1:buffaloManager){
                 if(buffalo!=buffalo1){
-                    buffalo.collide(buffalo1);
+                    buffalo.collide(buffalo,buffalo1);
                 }
             }
-            buffalo.plow(playerController);
+            buffalo.ativate(buffalo,500,650,950,1050);
             buffalo.update(Gdx.graphics.getDeltaTime());
         }
     }
 
-    public void activate(){
-        for(Buffalo buffalo:buffaloManager){
-            if(buffalo.gethungry()<=0){
-                if (buffalo.getLeft()) {
-                    buffalo.setcrencurrentState(PetState.SLEEP_LEFT);
-                } else {
-                    buffalo.setcrencurrentState(PetState.SLEEP_RIGHT);
-                }
-                return;
-            }
-            else {
-                if (buffalo.getIsStopped()) {
-                    if (TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()) >= 5000) {
-                        buffalo.setIsStopped(false);
-                        buffalo.settargetLocation(buffalo.randomlocation()) ;
-                        System.out.println(TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()));
-                    } else {
-                        if (buffalo.getLeft()) {
-                            buffalo.setcrencurrentState(PetState.IDLE_LEFT);
-                        } else {
-                            buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
-                        }
-                    }
-
-                }
-                else {
-                    System.out.println(buffalo.getIsStopped());
-                    if (buffalo.getTargetLocation() == null || buffalo.getlocation().epsilonEquals(buffalo.getTargetLocation(), 1f)) {
-                        if (buffalo.getStopTime() == 0) {
-                            buffalo.setStopTime(TimeUtils.millis()) ;
-                        }
-
-                        if (TimeUtils.timeSinceMillis(buffalo.getStopTime()) >= 5000 && buffalo.gethungry() > 0) {
-                            buffalo.settargetLocation(buffalo.randomlocation()) ;
-                            buffalo.setStopTime(0);
-
-                        } else {
-                            if (buffalo.getLeft()) {
-                                buffalo.setcrencurrentState(PetState.IDLE_LEFT);
-                            } else {
-                                buffalo.setcrencurrentState(PetState.IDLE_RIGHT);
-                            }
-                        }
-                    }else {
-                        buffalo.movelocation();
-                    }
-
-                }
-            }
-
-        }
-    }
 
     public ArrayList<Buffalo> getBuffaloManager(){
         return (buffaloManager);
@@ -135,6 +93,26 @@ public class BuffaloManager  {
     public void dispose() {
         for (Buffalo buffalo : buffaloManager) {
             buffalo.dispose(); // Nếu lớp Buffalo có hàm dispose
+        }
+    }
+
+    public void readBuffaloData(ArrayList<Buffalo> buffalo) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(new File(link));
+            JsonNode buffaloArray = rootNode.get("buffalo");
+            for (JsonNode buffaloNode : buffaloArray) {
+                float posX = (float) buffaloNode.get("posX").asDouble();
+                float posY = (float) buffaloNode.get("posY").asDouble();
+                float hp = (float) buffaloNode.get("hp").asDouble();
+                float hungry = (float) buffaloNode.get("hungry").asDouble();
+                Buffalo buffalo1=new Buffalo(new Vector2(posX,posY),(long) hungry);
+                buffalo1.getHeath().setCurrHp(hp);
+                buffalo.add(buffalo1);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Lỗi khi đọc file JSON", e);
         }
     }
 

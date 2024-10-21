@@ -36,7 +36,6 @@ public class Item implements RenderableEntity, Collider, Disposable {
         String TYPE = tmp[0];
         String NAME = tmp[1];
         this.texture = new Texture("UI/Item/" + TYPE + "/" + NAME + ".png");
-
         collider = new Rectangle(endPosition.x * 16 + (16 / 2f) - (texture.getWidth() / 2f), endPosition.y * 16 + (16 / 2f - 3), texture.getWidth(), texture.getHeight());
     }
 
