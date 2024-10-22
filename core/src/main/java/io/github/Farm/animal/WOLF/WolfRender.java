@@ -1,4 +1,4 @@
-package io.github.Farm.animal;
+package io.github.Farm.animal.WOLF;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -13,7 +13,10 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.Buffalo.Buffalo;
-import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.Pet;
+import io.github.Farm.animal.PetManager;
+import io.github.Farm.animal.PetState;
+import io.github.Farm.animal.chatbox;
 import io.github.Farm.player.PlayerController;
 
 import java.util.concurrent.ThreadLocalRandom;

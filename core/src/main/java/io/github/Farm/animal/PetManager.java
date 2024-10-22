@@ -1,7 +1,8 @@
 package io.github.Farm.animal;
 
-import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.Chicken.ChickenManager;
+import io.github.Farm.animal.Pig.PigManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class PetManager {
         return petManager;
     }
 
-    public void update(BuffaloManager buffaloManager,ChickenManager chickenManager,PigManager pigManager){
+    public void update(BuffaloManager buffaloManager, ChickenManager chickenManager, PigManager pigManager){
         if(pet!=null) {
             pet.clear();
         }

@@ -1,25 +1,31 @@
-package io.github.Farm.animal;
+package io.github.Farm.animal.Pig;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.RenderableEntity;
+import io.github.Farm.animal.Pet;
+import io.github.Farm.animal.PetState;
 import io.github.Farm.player.PlayerController;
 
-public class ChickenRender extends Pet implements RenderableEntity {
-    private ChickenImageManager imageManager;
+public class PigReander extends Pet implements RenderableEntity {
+    private PigImageManager imageManager;
     private Animation<TextureRegion> currentAnimation;
+    ShapeRenderer shapeRenderer;
 
-    public ChickenRender(Vector2 location, long hungry) {
+    public PigReander(Vector2 location, long hungry) {
         super(location, hungry,100);
-        imageManager = new ChickenImageManager();
+        imageManager = new PigImageManager();
         setcrencurrentState(PetState.IDLE_LEFT);
-        settargetLocation(randomlocation(800,950,850,950));
+        settargetLocation(randomlocation(300,450,850,950));
+        setBox(new Rectangle(location().x , location().y , 20, 15));
     }
 
     public void update(float deltaTime) {
@@ -31,7 +37,7 @@ public class ChickenRender extends Pet implements RenderableEntity {
                 setIsStopped(false);
             }
         }
-        getbox().setPosition(location().x + 10, location().y + 5);
+        getbox().setPosition(location().x , location().y );
 
     }
 
@@ -47,14 +53,14 @@ public class ChickenRender extends Pet implements RenderableEntity {
 //        shapeRenderer.setProjectionMatrix(camera.combined);
 //        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 //        shapeRenderer.setColor(Color.RED);
-//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+//        shapeRenderer.rect(getBox().x, getBox().y, getBox().width, getBox().height);
 //        shapeRenderer.end();
         currentAnimation = imageManager.getAnimation(getCrencurrentState());
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         setStateTime(getStateTime()+ Gdx.graphics.getDeltaTime()); ;
         TextureRegion frame = currentAnimation.getKeyFrame(getStateTime(), true);
-        batch.draw(frame, location().x-10f, location().y-5f, 12, 12);
+        batch.draw(frame, location().x-10f, location().y-5f, 32, 32);
         batch.end();
 
     }

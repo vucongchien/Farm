@@ -1,10 +1,11 @@
-package io.github.Farm.animal;
+package io.github.Farm.animal.Pig;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import io.github.Farm.animal.PetState;
 
 import java.util.EnumMap;
 

@@ -2,7 +2,6 @@ package io.github.Farm;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,10 +20,10 @@ import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
-import io.github.Farm.animal.ChickenManager;
+import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.PetManager;
-import io.github.Farm.animal.PigManager;
-import io.github.Farm.animal.WolfManager;
+import io.github.Farm.animal.Pig.PigManager;
+import io.github.Farm.animal.WOLF.WolfManager;
 import io.github.Farm.data.*;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
@@ -34,9 +33,6 @@ import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.Other.SelectionBox;
 import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Main extends ApplicationAdapter {

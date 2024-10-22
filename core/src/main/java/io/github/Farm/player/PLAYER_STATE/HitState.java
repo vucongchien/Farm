@@ -2,10 +2,8 @@ package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.Gdx;
 import io.github.Farm.Plants.PlantManager;
-import com.badlogic.gdx.utils.TimeUtils;
-import io.github.Farm.Plants.PlantRenderer;
-import io.github.Farm.animal.WolfManager;
-import io.github.Farm.animal.WolfRender;
+import io.github.Farm.animal.WOLF.WolfManager;
+import io.github.Farm.animal.WOLF.WolfRender;
 import io.github.Farm.player.PlayerController;
 
 import java.util.Iterator;

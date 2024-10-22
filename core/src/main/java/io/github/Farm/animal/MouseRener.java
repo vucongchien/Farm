@@ -12,6 +12,7 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
+import io.github.Farm.animal.Chicken.ChickenImageManager;
 import io.github.Farm.player.PlayerController;
 
 public class MouseRener implements Collider, RenderableEntity {

@@ -1,4 +1,4 @@
-package io.github.Farm.animal;
+package io.github.Farm.animal.Pig;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;

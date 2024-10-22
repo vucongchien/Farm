@@ -1,12 +1,10 @@
-package io.github.Farm.animal;
+package io.github.Farm.animal.Chicken;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.Farm.Main;
-import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.ui.MainMenu;
 
