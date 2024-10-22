@@ -33,6 +33,8 @@ public  class MainMenu {
     private String controlsText; // Text chứa nội dung điều khiển
     private boolean isControlsActive;
     private boolean isDataFileExists;
+    //.............checkchedo
+    private static boolean checkcontinue;
 
 
 
@@ -97,6 +99,14 @@ public  class MainMenu {
 
     }
 
+    public static boolean isCheckcontinue() {
+        return checkcontinue;
+    }
+
+    public static void setCheckcontinue(boolean checkcontinue) {
+        MainMenu.checkcontinue = checkcontinue;
+    }
+
     public void render(SpriteBatch batch) {
         if (isMenuActive) {
             batch.begin();
@@ -156,13 +166,17 @@ public  class MainMenu {
                     case "Start Game":
                         // Start game
                         isMenuActive = false;
+                        checkcontinue=false;
                         break;
 
                     case "New Game":
                         isMenuActive = false;
+                        checkcontinue=false;
                         break;
 
                     case "Continue":
+                        isMenuActive = false;
+                        checkcontinue=true;
                         break;
 
                     case "Controls":

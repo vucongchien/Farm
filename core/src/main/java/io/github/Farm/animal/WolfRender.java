@@ -23,8 +23,8 @@ public class WolfRender implements Collider, RenderableEntity {
     private Vector2 location;
     private final Rectangle box;
     private boolean trangthaitancong=false;
-    private Buffalo prey;
-    private Buffalo fistprey;
+    private Pet prey;
+    private Pet fistprey;
     private PetState crencurrentState;
     private PetState lastState;
     private float   distancefrombossx;
@@ -121,7 +121,7 @@ public class WolfRender implements Collider, RenderableEntity {
         thulinh=a;
     }
 
-    public Buffalo getPrey(){
+    public Pet getPrey(){
         return prey;
     }
 
@@ -169,13 +169,13 @@ public class WolfRender implements Collider, RenderableEntity {
         this.timeActack = timeActack;
     }
 
-    public void setprey(BuffaloManager buffaloManager){
-        if (buffaloManager.getBuffaloManager().isEmpty()) {
+    public void setprey(PetManager petManager){
+        if (petManager.getPetManager().isEmpty()) {
             prey = null;
         } else {
-            Buffalo min = buffaloManager.getBuffaloManager().get(0);
-            for (Buffalo x : buffaloManager.getBuffaloManager()) {
-                if (x.getlocation().dst(getlocation()) < min.getlocation().dst(getlocation())) {
+            Pet min = petManager.getPetManager().get(0);
+            for (Pet x : petManager.getPetManager()) {
+                if (x.location().dst(getlocation()) < min.location().dst(getlocation())) {
                     min = x;
                 }
             }
@@ -313,10 +313,10 @@ public class WolfRender implements Collider, RenderableEntity {
         this.radius = radius;
     }
 
-    public void checkCoer(Buffalo a) {
+    public void checkCoer(Pet a) {
         if (a != null) {
-            if (location.x > a.getlocation().x) {
-                if (location.y > a.getlocation().y) {
+            if (location.x > a.location().x) {
+                if (location.y > a.location().y) {
                     checkCoer = 1;
                     if (radius == 0 || prey!=fistprey) {
                         fistprey=prey;
@@ -330,7 +330,7 @@ public class WolfRender implements Collider, RenderableEntity {
                     }
                 }
             } else {
-                if (location.y > a.getlocation().y) {
+                if (location.y > a.location().y) {
 
                     checkCoer = 4;
                     if (radius == 0 || prey!=fistprey) {

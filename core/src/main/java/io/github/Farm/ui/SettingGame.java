@@ -13,10 +13,9 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.SoundManager;
+import io.github.Farm.animal.*;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
-import io.github.Farm.animal.WolfManager;
-import io.github.Farm.animal.WolfRender;
 import io.github.Farm.data.*;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.InventorySlot;
@@ -219,12 +218,20 @@ public class SettingGame {
         if(!animalData.getStorageWolfRenders().isEmpty()){
             animalData.getStorageWolfRenders().clear();
         }
-
+        if(!animalData.getPig().isEmpty()){
+            animalData.getPig().clear();
+        }
+        if(!animalData.getChicken().isEmpty()){
+            animalData.getChicken().clear();
+        }
         List<AnimalData.Wolf> list= new ArrayList<>();
         for(WolfRender wolfRender: WolfManager.getwolfmanage().getwolfmanafer()){
             AnimalData.Wolf wolf =new AnimalData.Wolf();
             wolf.setPosition(wolfRender.getlocation());
             wolf.setHealth(wolfRender.getHp().getCurrHp());
+            wolf.setLeader(wolfRender.getthulinh());
+            wolf.setDistancefrombossx(wolfRender.getdistancefrombossx());
+            wolf.setDistancefrombossy(wolfRender.getDistancefrombossy());
             list.add(wolf);
         }
         animalData.setWolfRenders(list);
@@ -235,22 +242,47 @@ public class SettingGame {
             AnimalData.Wolf wolf =new AnimalData.Wolf();
             wolf.setPosition(wolfRender.getlocation());
             wolf.setHealth(wolfRender.getHp().getCurrHp());
+            wolf.setLeader(wolfRender.getthulinh());
+            wolf.setDistancefrombossx(wolfRender.getdistancefrombossx());
+            wolf.setDistancefrombossy(wolfRender.getDistancefrombossy());
             list.add(wolf);
         }
         animalData.setStorageWolfRenders(list);
         for(AnimalData.Wolf wolf: animalData.getWolfRenders()){
             System.out.println(wolf.getHealth());
         }
-        if(!list.isEmpty()) {
-            list.clear();
+
+        List<AnimalData.Animal> list1=new ArrayList<>();
+        for(PigReander pigReander: PigManager.getPigmanager().getPigManager()){
+            AnimalData.Animal pig=new AnimalData.Animal();
+            pig.setPosition(pigReander.location());
+            pig.setHungry(pigReander.gethungry());
+            pig.setHp(pigReander.getHeath().getCurrHp());
+            list1.add(pig);
+        }
+        animalData.setPig(list1);
+        if (!list1.isEmpty()){
+            list1.clear();
+        }
+        for(ChickenRender chickenRender:ChickenManager.getChickenmanager().getChickenManager()){
+            AnimalData.Animal chicken =new AnimalData.Animal();
+            chicken.setPosition(chickenRender.location());
+            chicken.setHungry(chickenRender.gethungry());
+            chicken.setHp(chickenRender.getHeath().getCurrHp());
+            list1.add(chicken);
+        }
+        animalData.setChicken(list1);
+        if (!list1.isEmpty()){
+            list1.clear();
         }
         for(Buffalo buffalo: BuffaloManager.getbuffalomanager().getBuffaloManager()){
-            AnimalData.Wolf wolf =new AnimalData.Wolf();
-            wolf.setPosition(buffalo.getlocation());
-            wolf.setHealth(buffalo.getmau().getCurrHp());
-            list.add(wolf);
+            AnimalData.Animal wolf =new AnimalData.Animal();
+            wolf.setPosition(buffalo.location());
+            wolf.setHungry(buffalo.gethungry());
+            wolf.setHp(buffalo.getmau().getCurrHp());
+            list1.add(wolf);
         }
-        animalData.setBuffalo(list);
+        animalData.setBuffalo(list1);
     }
 
 

@@ -4,21 +4,23 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Interface.Animal;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.ChickenManager;
+import io.github.Farm.animal.PigManager;
 import io.github.Farm.animal.WolfManager;
+import io.github.Farm.animal.MouseRener;
 import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.weather.Weather;
-import io.github.Farm.Map.MapManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Currency;
 import java.util.List;
 
 public class GameRenderer {
@@ -66,6 +68,12 @@ public class GameRenderer {
         renderableEntities.addAll(BuffaloManager.getbuffalomanager().getBuffaloManager());
 
         renderableEntities.addAll(WolfManager.getwolfmanage().getwolfmanafer());
+
+        renderableEntities.addAll(PigManager.getPigmanager().getPigManager());
+
+        renderableEntities.addAll(ChickenManager.getChickenmanager().getChickenManager());
+
+       // renderableEntities.add(new MouseRener(new Vector2(850,1050)));
 
 
         renderableEntities.sort(new Comparator<RenderableEntity>() {

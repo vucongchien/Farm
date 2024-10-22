@@ -7,8 +7,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.Farm.player.PlayerController;
+import io.github.Farm.ui.MainMenu;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +36,7 @@ public class Inventory {
     private final int rows = (int) Math.ceil((double) maxSlots / columns);
     private final float totalWidth = columns * slotSize;
     private final float totalHeight = rows * slotSize;
+    private final String link="inventoryData.json";
 
     private int selectedItemIndex = 0;
 
@@ -38,7 +44,12 @@ public class Inventory {
 
 
     public Inventory() {
-        font.setColor(Color.BLACK);
+        if(MainMenu.isCheckcontinue()){
+            font.setColor(Color.BLACK);
+            readInventoty(slots);
+        }else {
+            font.setColor(Color.BLACK);
+        }
     }
 
 
@@ -183,5 +194,19 @@ public class Inventory {
         slots.forEach(InventorySlot::dispose);
     }
 
-
+    public void readInventoty(List<InventorySlot> slots){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            JsonNode rootNode = objectMapper.readTree(new File(link));
+            JsonNode itemNode =rootNode.get("items");
+            for(JsonNode inventoryData:itemNode){
+                String name = inventoryData.get("name").asText();
+                double quantity = inventoryData.get("quantity").asDouble();
+                InventorySlot inventorySlot=new InventorySlot(name,(int)quantity);
+                slots.add(inventorySlot);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
