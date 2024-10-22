@@ -140,6 +140,13 @@ public class WolfManager {
                         }
                     } else {
                         starttime = 0;
+                        if (wolf.getcheck() == 2) {
+                            movelocation(wolf, home, 1f, 1f,0.021f);
+                            if (Math.abs(wolf.getlocation().x - home.x) < 1f && Math.abs(wolf.getlocation().y - home.y) < 1f) {
+                                wolf.setprey(buffaloManager);
+                                preyleader = wolf.getPrey().location().cpy().add(50, 50);
+                            }
+                        }
                     }
                     if (preyleader.x != 0 || preyleader.y != 0) {
                         if (Math.abs(wolf.getlocation().x - preyleader.x) < 10f && Math.abs(wolf.getlocation().y - preyleader.y) < 10f) {
@@ -160,18 +167,11 @@ public class WolfManager {
                         } else {
                             endtime = 0;
                             if (wolf.getcheck() == 1) {
-
                                 movelocation(wolf, preyleader);
                             }
                         }
                     }
-                    if (wolf.getcheck() == 2) {
-                        movelocation(wolf, home, 1f, 1f,0.021f);
-                        if (Math.abs(wolf.getlocation().x - home.x) < 1f && Math.abs(wolf.getlocation().y - home.y) < 1f) {
-                            wolf.setprey(buffaloManager);
-                            preyleader = wolf.getPrey().location().cpy().add(50, 50);
-                        }
-                    }
+
                 } else {
                     Vector2 bossLocation = null;
                     boolean bossAttack = false;
