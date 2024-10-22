@@ -13,9 +13,14 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.SoundManager;
-import io.github.Farm.animal.*;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.Chicken.ChickenManager;
+import io.github.Farm.animal.Chicken.ChickenRender;
+import io.github.Farm.animal.Pig.PigManager;
+import io.github.Farm.animal.Pig.PigReander;
+import io.github.Farm.animal.WOLF.WolfManager;
+import io.github.Farm.animal.WOLF.WolfRender;
 import io.github.Farm.data.*;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.InventorySlot;
@@ -264,7 +269,7 @@ public class SettingGame {
         if (!list1.isEmpty()){
             list1.clear();
         }
-        for(ChickenRender chickenRender:ChickenManager.getChickenmanager().getChickenManager()){
+        for(ChickenRender chickenRender: ChickenManager.getChickenmanager().getChickenManager()){
             AnimalData.Animal chicken =new AnimalData.Animal();
             chicken.setPosition(chickenRender.location());
             chicken.setHungry(chickenRender.gethungry());

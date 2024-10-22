@@ -5,20 +5,15 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
-import java.util.concurrent.ThreadLocalRandom;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
 import com.badlogic.gdx.math.Rectangle;
 import io.github.Farm.Interface.Collider;
-import io.github.Farm.Interface.Heath;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.animal.Pet;
 import io.github.Farm.animal.PetState;
-import io.github.Farm.animal.PigImageManager;
 import io.github.Farm.player.PlayerController;
 
 
@@ -32,6 +27,7 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
         imageManager = new BuffaloImageManager();
         setcrencurrentState(PetState.IDLE_LEFT);
         settargetLocation(randomlocation(500,650,950,1050));
+        setBox(new Rectangle(location().x , location().y , 15, 10));
     }
 
     public void update(float deltaTime) {
@@ -59,7 +55,7 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
 //        shapeRenderer.setProjectionMatrix(camera.combined);
 //        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 //        shapeRenderer.setColor(Color.RED);
-//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+//        shapeRenderer.rect(getbox().x, getbox().y, getbox().width, getbox().height);
 //        shapeRenderer.end();
         currentAnimation = imageManager.getAnimation(getCrencurrentState());
         batch.setProjectionMatrix(camera.combined);

@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.animal.Buffalo.Buffalo;
+import io.github.Farm.animal.Chicken.ChickenRender;
+import io.github.Farm.animal.Pig.PigReander;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -42,8 +44,10 @@ public class Pet {
         heath = new Heath(a);
         this.hungry = hungry;
         this.location = location;
-        box = new Rectangle(location().x + 10f, location().y + 5f, 15, 10);
     }
+
+
+    public void setBox(Rectangle a){box=a;}
 
     public boolean isCheckeating() {
         return checkeating;
@@ -80,10 +84,6 @@ public class Pet {
     public boolean getLeft(){return isLeft;}
 
     public void setLeft(boolean a){isLeft=a;}
-
-    public void setBox(float x, float y) {
-        box.setPosition(x, y);
-    }
 
     public Rectangle getbox() {
         return box;
@@ -262,13 +262,13 @@ public class Pet {
                     if (location.x < no.getTargetLocation().x) {
                         location.x += 10f * deltaTime;
                         setLocation(location.x, location.y);
-                        no.getbox().setPosition(location.x, location.y);
+                        no.getbox().setPosition(location.cpy().x-10f, location.cpy().y-10f);
                         no.setcrencurrentState(PetState.WALK_RIGHT);
                         no.setLeft(false);
                     } else {
                         location().x -= 10f * deltaTime;
                         setLocation(location.x, location.y);
-                        no.getbox().setPosition(location.x, location.y);
+                        no.getbox().setPosition(location.cpy().x-10f, location.cpy().y-10f);
                         no.setcrencurrentState(PetState.WALK_LEFT);
                         no.setLeft(true);
                     }
@@ -277,7 +277,7 @@ public class Pet {
                     if (location.y < no.getTargetLocation().y) {
                         location.y += 10f * deltaTime;
                         setLocation(location.x, location.y);
-                        no.getbox().setPosition(location.x, location.y);
+                        no.getbox().setPosition(location.cpy().x-10f, location.cpy().y-10f);
                         if (no.getLeft()) {
                             no.setcrencurrentState(PetState.WALK_LEFT);
                         } else {
@@ -287,7 +287,7 @@ public class Pet {
                     } else {
                         location.y -= 10f * deltaTime;
                         setLocation(location.x, location.y);
-                        no.getbox().setPosition(location.x, location.y);
+                        no.getbox().setPosition(location.cpy().x-10f, location.cpy().y-10f);
                         if (no.getLeft()) {
                             no.setcrencurrentState(PetState.WALK_LEFT);
                         } else {
@@ -319,7 +319,7 @@ public class Pet {
             float knockbackForce = 20f;
             pig2.setKnockbackVelocity(direction.scl(knockbackForce));
             pig2.setKnockbackDuration(0.2f);
-            pig2.getbox().setPosition(pig2.location().x+10, pig2.location().y+5);
+            pig2.getbox().setPosition(pig2.location().x, pig2.location().y);
         }
         if(a instanceof ChickenRender && b instanceof ChickenRender){
             ChickenRender chicken1=(ChickenRender) a;
@@ -329,7 +329,7 @@ public class Pet {
             float knockbackForce = 20f;
             chicken2.setKnockbackVelocity(direction.scl(knockbackForce));
             chicken2.setKnockbackDuration(0.2f);
-            chicken2.getbox().setPosition(chicken2.location().x+10, chicken2.location().y+5);
+            chicken2.getbox().setPosition(chicken2.location().x-10f, chicken2.location().y-10f);
         }
     }
 
@@ -567,19 +567,6 @@ public class Pet {
         }
     }
 
-
-    public void update(float deltaTime) {
-        if (knockbackDuration > 0) {
-            location().add(knockbackVelocity.cpy().scl(deltaTime));
-            knockbackDuration-=deltaTime ;
-            if (knockbackDuration <= 0) {
-                knockbackVelocity.set(0, 0);
-                isStopped=false;
-            }
-        }
-        getbox().setPosition(location().x + 10, location().y + 5);
-
-    }
 }
 
 

@@ -1,4 +1,4 @@
-package io.github.Farm.animal;
+package io.github.Farm.animal.WOLF;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.Farm.animal.Buffalo.Buffalo;
-import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.PetManager;
+import io.github.Farm.animal.PetState;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.ui.MainMenu;
 
@@ -107,7 +107,7 @@ public class WolfManager {
         }
     }
 
-    public void update(PetManager buffaloManager,PlayerController playerController) {
+    public void update(PetManager buffaloManager, PlayerController playerController) {
         setBoss();
         checkquantity();
         activate(buffaloManager);
@@ -181,16 +181,8 @@ public class WolfManager {
                     wolf.checkCoer(wolf.getPrey());
                     if (bossLocation != null) {
                         if (!bossAttack || wolf.getPrey() == null) {
-                            if (Math.abs(bossLocation.x - home.x) < 1f && Math.abs(bossLocation.y - home.y) < 1f) {
                                 wolf.setCrencurrentState(PetState.IDLE_RIGHT);
                                 movelocation(wolf, new Vector2(bossLocation.x + wolf.getdistancefrombossx(), bossLocation.y + wolf.getDistancefrombossy()), 1f, 1f,0.021f);
-                            } else {
-                                if (Math.abs(wolf.getlocation().x - bossLocation.x) < Math.abs(wolf.getdistancefrombossx()) && Math.abs(wolf.getlocation().y - bossLocation.y) < Math.abs(wolf.getDistancefrombossy())) {
-                                    wolf.setCrencurrentState(PetState.IDLE_RIGHT);
-                                } else {
-                                    movelocation(wolf, bossLocation, Math.abs(wolf.getdistancefrombossx()), Math.abs(wolf.getDistancefrombossy()),0.021f);
-                                }
-                            }
                         } else {
                             suppotativate(wolf,wolf.getPrey().location().cpy().add((float) Math.cos(wolf.getRadius()) * 20,(float) Math.sin(wolf.getRadius()) * 20));
                         }
@@ -203,7 +195,7 @@ public class WolfManager {
     }
 
     public void suppotativate(WolfRender wolf,Vector2 prey){
-        if(wolf.getlocation().epsilonEquals(prey,5f)){
+            if(wolf.getlocation().epsilonEquals(prey,5f)){
             wolf.getPrey().setCheckmove(true);
             if(wolf.getTimeActack() <0.32f){
                 wolf.setTimeActack(wolf.getTimeActack() + Gdx.graphics.getDeltaTime());
