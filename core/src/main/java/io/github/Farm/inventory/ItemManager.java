@@ -15,7 +15,14 @@ public class ItemManager  {
         itemList = new ArrayList<>();
     }
 
-    public void addItem(String name, Vector2 position,boolean isPlayerFacingRight,int quantity) {
+    public void addItem(String name,Vector2 position,int quantity){
+        for(int i=0;i<quantity;i++){
+            Item item=new Item(name,new Vector2(position));
+            itemList.add(item);
+        }
+    }
+
+    public void addItemVip(String name, Vector2 position, boolean isPlayerFacingRight, int quantity) {
         for(int i=0;i<quantity;i++) {
             Item item = new Item(name, new Vector2(position), isPlayerFacingRight);
             itemList.add(item);

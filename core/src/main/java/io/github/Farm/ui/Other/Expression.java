@@ -12,7 +12,8 @@ public enum Expression {
     CONFUSED_ALT("UI/other/expression_confused-1.png"),
     LOVE("UI/other/expression_love.png"),
     STRESS("UI/other/expression_stress.png"),
-    WORKING("UI/other/expression_working.png");
+    WORKING("UI/other/expression_working.png"),
+    NEEDWATER("UI/other/water.png");
 
     private TextureRegion textureRegion;
 

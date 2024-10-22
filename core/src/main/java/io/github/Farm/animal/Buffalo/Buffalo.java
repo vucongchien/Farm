@@ -232,12 +232,12 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     @Override
     public void render(SpriteBatch batch, Camera camera) {
         box.setPosition(getlocation().x, getlocation().y);
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(box.x, box.y, box.width, box.height);
-        shapeRenderer.end();
+//        shapeRenderer = new ShapeRenderer();
+//        shapeRenderer.setProjectionMatrix(camera.combined);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(Color.RED);
+//        shapeRenderer.rect(box.x, box.y, box.width, box.height);
+//        shapeRenderer.end();
         currentAnimation = imageManager.getAnimation(crencurrentState);
 
         batch.setProjectionMatrix(camera.combined);
@@ -266,12 +266,12 @@ public class Buffalo extends Pet implements RenderableEntity, Collider {
     @Override
     public void onCollision(Collider other) {
 
-            if(other instanceof PlayerController){
-                PlayerController playerController=(PlayerController) other;
-                if(playerController.getCurrentState().startsWith("DOING_")) {
-                    getHeath().heal(20);
-                }
+        if (other instanceof PlayerController) {
+            PlayerController playerController = (PlayerController) other;
+            if (playerController.getCurrentState().startsWith("DOING_")) {
+                getHeath().heal(20);
             }
+        }
     }
 
     public boolean isCheckeating() {

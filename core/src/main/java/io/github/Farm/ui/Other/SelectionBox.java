@@ -1,5 +1,7 @@
 package io.github.Farm.ui.Other;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,43 +10,58 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 public class SelectionBox {
-    private static SelectionBox instance;
+
+
     private TextureRegion[] selectionBoxTextures;
+    private Vector2 position;
+    private SpriteBatch batch;
+    private static Camera camera;
 
-    private SelectionBox() {
+    private float dropPositionY = 0f;
+    private float timeElapsed = 0f;
+    private float scaleFactor = 1f;
+    private boolean isShrinking = true;
+
+    public SelectionBox() {
         selectionBoxTextures = new TextureRegion[4];
-        selectionBoxTextures[0] = new TextureRegion(new Texture("UI/selectbox_tl.png"));
-        selectionBoxTextures[1] = new TextureRegion(new Texture("UI/selectbox_tr.png"));
-        selectionBoxTextures[2] = new TextureRegion(new Texture("UI/selectbox_bl.png"));
-        selectionBoxTextures[3] = new TextureRegion(new Texture("UI/selectbox_br.png"));
+        selectionBoxTextures[0] = new TextureRegion(new Texture("UI/other/selectbox_tl.png"));
+        selectionBoxTextures[1] = new TextureRegion(new Texture("UI/other/selectbox_tr.png"));
+        selectionBoxTextures[2] = new TextureRegion(new Texture("UI/other/selectbox_bl.png"));
+        selectionBoxTextures[3] = new TextureRegion(new Texture("UI/other/selectbox_br.png"));
+        batch=new SpriteBatch();
     }
 
-    public static SelectionBox getInstance() {
-        if (instance == null) {
-            instance = new SelectionBox();
+    public void ren(Vector2 position, float width, float height) {
+        batch.setProjectionMatrix(camera.combined);
+
+        timeElapsed += Gdx.graphics.getDeltaTime();
+        if (isShrinking) {
+            scaleFactor -= 1 * Gdx.graphics.getDeltaTime();
+            if (scaleFactor <= 0.9f) {
+                scaleFactor = 0.9f;
+                isShrinking = false;
+            }
+        } else {
+            scaleFactor += 1 * Gdx.graphics.getDeltaTime();
+            if (scaleFactor >= 1f) {
+                scaleFactor = 1f;
+                isShrinking = true;
+            }
         }
-        return instance;
+
+        float scaledWidth = width * scaleFactor;
+        float scaledHeight = height * scaleFactor;
+
+        batch.begin();
+        batch.draw(selectionBoxTextures[0], position.x - scaledWidth * 1 / 3, position.y + scaledHeight, scaledWidth / 2, scaledHeight / 2);
+        batch.draw(selectionBoxTextures[1], position.x + scaledWidth, position.y + scaledHeight, scaledWidth / 2, scaledHeight / 2);
+        batch.draw(selectionBoxTextures[2], position.x - scaledWidth * 1 / 3, position.y - scaledHeight * 1 / 2, scaledWidth / 2, scaledHeight / 2);
+        batch.draw(selectionBoxTextures[3], position.x + scaledWidth, position.y - scaledHeight * 1 / 2, scaledWidth / 2, scaledHeight / 2);
+        batch.end();
     }
 
-    public void render(Vector2 position, SpriteBatch batch, TiledMap map) {
-        TiledMapTileLayer lay = (TiledMapTileLayer) map.getLayers().get("land");
 
-        float tileWidth = lay.getTileWidth();
-        float tileHeight = lay.getTileHeight();
-        int tileX = (int) (position.x / tileWidth) + 2;
-        int tileY = (int) (position.y / tileHeight) + 1;
-        TiledMapTileLayer.Cell cell = lay.getCell(tileX, tileY);
-
-        if (cell != null) {
-
-
-            batch.draw(selectionBoxTextures[0], tileX * tileWidth - 1, tileY * tileHeight + tileHeight - 2, tileWidth / 4, tileHeight / 4);
-            batch.draw(selectionBoxTextures[1], (tileX + 1) * tileWidth - tileWidth / 4 + 1, tileY * tileHeight + tileHeight - 2, tileWidth / 4, tileHeight / 4);
-            batch.draw(selectionBoxTextures[2], tileX * tileWidth - 1, tileY * tileHeight - 1, tileWidth / 4, tileHeight / 4);
-            batch.draw(selectionBoxTextures[3], (tileX + 1) * tileWidth - tileWidth / 4 + 1, tileY * tileHeight - 1, tileWidth / 4, tileHeight / 4);
-
-        }
-
-        batch.setColor(1f, 1f, 1f, 1f);
+    public static void setCamera(Camera cam) {
+        camera = cam;
     }
 }

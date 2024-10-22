@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import io.github.Farm.player.PlayerController;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Inventory {
@@ -74,7 +73,7 @@ public class Inventory {
         return null;
     }
 
-    public boolean useItem(String Full_Name){
+    public boolean dropItem(String Full_Name){
         for(InventorySlot slot:slots){
             if(Full_Name.equals(slot.getFULL_NAME())){
                 slot.reduceQuantity();

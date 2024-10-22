@@ -28,6 +28,7 @@ import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.ui.MainMenu;
+import io.github.Farm.ui.Other.SelectionBox;
 import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
 
@@ -97,6 +98,7 @@ public class Main extends ApplicationAdapter {
         playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
         playerImageManagerNew = new PlayerImageManager();
         playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
+        SelectionBox.setCamera(camera);
 
         gameRenderer = new GameRenderer(playerRendererNew, camera,map);
 
@@ -157,6 +159,7 @@ public class Main extends ApplicationAdapter {
 
 
                 gameRenderer.render();
+
                 if (Inventory.getInstance().isOpened()) {
                     batch.setColor(Color.WHITE);
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());

@@ -29,7 +29,7 @@ public class CaughtState implements InterfacePlayerState {
 
     @Override
     public void exit(PlayerController player) {
-        ItemManager.getInstance().addItem("FOOD_fish",new Vector2(player.getPositionInMap()), !player.isFacingRight(), 1);
+        ItemManager.getInstance().addItemVip("FOOD_fish",new Vector2(player.getPositionInMap()), !player.isFacingRight(), 1);
         System.out.println("Exiting Caught State");
     }
 

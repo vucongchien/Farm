@@ -3,8 +3,9 @@ package io.github.Farm;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
-public class SoundManager {
+public class SoundManager implements Disposable {
     private static SoundManager instance;
     public static SoundManager getInstance() {
         if (instance == null) {
@@ -67,9 +68,9 @@ public class SoundManager {
         footStep.stop();
     }
 
-    
 
 
+    @Override
     public void dispose(){
         moveSound.dispose();
         gameMusic.dispose();

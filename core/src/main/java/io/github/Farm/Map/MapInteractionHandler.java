@@ -20,7 +20,6 @@ public class MapInteractionHandler {
 
 
     private final float TIME_TO_PLANT =2f;
-    private final float TIME_TO_DIG=2f;
 
     private Timer.Task currentTask;
 
@@ -45,14 +44,15 @@ public class MapInteractionHandler {
         }
         else {
 
-            System.out.println("Cannot plant: " + tileClass);
+
         }
 
     }
     public void plantSeed( PlantType plantType, PlayerController playerController){
+        Inventory.getInstance().setOpened();
+        if(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap())!=null) return;
         String tileClass=mapManager.getTileClass(playerController.getPositionInMap());
         if("dug_soil".equals(tileClass)){
-            Inventory.getInstance().setOpened();
             playerController.setPlanting(true);
 
             if (currentTask != null) {

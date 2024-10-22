@@ -10,6 +10,8 @@
     import io.github.Farm.Interface.Collider;
     import io.github.Farm.inventory.ItemManager;
     import io.github.Farm.player.PlayerController;
+    import io.github.Farm.ui.Other.Expression;
+    import io.github.Farm.ui.Other.ExpressionManager;
 
     public class PlantRenderer implements Collider, RenderableEntity {
         private final Vector2 position;
@@ -17,13 +19,18 @@
         private PlantStage stage;
         private long plantTime;
         private long lastStageChangeTime;
-        private long needWaterTime;
+        private long lastWaterTime;
         private boolean isWatered;
         private boolean isHarvestable;
+       // private boolean isdie;
 
-        private static final long WATERING_DURATION = 12000;
-        private static final long GROWTH_TIME = 6000;
+        private static final long WATERING_DURATION = 20000;
+        private static final long GROWTH_TIME = 12000;
         private static final long NEED_WATER_TIME = 45000;
+
+
+
+        private ExpressionManager expressionManager;
 
 
 
@@ -37,34 +44,49 @@
         private float height = 16f;
 
         public PlantRenderer(Vector2 position, PlantType type) {
-            this.position = position;
+            this.position = position.cpy();
             this.type = type;
             this.stage = PlantStage.SPROUT;
             this.plantTime = TimeUtils.millis();
             this.lastStageChangeTime = plantTime;
-            this.needWaterTime=plantTime;
+            this.lastWaterTime =plantTime;
             this.isWatered = false;
             this.isHarvestable = false;
+            this.expressionManager=new ExpressionManager();
 
-            imageManager = new PlantImageManager(type);
-            currentTexture = imageManager.getTexture(PlantStage.HARVESTED);
+            this.imageManager = new PlantImageManager(type);
+            this.currentTexture = imageManager.getTexture(PlantStage.HARVESTED);
 
-            plantCollider = new Rectangle(this.position.x * 16, this.position.y * 16, width, height);
+            this.plantCollider = new Rectangle(this.position.x * 16, this.position.y * 16, width, height);
         }
 
         public void update(float deltaTime) {
+           // if(isdie) return;
+
             long timeSinceLastStageChange = TimeUtils.timeSinceMillis(lastStageChangeTime);
-            long timeSinceLastWatered = TimeUtils.timeSinceMillis(needWaterTime);
+            long timeSinceLastWatered = TimeUtils.timeSinceMillis(lastWaterTime);
 
             if (isWatered) {
+                expressionManager.setExpression(Expression.NULL);
                 if (timeSinceLastStageChange > GROWTH_TIME) {
                     advanceGrowthStage();
                 }
                 if (timeSinceLastWatered > WATERING_DURATION) {
                     isWatered = false;
-                    needWaterTime = TimeUtils.millis();
+
                 }
             }
+
+            if(!isWatered){
+                expressionManager.setExpression(Expression.WORKING);
+            }
+
+//            if(timeSinceLastWatered > NEED_WATER_TIME){
+//                isdie=true;
+//                expressionManager.setExpression(Expression.NULL);
+//                return;
+//            }
+
 
             currentTexture = imageManager.getTexture(stage);
 
@@ -94,27 +116,26 @@
 
         public void water() {
             isWatered = true;
-            needWaterTime = TimeUtils.millis();
+            lastWaterTime = TimeUtils.millis();
+
         }
 
-        public void grow() {
-            advanceGrowthStage();
-        }
 
-        public boolean isHarvestable() {
-            return isHarvestable;
-        }
 
-        public void harvest() {
-            if (isHarvestable) {
-                stage = PlantStage.HARVESTED;
-                isHarvestable = false;
+        public void dropItems(Vector2 position,boolean isPlayerFacingRight) {
+            String namePlant=type.toString();
+            if(isHarvestable) {
+                ItemManager.getInstance().addItemVip("FOOD_" + namePlant, position, isPlayerFacingRight, 1);
+                ItemManager.getInstance().addItemVip("SEED_" + namePlant, position, isPlayerFacingRight, 2);
+                return;
             }
-        }
+            if(stage.toString().equals("MATURE")){
+                ItemManager.getInstance().addItemVip("FOOD_" + namePlant, position, isPlayerFacingRight, 1);
+                ItemManager.getInstance().addItemVip("SEED_" + namePlant, position, isPlayerFacingRight, 1);
+                return;
+            }
+            ItemManager.getInstance().addItemVip("SEED_" + namePlant, position, isPlayerFacingRight, 1);
 
-        public void dropItems(String namePlant,Vector2 position,boolean isPlayerFacingRight) {
-            ItemManager.getInstance().addItem("FOOD_"+namePlant,position,isPlayerFacingRight,2);
-            ItemManager.getInstance().addItem("SEED_"+namePlant,position,isPlayerFacingRight,2);
         }
 
         //use interface
@@ -133,7 +154,7 @@
                 }
 
                 if(playerController.getCurrentState().startsWith("HIT_")){
-                    dropItems(type.toString(),position,playerController.isFacingRight());
+                    dropItems(position,playerController.isFacingRight());
                 }
 
 
@@ -154,9 +175,13 @@
 
             float renderX = position.x*16 + (tileSize / 2f) - (currentTexture.getWidth() / 2f);
             float renderY = position.y*16+ (tileSize / 2f-3);
+            expressionManager.render(new Vector2(renderX,renderY),camera,10f,0.4f);
             batch.begin();
+
             batch.draw(currentTexture, renderX, renderY, currentTexture.getWidth(), currentTexture.getHeight());
+
             batch.end();
+
 
 
         }
@@ -175,5 +200,15 @@
             return type;
         }
 
+        public float getHeight() {
+            return currentTexture.getHeight();
+        }
 
+        public float getWidth() {
+            return currentTexture.getWidth();
+        }
+
+        public boolean isHarvestable() {
+            return isHarvestable;
+        }
     }

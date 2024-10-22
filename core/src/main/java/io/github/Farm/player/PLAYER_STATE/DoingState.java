@@ -25,9 +25,9 @@ public class DoingState implements InterfacePlayerState{
     @Override
     public void update(PlayerController player, float deltaTime) {
         time += player.getDeltaTime();
-        if (time >= 3f) {
-            player.setPlanting(false);
-        }
+//        if (time >= 3f) {
+//            player.setPlanting(false);
+//        }
         greenBar.render( player.getPosition(), player.getCamera(), time,2, 14, 7);
 
 

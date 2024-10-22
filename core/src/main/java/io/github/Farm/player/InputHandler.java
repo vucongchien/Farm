@@ -49,7 +49,7 @@ public class InputHandler {
     }
 
     public boolean isPlowing() {
-        return Gdx.input.isKeyPressed(Input.Keys.F);
+        return Gdx.input.isKeyPressed(Input.Keys.K);
     }
 
     public boolean isHitting() {

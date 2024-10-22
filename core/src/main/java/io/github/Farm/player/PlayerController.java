@@ -14,9 +14,12 @@ import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.SoundManager;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.inventory.Inventory;
+import io.github.Farm.inventory.Item;
+import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PLAYER_STATE.*;
 import io.github.Farm.ui.Other.Expression;
 import io.github.Farm.ui.Other.ExpressionManager;
+import io.github.Farm.ui.Other.SelectionBox;
 
 public class PlayerController implements Collider, Disposable {
     private final Heath heath;
@@ -29,7 +32,6 @@ public class PlayerController implements Collider, Disposable {
     private boolean isSwim = false;
     private boolean isPlanting = false;
     private boolean isHurt = false; StringBuilder enemyDirection;
-    private boolean canFeed=false;
 
     private final InputHandler inputHandler;
     private final CollisionHandler collisionHandler;
@@ -42,7 +44,11 @@ public class PlayerController implements Collider, Disposable {
     private final Body body;
 
     private final Camera camera;
+
     private ExpressionManager expressionManager;
+    private SelectionBox selectionBox;
+    private float time;
+
 
     public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
 
@@ -60,7 +66,7 @@ public class PlayerController implements Collider, Disposable {
         this.collider = new Rectangle(body.getPosition().x, body.getPosition().y, 16, 16);
         this.shapeRenderer = new ShapeRenderer();
         this.expressionManager=new ExpressionManager();
-
+        this.selectionBox=new SelectionBox();
     }
 
     private Body createBody(Vector2 startPosition, World world) {
@@ -84,6 +90,7 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void update(float deltaTime) {
+
         updatePlayerState(deltaTime);
         updateExpress();
 
@@ -111,8 +118,8 @@ public class PlayerController implements Collider, Disposable {
             body.setLinearVelocity(Vector2.Zero);
             return;
         }
-        updateSpeed();
         stateManager.updateState(this, deltaTime);
+        updateSpeed();
 
         if(getCurrentState().startsWith("HURT_")){
             return;
@@ -144,8 +151,6 @@ public class PlayerController implements Collider, Disposable {
             return;
         }
 
-        //frezeeeeeeeeeeeeeeeeeeeee
-        if(Inventory.getInstance().isOpened()) return;
 
 
 
@@ -189,7 +194,7 @@ public class PlayerController implements Collider, Disposable {
         else if (inputHandler.isHitting()) {
             stateManager.changeState(this, new HitState(direction));
         }
-        else if (inputHandler.isPlowing()&&!canFeed) {
+        else if (inputHandler.isPlowing()) {
 
             stateManager.changeState(this, new DigState(direction));
         }
@@ -221,7 +226,7 @@ public class PlayerController implements Collider, Disposable {
         else {
             expressionManager.setExpression(Expression.NULL);
         }
-        expressionManager.render(body.getPosition(),camera);
+        expressionManager.render(body.getPosition(),camera,10f,0.4f);
     }
 
 
@@ -230,7 +235,7 @@ public class PlayerController implements Collider, Disposable {
             speed=40f;
         }
         else{
-            speed=150f;
+            speed=50f;
         }
     }
 
@@ -253,8 +258,10 @@ public class PlayerController implements Collider, Disposable {
     public void onCollision(Collider other) {
         if (other instanceof Buffalo){
             Buffalo buffalo=(Buffalo) other;
+            selectionBox.ren(buffalo.getlocation(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                if(Inventory.getInstance().useItem("FOOD_pumpkin")) {
+                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                    ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.getlocation().cpy().scl(1/16f),1);
                     buffalo.setCheckeating(true);
                     buffalo.getmau().damaged(20);
                 }
@@ -323,11 +330,4 @@ public class PlayerController implements Collider, Disposable {
         this.enemyDirection = new StringBuilder(enemyDirection);
     }
 
-    public boolean isCanFeed() {
-        return canFeed;
-    }
-
-    public void setCanFeed(boolean canFeed) {
-        this.canFeed = canFeed;
-    }
 }
