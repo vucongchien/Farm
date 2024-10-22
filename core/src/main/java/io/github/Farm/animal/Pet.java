@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
+import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.animal.Buffalo.Buffalo;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Pet {
+public abstract class Pet implements Collider {
     private Vector2 location;
     private long hungry;
     private final Heath heath;
@@ -580,6 +581,10 @@ public class Pet {
         getbox().setPosition(location().x + 10, location().y + 5);
 
     }
+
+    public abstract Rectangle getCollider();
+
+    public abstract void onCollision(Collider other);
 }
 
 

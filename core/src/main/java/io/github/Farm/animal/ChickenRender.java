@@ -11,7 +11,7 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.player.PlayerController;
 
-public class ChickenRender extends Pet implements RenderableEntity, Collider {
+public class ChickenRender extends Pet implements RenderableEntity {
     private ChickenImageManager imageManager;
     private Animation<TextureRegion> currentAnimation;
 

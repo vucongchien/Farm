@@ -22,7 +22,7 @@ import io.github.Farm.animal.PigImageManager;
 import io.github.Farm.player.PlayerController;
 
 
-public class Buffalo extends Pet implements RenderableEntity, Collider {
+public class Buffalo extends Pet implements RenderableEntity {
     //.....animation
     private BuffaloImageManager imageManager;
     private Animation<TextureRegion> currentAnimation;

@@ -10,6 +10,10 @@ import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.ChickenRender;
+import io.github.Farm.animal.Pet;
+import io.github.Farm.animal.PetManager;
+import io.github.Farm.animal.PigReander;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.Item;
 import io.github.Farm.inventory.ItemManager;
@@ -35,41 +39,52 @@ public class CollisionHandler implements Collider {
     }
 
     public void checkCollisions() {
-        //check nhieu cai khac o day--
 
+        checkItemCollisions();
+
+        checkPetCollisions();
+
+        checkPlantCollisions();
+    }
+
+    private void checkItemCollisions() {
         Iterator<Item> iterator = ItemManager.getInstance().getItemList().iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Item item = iterator.next();
-            if (playerController.getCollider().overlaps(item.getCollider())) {
-                if (item.isCanTake()) {
-                    selectionBox.ren(item.getPosition(), item.getWidth(), item.getHeight());
-                    if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                        item.onCollision(playerController);
-                        iterator.remove();
-                    }
+            if (playerController.getCollider().overlaps(item.getCollider()) && item.isCanTake()) {
+                selectionBox.ren(item.getPosition(), item.getWidth(), item.getHeight());
+                if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                    item.onCollision(playerController);
+                    iterator.remove();
                 }
             }
         }
+    }
 
-        Iterator<Buffalo> buffaloIterator= BuffaloManager.getbuffalomanager().getBuffaloManager().iterator();
-        while (buffaloIterator.hasNext()){
-            Buffalo buffalo=buffaloIterator.next();
-            if(playerController.getCollider().overlaps(buffalo.getCollider())){
-                  buffalo.onCollision(playerController);
-                playerController.onCollision(buffalo);
+    private void checkPetCollisions() {
+        for (Pet pet : PetManager.getPetmanager().getPetManager()) {
+            if (playerController.getCollider().overlaps(pet.getCollider())) {
+                playerController.onCollision(pet);
                 return;
             }
         }
+    }
 
-        if(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap())!=null){
-            if(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).isHarvestable()){
-                selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(3,5.5f), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth()-2, PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight()-3 );
-            }
-            else {
+    private void checkPlantCollisions() {
+
+
+        if (PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()) != null) {
+            if (PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).isHarvestable()) {
+                selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(3, 5.5f), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2, PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 3);
+            } else {
                 selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(4.8f, 5.5f), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2, PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 2);
-            }        }
+            }
+        }
 
     }
+
+
+
 
     public void handlePlowing() {
         mapInteractionHandler.digSoil(playerController);

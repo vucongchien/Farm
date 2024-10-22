@@ -15,6 +15,8 @@ import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.SoundManager;
 import io.github.Farm.animal.Buffalo.Buffalo;
+import io.github.Farm.animal.ChickenRender;
+import io.github.Farm.animal.PigReander;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.Item;
 import io.github.Farm.inventory.ItemManager;
@@ -269,14 +271,36 @@ public class PlayerController implements Collider, Disposable {
 
     @Override
     public void onCollision(Collider other) {
-        if (other instanceof Buffalo){
-            Buffalo buffalo=(Buffalo) other;
-            selectionBox.ren(buffalo.getlocation(),16,16);
+        if (other instanceof Buffalo) {
+            Buffalo buffalo = (Buffalo) other;
+            selectionBox.ren(buffalo.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
-                    ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.getlocation().cpy().scl(1/16f),1);
+                    ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.location().cpy().scl(1/16f),1);
                     buffalo.setCheckeating(true);
                     buffalo.getmau().damaged(20);
+                }
+            }
+
+        } else if (other instanceof PigReander) {
+            PigReander pig = (PigReander) other;
+            selectionBox.ren(pig.location(),16,16);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                    ItemManager.getInstance().addItem("FOOD_pumpkin",pig.location().cpy().scl(1/16f),1);
+                    pig.setCheckeating(true);
+                    pig.getmau().damaged(20);
+                }
+            }
+
+        } else if (other instanceof ChickenRender) {
+            ChickenRender chicken = (ChickenRender) other;
+            selectionBox.ren(chicken.location(),16,16);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                    ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
+                    chicken.setCheckeating(true);
+                    chicken.getmau().damaged(20);
                 }
             }
         }
