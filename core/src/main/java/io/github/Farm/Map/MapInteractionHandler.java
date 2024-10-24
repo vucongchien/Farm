@@ -40,6 +40,7 @@ public class MapInteractionHandler {
         if ("grass".equals(tileClass)) {
 
             mapManager.changeTile(playerController.getPositionInMap(), "dug_soil", "land");
+            System.out.println(playerController.getPositionInMap());
 
         }
         else {

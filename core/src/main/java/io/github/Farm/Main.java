@@ -94,11 +94,10 @@ public class Main extends ApplicationAdapter {
 
 
 
-       
         SelectionBox.setCamera(camera);
         gameRenderer = new GameRenderer(null, camera,map);
-        mainMenu = new MainMenu();
-        settingGame = new SettingGame(gameData,null);
+        mainMenu = new MainMenu(map);
+        settingGame = new SettingGame(gameData,null,map);
     }
 
     @Override
@@ -114,7 +113,7 @@ public class Main extends ApplicationAdapter {
                 playerImageManagerNew = new PlayerImageManager();
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);
-                settingGame = new SettingGame(gameData,playerControllerNew);
+                settingGame = new SettingGame(gameData,playerControllerNew,map);
             }
             settingGame.handleInput();
             if (settingGame.isActive()) {

@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import io.github.Farm.SoundManager;
+import io.github.Farm.data.GameSaveManager;
 
 
 public  class MainMenu {
@@ -35,11 +37,18 @@ public  class MainMenu {
     private boolean isDataFileExists;
     //.............checkchedo
     private static boolean checkcontinue;
+    private TiledMap map;
+
+
+
+    public MainMenu(TiledMap map) {
+        this.map=map;
 
 
 
 
-    public MainMenu() {
+
+
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -175,6 +184,7 @@ public  class MainMenu {
                         break;
 
                     case "Continue":
+                        GameSaveManager.getInstance().loadMapData(map);
                         isMenuActive = false;
                         checkcontinue=true;
                         break;

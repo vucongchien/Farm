@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
@@ -42,12 +43,14 @@ public class SettingGame {
     private boolean isMusicPlaying;
 
     private GameData gameData;
+    private TiledMap map;
     private PlayerController playerController;
 
-    public SettingGame(GameData gameData,PlayerController playerController) {
+    public SettingGame(GameData gameData, PlayerController playerController, TiledMap map) {
 
         this.gameData=gameData;
         this.playerController=playerController;
+        this.map=map;
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -111,6 +114,7 @@ public class SettingGame {
                 GameSaveManager.getInstance().savePlantsData(gameData.getPlants());
                 GameSaveManager.getInstance().saveInventoryData(gameData.getInventory());
                 GameSaveManager.getInstance().saveAnimalData(gameData.getAnimal());
+                GameSaveManager.getInstance().saveMapData(map);
 
                 System.out.println("Game Saved!");
                 break;

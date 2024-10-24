@@ -27,15 +27,15 @@
         "Map.tmx": {
             "expandedGroupLayers": [
                 20,
-                29,
                 16,
+                29,
                 31
             ],
-            "scale": 0.33,
-            "selectedLayer": 10,
+            "scale": 2,
+            "selectedLayer": 16,
             "viewCenter": {
-                "x": 1443.939393939394,
-                "y": 683.3333333333333
+                "x": 2447.75,
+                "y": 1222.25
             }
         },
         "Other.tsx": {
@@ -45,8 +45,8 @@
         },
         "tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInDock": 3,
+            "scaleInEditor": 5.5
         },
         "tileset_vippp.tsx": {
             "dynamicWrapping": false,

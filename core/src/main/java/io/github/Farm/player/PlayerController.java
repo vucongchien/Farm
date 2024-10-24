@@ -53,10 +53,12 @@ public class PlayerController implements Collider, Disposable {
     private final Camera camera;
 
     private ExpressionManager expressionManager;
+
+
     //..................readfile
     private final String link="playerData.json";
     private SelectionBox selectionBox;
-    private float time;
+    private static float time=0f;
 
 
     public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
@@ -109,6 +111,14 @@ public class PlayerController implements Collider, Disposable {
 
         updatePlayerState(deltaTime);
         updateExpress();
+        time+=deltaTime;
+
+        if(time>=10f){
+            heath.damaged(5);
+            heath.getHealBar().render(body.getPosition(),camera,this.getHeath().getCurrHp(),this.getHeath().getMaxHp(),16,7);
+
+            time=0f;
+        }
 
 
         collider.setPosition(isFacingRight ? body.getPosition().x + 5 : body.getPosition().x - 20, body.getPosition().y - 5);
@@ -236,13 +246,13 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void updateExpress(){
-        if(getCurrentState().startsWith("DOING_")){
-            expressionManager.setExpression(Expression.WORKING);
-        }
-        else {
-            expressionManager.setExpression(Expression.NULL);
-        }
-        expressionManager.render(body.getPosition(),camera,10f,0.4f);
+//        if(getCurrentState().startsWith("DOING_")){
+//            expressionManager.setExpression(Expression.WORKING);
+//        }
+//        else {
+//            expressionManager.setExpression(Expression.NULL);
+//        }
+//        expressionManager.render(body.getPosition(),camera,10f,0.4f);
     }
 
     public void updateSpeed(){
@@ -379,6 +389,10 @@ public class PlayerController implements Collider, Disposable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+    }
+
+    public boolean isDie(){
+        return heath.isDie();
     }
 
 }
