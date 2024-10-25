@@ -9,6 +9,7 @@ import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
+import io.github.Farm.Trees.TreeManager;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.Pig.PigManager;
@@ -25,12 +26,10 @@ public class GameRenderer {
     private SpriteBatch batch;
     private PlayerRenderer player;
     private List<Animal> animal;
-    private PlantManager plantManager;
     private Camera camera;
     private TiledMap map;
     private Weather weather;
     private MapManager mapManager;
-
 
     List<RenderableEntity> renderableEntities = new ArrayList<>();
 
@@ -70,6 +69,8 @@ public class GameRenderer {
         renderableEntities.addAll(PigManager.getPigmanager().getPigManager());
 
         renderableEntities.addAll(ChickenManager.getChickenmanager().getChickenManager());
+
+        renderableEntities.addAll(TreeManager.getInstance().getTrees());
 
        // renderableEntities.add(new MouseRener(new Vector2(850,1050)));
 

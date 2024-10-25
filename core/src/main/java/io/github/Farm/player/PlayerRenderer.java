@@ -41,7 +41,7 @@ public class PlayerRenderer implements RenderableEntity {
 
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
         batch.setProjectionMatrix(camera.combined);
-        batch.draw(frame, player.getPosition().x-32, player.getPosition().y-30, size, size);
+        batch.draw(frame, player.getPosition().x-32, player.getPosition().y-28, size, size);
         batch.end();
     }
 

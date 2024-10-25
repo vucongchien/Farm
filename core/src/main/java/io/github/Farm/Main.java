@@ -18,7 +18,10 @@ import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantType;
 import io.github.Farm.Renderer.GameRenderer;
+import io.github.Farm.Trees.TreeManager;
+import io.github.Farm.Trees.TreeType;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.PetManager;
@@ -46,6 +49,7 @@ public class Main extends ApplicationAdapter {
     private PlayerRenderer playerRendererNew;
     private PlayerController playerControllerNew =null;
     private PlayerImageManager playerImageManagerNew;
+
 
 
     //-------------map
@@ -91,7 +95,7 @@ public class Main extends ApplicationAdapter {
         gameData.setInventory(GameSaveManager.getInstance().loadInventoryData());
         gameData.setAnimal(GameSaveManager.getInstance().loadAnimalData());
 
-
+        TreeManager.getInstance().addTree(world, TreeType.tree,new Vector2(2300,1500));
 
 
         SelectionBox.setCamera(camera);
@@ -114,6 +118,7 @@ public class Main extends ApplicationAdapter {
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);
                 settingGame = new SettingGame(gameData,playerControllerNew,map);
+                System.out.println("1");
             }
             settingGame.handleInput();
             if (settingGame.isActive()) {
@@ -142,12 +147,17 @@ public class Main extends ApplicationAdapter {
 
                 float deltaTime = Gdx.graphics.getDeltaTime();
 
+
                 debugRenderer.render(world, camera.combined);
                 shapeRenderer.setProjectionMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.RED);
                 Rectangle collider = playerControllerNew.getCollider();
                 shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
+                if(TreeManager.getInstance().getTrees().get(0)!=null) {
+                    Rectangle a = TreeManager.getInstance().getTrees().get(0).getRectangle();
+                    shapeRenderer.rect(a.x, a.y, a.width, a.height);
+                }
                 shapeRenderer.end();
 
                 batch.setProjectionMatrix(camera.combined);

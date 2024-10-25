@@ -46,7 +46,6 @@ public class PlayerController implements Collider, Disposable {
 
     //collider
     private final Rectangle collider;
-    private final ShapeRenderer shapeRenderer;
     private final World world;
     private final Body body;
 
@@ -58,7 +57,6 @@ public class PlayerController implements Collider, Disposable {
     //..................readfile
     private final String link="playerData.json";
     private SelectionBox selectionBox;
-    private static float time=0f;
 
 
     public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
@@ -82,7 +80,6 @@ public class PlayerController implements Collider, Disposable {
         this.camera = camera;
         this.stateManager = new PlayerStateManager(new IdleState("RIGHT"));
         this.collider = new Rectangle(body.getPosition().x, body.getPosition().y, 16, 16);
-        this.shapeRenderer = new ShapeRenderer();
         this.expressionManager=new ExpressionManager();
         this.selectionBox=new SelectionBox();
     }
@@ -94,7 +91,7 @@ public class PlayerController implements Collider, Disposable {
         Body body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(5, 5);
+        shape.setAsBox(5, 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -103,6 +100,7 @@ public class PlayerController implements Collider, Disposable {
         fixtureDef.restitution = 0.1f;
 
         body.createFixture(fixtureDef);
+        body.setFixedRotation(true);
         shape.dispose();
         return body;
     }
@@ -111,14 +109,9 @@ public class PlayerController implements Collider, Disposable {
 
         updatePlayerState(deltaTime);
         updateExpress();
-        time+=deltaTime;
 
-        if(time>=10f){
-            heath.damaged(5);
-            heath.getHealBar().render(body.getPosition(),camera,this.getHeath().getCurrHp(),this.getHeath().getMaxHp(),16,7);
 
-            time=0f;
-        }
+
 
 
         collider.setPosition(isFacingRight ? body.getPosition().x + 5 : body.getPosition().x - 20, body.getPosition().y - 5);
@@ -246,13 +239,7 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void updateExpress(){
-//        if(getCurrentState().startsWith("DOING_")){
-//            expressionManager.setExpression(Expression.WORKING);
-//        }
-//        else {
-//            expressionManager.setExpression(Expression.NULL);
-//        }
-//        expressionManager.render(body.getPosition(),camera,10f,0.4f);
+        expressionManager.render(body.getPosition(),camera,10f,0.4f);
     }
 
     public void updateSpeed(){
@@ -270,7 +257,6 @@ public class PlayerController implements Collider, Disposable {
 
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
         world.destroyBody(body);
     }
 
@@ -393,6 +379,10 @@ public class PlayerController implements Collider, Disposable {
 
     public boolean isDie(){
         return heath.isDie();
+    }
+
+    public void eat(){
+
     }
 
 }

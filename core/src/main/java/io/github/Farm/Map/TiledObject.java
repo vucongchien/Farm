@@ -28,10 +28,14 @@ public class TiledObject {
     }
     private static ChainShape createPolyLine(PolylineMapObject polyLine){
         float[] vertices=polyLine.getPolyline().getTransformedVertices();
+
+
         Vector2[] worldVertices=new Vector2[vertices.length/2];
         for (int i=0;i<worldVertices.length;i++){
             worldVertices[i]=new Vector2(vertices[i*2],vertices[i*2+1]);
         }
+
+
         ChainShape cs=new ChainShape();
         cs.createChain(worldVertices);
         return cs;

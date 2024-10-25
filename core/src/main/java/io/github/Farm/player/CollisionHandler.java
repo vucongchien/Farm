@@ -8,6 +8,7 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
+import io.github.Farm.Trees.TreeManager;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Pet;
@@ -45,6 +46,10 @@ public class CollisionHandler implements Collider {
         checkPlantCollisions();
     }
 
+    private void checkTreeCollisions(){
+
+    }
+
     private void checkItemCollisions() {
         Iterator<Item> iterator = ItemManager.getInstance().getItemList().iterator();
         while (iterator.hasNext()) {
@@ -73,9 +78,11 @@ public class CollisionHandler implements Collider {
 
         if (PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()) != null) {
             if (PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).isHarvestable()) {
+
                 selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(3, 5.5f), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2, PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 3);
             } else {
-                selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(4.8f, 5.5f), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2, PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 2);
+                System.out.println(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2);
+                selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(4.8f, 5.5f), Math.max((int) PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2,6), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 2);
             }
         }
 

@@ -26,6 +26,7 @@ public class InventorySlot {
         switch (TYPE){
             case "FOOD":
                 playerController.getHeath().heal(10);
+                playerController.eat();
                 reduceQuantity();
                 return;
 
