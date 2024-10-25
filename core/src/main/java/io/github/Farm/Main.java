@@ -69,10 +69,13 @@ public class Main extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
 
+    //........googlemapp
+//    GoogleMap googleMap;
 
 
     @Override
     public void create() {
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 450);
@@ -83,7 +86,7 @@ public class Main extends ApplicationAdapter {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         mapManager = new MapManager(map);
         mapInteractionHandler = new MapInteractionHandler(mapManager);
-
+//        googleMap=new GoogleMap(map);
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
@@ -168,6 +171,7 @@ public class Main extends ApplicationAdapter {
                 PetManager.getPetmanager().update(BuffaloManager.getbuffalomanager(),ChickenManager.getChickenmanager(),PigManager.getPigmanager());
                 WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
+
 
 
                 gameRenderer.render();

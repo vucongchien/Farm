@@ -24,6 +24,8 @@ public class MouseManager {
         mousemanager=new HashMap<>();
     }
 
+
+
     public void checkquantity(){
         if(!PlantManager.getInstance().getListPlants().isEmpty()){
 
