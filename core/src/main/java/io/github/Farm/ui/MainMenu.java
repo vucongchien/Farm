@@ -104,7 +104,7 @@ public  class MainMenu {
     }
 
     public static void setCheckcontinue(boolean checkcontinue) {
-        MainMenu.checkcontinue = checkcontinue;
+       checkcontinue = checkcontinue;
     }
 
     public void render(SpriteBatch batch) {

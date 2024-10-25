@@ -100,9 +100,9 @@ public class Main extends ApplicationAdapter {
         gameRenderer = new GameRenderer(null, camera,map);
         mainMenu = new MainMenu();
         settingGame = new SettingGame(gameData,null);
-//        googleMap.setGooglemap(map);
-//        googleMap.takepoinbuffalo(12,71);
-//        googleMap.DFSbiendi(95,71);
+//        googleMap.initializeMap(map);
+//        googleMap.findPathToTarget(12,71);
+//        googleMap.findDFSPath(95,71);
     }
 
     @Override
