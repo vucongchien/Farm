@@ -26,7 +26,7 @@ public class Buffalo extends Pet implements RenderableEntity {
         super(location, hungry,100);
         imageManager = new BuffaloImageManager();
         setcrencurrentState(PetState.IDLE_LEFT);
-        settargetLocation(randomlocation(500,650,950,1050));
+        settargetLocation(randomlocation(2200,2300,1500,1700));
         setBox(new Rectangle(location().x , location().y , 15, 10));
     }
 

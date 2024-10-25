@@ -45,7 +45,7 @@ public class BuffaloManager  {
                 breedingTime = TimeUtils.millis();
             }
             if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-                buffaloManager.add(new Buffalo(new Vector2(650,1050),100));
+                buffaloManager.add(new Buffalo(new Vector2(2300,1500),100));
                 breedingTime = 0;
             }
         }

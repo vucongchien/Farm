@@ -155,7 +155,7 @@ public class Main extends ApplicationAdapter {
         }
         else {
             if(playerControllerNew==null){
-                playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
+                playerControllerNew = new PlayerController(new Vector2(2500, 1500), world, mapInteractionHandler,camera);
                 playerImageManagerNew = new PlayerImageManager();
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);

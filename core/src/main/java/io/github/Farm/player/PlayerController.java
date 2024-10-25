@@ -270,18 +270,18 @@ public class PlayerController implements Collider, Disposable {
         if (other instanceof Buffalo) {
             Buffalo buffalo = (Buffalo) other;
             selectionBox.ren(buffalo.location(),16,16);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!buffalo.isCheckeating()) {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.location().cpy().scl(1/16f),1);
                     buffalo.setCheckeating(true);
-                    buffalo.getmau().damaged(20);
+
                 }
             }
 
         } else if (other instanceof PigReander) {
             PigReander pig = (PigReander) other;
             selectionBox.ren(pig.location(),16,16);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!pig.isCheckeating()) {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",pig.location().cpy().scl(1/16f),1);
                     pig.setCheckeating(true);
@@ -292,7 +292,7 @@ public class PlayerController implements Collider, Disposable {
         } else if (other instanceof ChickenRender) {
             ChickenRender chicken = (ChickenRender) other;
             selectionBox.ren(chicken.location(),16,16);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!chicken.isCheckeating()) {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
                     chicken.setCheckeating(true);
