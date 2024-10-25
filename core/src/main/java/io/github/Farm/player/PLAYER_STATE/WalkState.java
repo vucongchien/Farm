@@ -1,6 +1,7 @@
 package io.github.Farm.player.PLAYER_STATE;
 
 import com.badlogic.gdx.math.Vector2;
+import io.github.Farm.SoundManager;
 import io.github.Farm.player.PlayerController;
 
 public class WalkState implements InterfacePlayerState {
@@ -16,14 +17,12 @@ public class WalkState implements InterfacePlayerState {
 
     @Override
     public void update(PlayerController player, float deltaTime) {
-        if (!player.getInputHandler().isMoving()) {
-            player.changeState(new IdleState(direction));
-        }
+
     }
 
     @Override
     public void exit(PlayerController player) {
-        //-----------------------
+
     }
 
     @Override

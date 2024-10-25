@@ -19,12 +19,25 @@ import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantType;
 import io.github.Farm.Renderer.GameRenderer;
+import io.github.Farm.Trees.TreeManager;
+import io.github.Farm.Trees.TreeType;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.Chicken.ChickenManager;
+import io.github.Farm.animal.PetManager;
+import io.github.Farm.animal.Pig.PigManager;
+import io.github.Farm.animal.WOLF.WolfManager;
+import io.github.Farm.data.*;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.ui.*;
 import io.github.Farm.ui.inventory.Inventory;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.ui.MainMenu;
+import io.github.Farm.ui.Other.SelectionBox;
+import io.github.Farm.ui.SettingGame;
 import io.github.Farm.weather.Weather;
 
 
@@ -37,8 +50,9 @@ public class Main extends ApplicationAdapter {
     //-------------player
 
     private PlayerRenderer playerRendererNew;
-    private PlayerController playerControllerNew;
+    private PlayerController playerControllerNew =null;
     private PlayerImageManager playerImageManagerNew;
+
 
 
     //-------------map
@@ -47,6 +61,11 @@ public class Main extends ApplicationAdapter {
     private MapManager mapManager;
     private MapInteractionHandler mapInteractionHandler;
 
+
+
+    private MainMenu mainMenu;
+    private SettingGame settingGame;
+    private GameData gameData;
 
     //------------------render
     private GameRenderer gameRenderer;
@@ -67,21 +86,28 @@ public class Main extends ApplicationAdapter {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         mapManager = new MapManager(map);
         mapInteractionHandler = new MapInteractionHandler(mapManager);
-
+//        googleMap=new GoogleMap(map);
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
 
 
-        playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
-        playerImageManagerNew = new PlayerImageManager();
-        playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
+        gameData = new GameData();
+        gameData.setPlayer(GameSaveManager.getInstance().loadPlayerData());
+        gameData.setPlants(GameSaveManager.getInstance().loadPlantsData());
+        gameData.setInventory(GameSaveManager.getInstance().loadInventoryData());
+        gameData.setAnimal(GameSaveManager.getInstance().loadAnimalData());
 
-        gameRenderer = new GameRenderer(playerRendererNew, camera,map);
+        TreeManager.getInstance().addTree(world, TreeType.tree,new Vector2(2300,1500));
+
+
+        SelectionBox.setCamera(camera);
+        gameRenderer = new GameRenderer(null, camera,map);
+        mainMenu = new MainMenu(map);
+        settingGame = new SettingGame(gameData,null,map);
 
         IntroGame.getInstance();
         WinGame.getInstance();
-
     }
 
     @Override
@@ -129,6 +155,16 @@ public class Main extends ApplicationAdapter {
             }
         }
         else {
+            if(playerControllerNew==null){
+                playerControllerNew = new PlayerController(new Vector2(900, 900), world, mapInteractionHandler,camera);
+                playerImageManagerNew = new PlayerImageManager();
+                playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
+                gameRenderer = new GameRenderer(playerRendererNew, camera,map);
+                settingGame = new SettingGame(gameData,playerControllerNew,map);
+                System.out.println("1");
+            }
+
+            
             SettingGame.getInstance().handleInput();
             WinGame.getInstance().handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
@@ -149,12 +185,8 @@ public class Main extends ApplicationAdapter {
                 mapRenderer.setView(camera);
                 mapRenderer.render();
 
+                Weather.getInstance().update(Gdx.graphics.getDeltaTime());
                 batch.begin();
-                if(Weather.getInstance().getNight()){
-                    mapManager.setNightLayerVisible(true);
-                }else {
-                    mapManager.setNightLayerVisible(false);
-                }
                 Weather.getInstance().render(batch);
                 batch.end();
 
@@ -162,17 +194,30 @@ public class Main extends ApplicationAdapter {
 
                 float deltaTime = Gdx.graphics.getDeltaTime();
 
+
                 debugRenderer.render(world, camera.combined);
                 shapeRenderer.setProjectionMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.RED);
                 Rectangle collider = playerControllerNew.getCollider();
                 shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
+                if(TreeManager.getInstance().getTrees().get(0)!=null) {
+                    Rectangle a = TreeManager.getInstance().getTrees().get(0).getRectangle();
+                    shapeRenderer.rect(a.x, a.y, a.width, a.height);
+                }
                 shapeRenderer.end();
 
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
+                BuffaloManager.getbuffalomanager().update(playerControllerNew);
+                PigManager.getPigmanager().update(playerControllerNew);
+                ChickenManager.getChickenmanager().update(playerControllerNew);
+                PetManager.getPetmanager().update(BuffaloManager.getbuffalomanager(),ChickenManager.getChickenmanager(),PigManager.getPigmanager());
+                WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
+
+
+
                 gameRenderer.render();
 
                 if (Inventory.getInstance().isOpened()) {

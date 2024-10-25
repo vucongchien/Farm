@@ -41,7 +41,14 @@ public class MainMenu {
 
 
 
-    public MainMenu() {
+    public MainMenu(TiledMap map) {
+        this.map=map;
+
+
+
+
+
+
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -50,6 +57,7 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
+        isDataFileExists = true;
         isDataFileExists = true;
 
         if (isDataFileExists) {
@@ -95,6 +103,14 @@ public class MainMenu {
         // Tạo animation với tốc độ 10 frame mỗi giây (có thể điều chỉnh)
         backgroundAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
 
+    }
+
+    public static boolean isCheckcontinue() {
+        return checkcontinue;
+    }
+
+    public static void setCheckcontinue(boolean checkcontinue) {
+        MainMenu.checkcontinue = checkcontinue;
     }
 
     public void render(SpriteBatch batch) {
@@ -161,6 +177,7 @@ public class MainMenu {
                         IntroGame.getInstance().setIntro(true);
 
                         isMenuActive = false;
+                        checkcontinue=false;
                         break;
 
                     case "New Game":
@@ -170,15 +187,15 @@ public class MainMenu {
                         break;
 
                     case "Continue":
-
+                        GameSaveManager.getInstance().loadMapData(map);
+                        isMenuActive = false;
+                        checkcontinue=true;
                         break;
 
                     case "Controls":
-                        // Options
                         isControlsActive = true;
                         break;
                     case "Exit":
-                        // Exit
                         Gdx.app.exit();
                         break;
                 }

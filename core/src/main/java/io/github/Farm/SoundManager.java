@@ -3,8 +3,9 @@ package io.github.Farm;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
-public class SoundManager {
+public class SoundManager implements Disposable {
     private static SoundManager instance;
     public static SoundManager getInstance() {
         if (instance == null) {
@@ -15,6 +16,12 @@ public class SoundManager {
     private Sound moveSound;
     private Music gameMusic;
     private Music rainSound;
+    private Music footStep;
+    private Music watering;
+    private Sound hurt;
+    private Sound shovel;
+
+
     private Sound running;
     private Music inTroGame;
     private Music inTroGame1;
@@ -26,6 +33,12 @@ public class SoundManager {
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("soundgame/gamemusic.mp3"));
         rainSound = Gdx.audio.newMusic(Gdx.files.internal("soundgame/rain_2.mp3"));
+        footStep = Gdx.audio.newMusic(Gdx.files.internal("soundgame/running-in-grass-6237.mp3"));
+        watering =Gdx.audio.newMusic(Gdx.files.internal("soundgame/watering.mp3"));
+        hurt = Gdx.audio.newSound(Gdx.files.internal("soundgame/hurt.mp3"));
+        shovel=Gdx.audio.newSound(Gdx.files.internal("soundgame/shovel.mp3"));
+
+
         running = Gdx.audio.newSound(Gdx.files.internal("soundgame/running.wav"));
         inTroGame = Gdx.audio.newMusic(Gdx.files.internal("soundgame/introGAME.mp3"));
         inTroGame1 = Gdx.audio.newMusic(Gdx.files.internal("soundgame/introGAME1.mp3"));
@@ -39,7 +52,7 @@ public class SoundManager {
     public void playGameMusic(){
         gameMusic.play();
         gameMusic.setLooping(true);
-        gameMusic.setVolume(0.3f);
+        gameMusic.setVolume(0f);
     }
     public void pauseGameMusic(){
         gameMusic.pause();
@@ -51,17 +64,22 @@ public class SoundManager {
         return gameMusic.isPlaying();
     }
     public void playRainSound(){
+        rainSound.setVolume(0.1f);
         rainSound.play();
         rainSound.setVolume(0.3f);
     }
     public void stopRainSound(){
         rainSound.stop();
     }
-    public void playRunningSound(){
-        running.play();
+    public void playFootStep() {
+        if(footStep.isPlaying())return;
+        footStep.play();
+        footStep.setLooping(true);
+        footStep.setVolume(5f);
     }
-    public void pauseRunningSound(){
-        running.pause();
+
+    public void stopFootStep() {
+        footStep.stop();
     }
     public void playInTroGame(){
         inTroGame.play();
@@ -93,10 +111,17 @@ public class SoundManager {
         endGame.setVolume(1.5f);
     }
 
+
+
+    @Override
     public void dispose(){
         moveSound.dispose();
         gameMusic.dispose();
         rainSound.dispose();
+        footStep.dispose();
+        hurt.dispose();
+        shovel.dispose();
+        watering.dispose();
         running.dispose();
         inTroGame.dispose();
         inTroGame1.dispose();

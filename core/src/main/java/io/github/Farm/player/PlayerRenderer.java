@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.player.PLAYER_STATE.PlayerState;
+import io.github.Farm.ui.Other.SelectionBox;
 
 public class PlayerRenderer implements RenderableEntity {
     private final PlayerController player;
@@ -15,6 +16,7 @@ public class PlayerRenderer implements RenderableEntity {
     private float stateTime;
     private int size;
     private PlayerState lastState;
+
 
     public PlayerRenderer(PlayerController player, PlayerImageManager imageManager, int initialSize){
         this.player=player;
@@ -33,12 +35,13 @@ public class PlayerRenderer implements RenderableEntity {
     @Override
     public void render(SpriteBatch batch, Camera camera) {
         batch.setProjectionMatrix(camera.combined);
-        batch.begin();
         stateTime += player.getDeltaTime();
         updateAnimation();
-        TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
+        batch.begin();
 
-        batch.draw(frame, player.getPosition().x-32, player.getPosition().y-30, size, size);
+        TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
+        batch.setProjectionMatrix(camera.combined);
+        batch.draw(frame, player.getPosition().x-32, player.getPosition().y-28, size, size);
         batch.end();
     }
 

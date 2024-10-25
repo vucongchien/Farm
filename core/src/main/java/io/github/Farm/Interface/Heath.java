@@ -1,13 +1,18 @@
 package io.github.Farm.Interface;
 
+import io.github.Farm.ui.Other.GreenBar;
+import io.github.Farm.ui.Other.RedBar;
+
 public class Heath {
 
     private float currHp;
     private final float maxHp;
+    private RedBar healBar;
 
     public Heath(float hp){
         this.currHp =hp;
         this.maxHp=hp;
+        this.healBar=new RedBar();
     }
 
     public void damaged(float damage){
@@ -34,4 +39,11 @@ public class Heath {
         this.currHp = currHp;
     }
 
+    public RedBar getHealBar() {
+        return healBar;
+    }
+
+    public float getMaxHp() {
+        return maxHp;
+    }
 }

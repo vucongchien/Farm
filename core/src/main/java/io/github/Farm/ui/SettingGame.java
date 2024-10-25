@@ -8,8 +8,26 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.SoundManager;
+import io.github.Farm.animal.Buffalo.Buffalo;
+import io.github.Farm.animal.Buffalo.BuffaloManager;
+import io.github.Farm.animal.Chicken.ChickenManager;
+import io.github.Farm.animal.Chicken.ChickenRender;
+import io.github.Farm.animal.Pig.PigManager;
+import io.github.Farm.animal.Pig.PigReander;
+import io.github.Farm.animal.WOLF.WolfManager;
+import io.github.Farm.animal.WOLF.WolfRender;
+import io.github.Farm.data.*;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.inventory.InventorySlot;
+import io.github.Farm.player.PlayerController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SettingGame {
@@ -86,14 +104,26 @@ public class SettingGame {
         switch (option) {
             case 0:
 
+                updatePlayerData(gameData.getPlayer(), playerController);
+                updatePlantsData(gameData.getPlants());
+                updateInventoryData(gameData.getInventory());
+                updateAnimalData(gameData.getAnimal());
+
+                GameSaveManager.getInstance().savePlayerData(gameData.getPlayer());
+                GameSaveManager.getInstance().savePlantsData(gameData.getPlants());
+                GameSaveManager.getInstance().saveInventoryData(gameData.getInventory());
+                GameSaveManager.getInstance().saveAnimalData(gameData.getAnimal());
+                GameSaveManager.getInstance().saveMapData(map);
+
+                System.out.println("Game Saved!");
                 break;
             case 1:
-                // Tùy chọn âm thanh
-                isMusicPlaying = !isMusicPlaying; // Đổi trạng thái âm thanh
+
+                isMusicPlaying = !isMusicPlaying;
                 options[1] = isMusicPlaying ? "Sound: ON" : "Sound: OFF";
                 if (SoundManager.getInstance().isGameMusicPlaying()) {
                     SoundManager.getInstance().pauseGameMusic();
-                    // Phát nhạc nền nếu âm thanh bật
+
                 } else {
                     SoundManager.getInstance().playGameMusic();
                 }
@@ -163,6 +193,119 @@ public class SettingGame {
             batch.end();
         }
     }
+
+    private void updatePlayerData(PlayerData playerData, PlayerController playerController) {
+
+        playerData.setPosition(playerController.getPosition());
+
+        playerData.setHealth(playerController.getHeath().getCurrHp());
+
+    }
+
+    private void updatePlantsData(List<PlantData> plantDataList) {
+        List<PlantRenderer> plants = PlantManager.getInstance().getListPlants();
+
+        if(!plantDataList.isEmpty()) {
+            plantDataList.clear();
+        }
+        for (PlantRenderer plant : plants) {
+
+            PlantData plantData = new PlantData();
+            plantData.setType(plant.getType().toString());
+            plantData.setStage(plant.getStage().toString());
+            plantData.setPosition(plant.getPosition());
+
+            plantDataList.add(plantData);
+        }
+    }
+
+    private void updateInventoryData(InventoryData inventoryData) {
+        inventoryData.getItems().clear();
+        List<InventorySlot> slots=Inventory.getInstance().getSlots();
+
+        for(InventorySlot inventorySlot:slots) {
+            inventoryData.addItem(inventorySlot.getFULL_NAME(), inventorySlot.getQuantity());
+        }
+    }
+
+    private void updateAnimalData(AnimalData animalData){
+        if(!animalData.getBuffalo().isEmpty()) {
+            animalData.getBuffalo().clear();
+        }
+        if(!animalData.getWolfRenders().isEmpty()) {
+            animalData.getWolfRenders().clear();
+        }
+        if(!animalData.getStorageWolfRenders().isEmpty()){
+            animalData.getStorageWolfRenders().clear();
+        }
+        if(!animalData.getPig().isEmpty()){
+            animalData.getPig().clear();
+        }
+        if(!animalData.getChicken().isEmpty()){
+            animalData.getChicken().clear();
+        }
+        List<AnimalData.Wolf> list= new ArrayList<>();
+        for(WolfRender wolfRender: WolfManager.getwolfmanage().getwolfmanafer()){
+            AnimalData.Wolf wolf =new AnimalData.Wolf();
+            wolf.setPosition(wolfRender.getlocation());
+            wolf.setHealth(wolfRender.getHp().getCurrHp());
+            wolf.setLeader(wolfRender.getthulinh());
+            wolf.setDistancefrombossx(wolfRender.getdistancefrombossx());
+            wolf.setDistancefrombossy(wolfRender.getDistancefrombossy());
+            list.add(wolf);
+        }
+        animalData.setWolfRenders(list);
+        if(!list.isEmpty()) {
+            list.clear();
+        }
+        for(WolfRender wolfRender: WolfManager.getwolfmanage().getStoragewolfmanager()){
+            AnimalData.Wolf wolf =new AnimalData.Wolf();
+            wolf.setPosition(wolfRender.getlocation());
+            wolf.setHealth(wolfRender.getHp().getCurrHp());
+            wolf.setLeader(wolfRender.getthulinh());
+            wolf.setDistancefrombossx(wolfRender.getdistancefrombossx());
+            wolf.setDistancefrombossy(wolfRender.getDistancefrombossy());
+            list.add(wolf);
+        }
+        animalData.setStorageWolfRenders(list);
+        for(AnimalData.Wolf wolf: animalData.getWolfRenders()){
+            System.out.println(wolf.getHealth());
+        }
+
+        List<AnimalData.Animal> list1=new ArrayList<>();
+        for(PigReander pigReander: PigManager.getPigmanager().getPigManager()){
+            AnimalData.Animal pig=new AnimalData.Animal();
+            pig.setPosition(pigReander.location());
+            pig.setHungry(pigReander.gethungry());
+            pig.setHp(pigReander.getHeath().getCurrHp());
+            list1.add(pig);
+        }
+        animalData.setPig(list1);
+        if (!list1.isEmpty()){
+            list1.clear();
+        }
+        for(ChickenRender chickenRender: ChickenManager.getChickenmanager().getChickenManager()){
+            AnimalData.Animal chicken =new AnimalData.Animal();
+            chicken.setPosition(chickenRender.location());
+            chicken.setHungry(chickenRender.gethungry());
+            chicken.setHp(chickenRender.getHeath().getCurrHp());
+            list1.add(chicken);
+        }
+        animalData.setChicken(list1);
+        if (!list1.isEmpty()){
+            list1.clear();
+        }
+        for(Buffalo buffalo: BuffaloManager.getbuffalomanager().getBuffaloManager()){
+            AnimalData.Animal wolf =new AnimalData.Animal();
+            wolf.setPosition(buffalo.location());
+            wolf.setHungry(buffalo.gethungry());
+            wolf.setHp(buffalo.getmau().getCurrHp());
+            list1.add(wolf);
+        }
+        animalData.setBuffalo(list1);
+    }
+
+
 
     public void dispose() {
         // Giải phóng tài nguyên font
