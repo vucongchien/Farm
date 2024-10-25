@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import io.github.Farm.SoundManager;
 import com.badlogic.gdx.graphics.GL20;
+import io.github.Farm.data.GameSaveManager;
 
 
 public class MainMenu {
@@ -38,17 +40,9 @@ public class MainMenu {
     private boolean isControlsActive;
     private boolean isDataFileExists;
 
+    private static boolean checkcontinue;
 
-
-
-    public MainMenu(TiledMap map) {
-        this.map=map;
-
-
-
-
-
-
+    public MainMenu() {
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -57,7 +51,6 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
-        isDataFileExists = true;
         isDataFileExists = true;
 
         if (isDataFileExists) {
@@ -161,7 +154,7 @@ public class MainMenu {
     }
 
 
-    public void handleInput() {
+    public void handleInput(TiledMap map) {
         if (!isControlsActive) {
             if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
                 selectedIndex = (selectedIndex + 1) % menuItems.length;
@@ -187,7 +180,7 @@ public class MainMenu {
                         break;
 
                     case "Continue":
-                        GameSaveManager.getInstance().loadMapData(map);
+                        GameSaveManager.getInstance().saveMapData(map);
                         isMenuActive = false;
                         checkcontinue=true;
                         break;

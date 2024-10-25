@@ -22,7 +22,6 @@ public class SoundManager implements Disposable {
     private Sound shovel;
 
 
-    private Sound running;
     private Music inTroGame;
     private Music inTroGame1;
     private Music gameOver;
@@ -38,8 +37,6 @@ public class SoundManager implements Disposable {
         hurt = Gdx.audio.newSound(Gdx.files.internal("soundgame/hurt.mp3"));
         shovel=Gdx.audio.newSound(Gdx.files.internal("soundgame/shovel.mp3"));
 
-
-        running = Gdx.audio.newSound(Gdx.files.internal("soundgame/running.wav"));
         inTroGame = Gdx.audio.newMusic(Gdx.files.internal("soundgame/introGAME.mp3"));
         inTroGame1 = Gdx.audio.newMusic(Gdx.files.internal("soundgame/introGAME1.mp3"));
         gameOver = Gdx.audio.newMusic(Gdx.files.internal("soundgame/game_over_1.mp3"));
@@ -122,7 +119,6 @@ public class SoundManager implements Disposable {
         hurt.dispose();
         shovel.dispose();
         watering.dispose();
-        running.dispose();
         inTroGame.dispose();
         inTroGame1.dispose();
         gameOver.dispose();

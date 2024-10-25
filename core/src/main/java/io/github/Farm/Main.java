@@ -33,7 +33,7 @@ import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
 import io.github.Farm.ui.*;
-import io.github.Farm.ui.inventory.Inventory;
+
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.Other.SelectionBox;
@@ -62,9 +62,6 @@ public class Main extends ApplicationAdapter {
     private MapInteractionHandler mapInteractionHandler;
 
 
-
-    private MainMenu mainMenu;
-    private SettingGame settingGame;
     private GameData gameData;
 
     //------------------render
@@ -103,8 +100,6 @@ public class Main extends ApplicationAdapter {
 
         SelectionBox.setCamera(camera);
         gameRenderer = new GameRenderer(null, camera,map);
-        mainMenu = new MainMenu(map);
-        settingGame = new SettingGame(gameData,null,map);
 
         IntroGame.getInstance();
         WinGame.getInstance();
@@ -135,7 +130,7 @@ public class Main extends ApplicationAdapter {
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             MainMenu.getInstance().render(batch);
-            MainMenu.getInstance().handleInput();
+            MainMenu.getInstance().handleInput(map);
         }
         else if(IntroGame.getInstance().isIntro()){
             if(!MainMenu.getInstance().isMenuActive()){
@@ -146,7 +141,7 @@ public class Main extends ApplicationAdapter {
                 IntroGame.getInstance().render(batch);
             }
             if (IntroGame.getInstance().getElapsedTime() > 16.1) {
-                IntroGame.getInstance().setIntro(false);// Kết thúc intro
+                IntroGame.getInstance().setIntro(false);
                 SoundManager.getInstance().stopInTroGame();
             }else if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 IntroGame.getInstance().setIntro(false);
@@ -160,12 +155,11 @@ public class Main extends ApplicationAdapter {
                 playerImageManagerNew = new PlayerImageManager();
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);
-                settingGame = new SettingGame(gameData,playerControllerNew,map);
                 System.out.println("1");
             }
 
-            
-            SettingGame.getInstance().handleInput();
+
+            SettingGame.getInstance().handleInput(gameData,playerControllerNew,map);
             WinGame.getInstance().handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (SettingGame.getInstance().isActive()) {

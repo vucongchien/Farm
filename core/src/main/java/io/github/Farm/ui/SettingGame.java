@@ -72,7 +72,7 @@ public class SettingGame {
         isActive = active;
     }
 
-    public void handleInput() {
+    public void handleInput(GameData gameData,PlayerController playerController,TiledMap map) {
         if(GameOverScreen.getInstance().isNotGameOverActive() ){
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 SoundManager.getInstance().playMoveSound();
@@ -90,7 +90,7 @@ public class SettingGame {
                 selectedOption = (selectedOption + 1) % options.length;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                performAction(selectedOption);
+                performAction(selectedOption,gameData,playerController,map);
             }
         }
         if (MainMenu.getInstance().isControlsActive() && Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
@@ -100,7 +100,7 @@ public class SettingGame {
 
     }
 
-    private void performAction(int option) {
+    private void performAction(int option,GameData gameData,PlayerController playerController,TiledMap map) {
         switch (option) {
             case 0:
 
