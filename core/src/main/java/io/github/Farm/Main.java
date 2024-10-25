@@ -19,6 +19,7 @@ import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
+//import io.github.Farm.Way.GoogleMap;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.PetManager;
@@ -64,10 +65,13 @@ public class Main extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
 
+    //........googlemapp
+//    GoogleMap googleMap;
 
 
     @Override
     public void create() {
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 450);
@@ -78,7 +82,7 @@ public class Main extends ApplicationAdapter {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         mapManager = new MapManager(map);
         mapInteractionHandler = new MapInteractionHandler(mapManager);
-
+//        googleMap=new GoogleMap(map);
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
@@ -96,6 +100,9 @@ public class Main extends ApplicationAdapter {
         gameRenderer = new GameRenderer(null, camera,map);
         mainMenu = new MainMenu();
         settingGame = new SettingGame(gameData,null);
+//        googleMap.setGooglemap(map);
+//        googleMap.takepoinbuffalo(12,71);
+//        googleMap.DFSbiendi(95,71);
     }
 
     @Override
@@ -156,6 +163,7 @@ public class Main extends ApplicationAdapter {
                 PetManager.getPetmanager().update(BuffaloManager.getbuffalomanager(),ChickenManager.getChickenmanager(),PigManager.getPigmanager());
                 WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
+
 
 
                 gameRenderer.render();
