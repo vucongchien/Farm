@@ -114,6 +114,8 @@ public class Main extends ApplicationAdapter {
             batch.setColor(Color.WHITE);
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            SoundManager.getInstance().stopGameMusic();
+            SoundManager.getInstance().playEndGame();
             WinGame.getInstance().render(batch,playerControllerNew.getPosition());
         }
         else if (GameOverScreen.getInstance().isGameOverActive()) {
@@ -123,6 +125,8 @@ public class Main extends ApplicationAdapter {
             mapRenderer.setView(camera);
             mapRenderer.render();
             mapManager.setNightLayerVisible(true);
+            SoundManager.getInstance().stopGameMusic();
+            SoundManager.getInstance().playGameOver();
             GameOverScreen.getInstance().render(batch, playerControllerNew.getPosition());
         }
         // Kiểm tra xem menu có đang hoạt động không
@@ -160,7 +164,6 @@ public class Main extends ApplicationAdapter {
 
 
             SettingGame.getInstance().handleInput(gameData,playerControllerNew,map);
-            WinGame.getInstance().handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (SettingGame.getInstance().isActive()) {
                 batch.setColor(Color.WHITE);
@@ -218,6 +221,12 @@ public class Main extends ApplicationAdapter {
                     batch.setColor(Color.WHITE);
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
 
+                }
+                if(playerControllerNew.isDie()){
+                    GameOverScreen.getInstance().setGameOverActive(true);
+                }
+                if(Inventory.getInstance().checkSoLuong("FOOD_pumpkin",3)){
+                    WinGame.getInstance().setIsWin(true);
                 }
             }
 

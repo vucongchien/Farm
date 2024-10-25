@@ -71,20 +71,18 @@ public class GameOverScreen {
             }
         }
 
-        // Nhấn phím L để hiển thị màn hình Game Over
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.L)) {
-            isGameOverActive = !isGameOverActive;
-            SoundManager.getInstance().stopGameMusic();
-            SoundManager.getInstance().playGameOver();
-        }
     }
 
     public boolean isGameOverActive() {
         return isGameOverActive;
     }
+    public void setGameOverActive(boolean isGameOverActive) {
+        this.isGameOverActive = isGameOverActive;
+    }
     public boolean isNotGameOverActive() {
         return !isGameOverActive;
     }
+
 
     public void dispose() {
         gameOverPanel.dispose();
