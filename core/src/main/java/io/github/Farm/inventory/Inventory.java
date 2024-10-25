@@ -218,12 +218,5 @@ public class Inventory {
             throw new RuntimeException(e);
         }
     }
-    public boolean checkSoLuong(String name,int soluong){
-        for(InventorySlot slot:slots){
-            if(name.equals(slot.getFULL_NAME())){
-                return slot.getQuantity()==soluong;
-            }
-        }
-        return false;
-    }
+
 }
