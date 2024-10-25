@@ -8,53 +8,80 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
-import io.github.Farm.ui.inventory.Inventory;
+import io.github.Farm.SoundManager;
+import io.github.Farm.animal.Buffalo.Buffalo;
+import io.github.Farm.animal.Chicken.ChickenRender;
+import io.github.Farm.animal.Pig.PigReander;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.inventory.Item;
+import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PLAYER_STATE.*;
+import io.github.Farm.ui.MainMenu;
+import io.github.Farm.ui.Other.Expression;
+import io.github.Farm.ui.Other.ExpressionManager;
+
+import java.io.*;
+import io.github.Farm.ui.Other.SelectionBox;
 
 public class PlayerController implements Collider, Disposable {
-    private Heath heath;
-    private Vector2 position;
-    private Vector2 positionInMap;
+    private final Heath heath;
+    private float speed;
+    private final Vector2 positionInMap;
 
     //boolean
-    private boolean canAct=true;
     private boolean isFacingRight = true;
-    private boolean isFishing=false;
-    private boolean isSwim=false;
-    private boolean isPlanting=false;
+    private boolean isFishing = false;
+    private boolean isSwim = false;
+    private boolean isPlanting = false;
+    private boolean isHurt = false; StringBuilder enemyDirection;
 
-    private InputHandler inputHandler;
-    private  CollisionHandler collisionHandler;
-    private PlayerStateManager stateManager;
+    private final InputHandler inputHandler;
+    private final CollisionHandler collisionHandler;
+    private final PlayerStateManager stateManager;
 
     //collider
-    private Rectangle collider;
-    private ShapeRenderer shapeRenderer;
-    private World world;
-    private Body body;
+    private final Rectangle collider;
+    private final World world;
+    private final Body body;
 
-    private Camera camera;
+    private final Camera camera;
 
-    public PlayerController(Vector2 startPosition, World world,MapInteractionHandler mapInteractionHandler,Camera camera) {
+    private ExpressionManager expressionManager;
 
-        this.heath=new Heath(100);
 
-        this.position=startPosition;
-        this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
+    //..................readfile
+    private final String link="playerData.json";
+    private SelectionBox selectionBox;
 
+
+    public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
+        if(MainMenu.isCheckcontinue()){
+            System.out.println("da doc nha may");
+            System.out.println(MainMenu.isCheckcontinue());
+            this.heath = new Heath(100);
+            readPlayerData(this.getHeath(),startPosition);
+            this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
+            this.body = createBody(startPosition, world);
+
+        }else {
+            this.heath = new Heath(100);
+            this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
+            this.body = createBody(startPosition, world);
+        }
+        this.speed = 100f;
         this.inputHandler = new InputHandler(this);
-        this.collisionHandler = new CollisionHandler( mapInteractionHandler,this);
-        this.world=world;
-        this.body=createBody(startPosition, world);
-        this.camera=camera;
+        this.collisionHandler = new CollisionHandler(mapInteractionHandler, this);
+        this.world = world;
+        this.camera = camera;
         this.stateManager = new PlayerStateManager(new IdleState("RIGHT"));
-
-        this.collider=new Rectangle(position.x,position.y,16,16);
-        this.shapeRenderer=new ShapeRenderer();
-
+        this.collider = new Rectangle(body.getPosition().x, body.getPosition().y, 16, 16);
+        this.expressionManager=new ExpressionManager();
+        this.selectionBox=new SelectionBox();
     }
 
     private Body createBody(Vector2 startPosition, World world) {
@@ -64,7 +91,7 @@ public class PlayerController implements Collider, Disposable {
         Body body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(5, 5);
+        shape.setAsBox(5, 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -73,75 +100,98 @@ public class PlayerController implements Collider, Disposable {
         fixtureDef.restitution = 0.1f;
 
         body.createFixture(fixtureDef);
+        body.setFixedRotation(true);
         shape.dispose();
         return body;
     }
 
     public void update(float deltaTime) {
-        //state
+
         updatePlayerState(deltaTime);
+        updateExpress();
 
-        //update may bien tao lao
-        collider.setPosition(isFacingRight ? position.x + 5 : position.x - 20, position.y - 5);
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+
+
+
+        collider.setPosition(isFacingRight ? body.getPosition().x + 5 : body.getPosition().x - 20, body.getPosition().y - 5);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             Inventory.getInstance().setOpened();
-            Inventory.getInstance().addItem("SEED_pumpkin",1);
-            Inventory.getInstance().addItem("FOOD_pumpkin",1);
+            Inventory.getInstance().addItem("SEED_pumpkin", 1);
+            Inventory.getInstance().addItem("FOOD_pumpkin", 1);
+            Inventory.getInstance().addItem("SEED_kale", 1);
+            Inventory.getInstance().addItem("SEED_carrot", 1);
         }
 
-        if(Inventory.getInstance().isOpened()){
-            body.setLinearVelocity(Vector2.Zero);
-            inputHandler.handleInventoryInput();
-            canAct=false;
-            return;
-        }else {
-            canAct=true;
-        }
+        updateMovement(deltaTime);
 
-//---------------------------all input
-        //move
-        Vector2 movement = inputHandler.handleMovementInput();
-        stateManager.updateState(this, deltaTime);
-
-        body.setLinearVelocity(movement.scl(150f));
-        position.set(body.getPosition());
-        this.positionInMap.set(
-            isFacingRight ? (int) (position.x / 16) + 1 : (int) (position.x / 16) - 1,
-            (int) (position.y / 16)
-        );
-
-        //logic swim
         if (isSwim) return;
         collisionHandler.checkCollisions();
-//
-//        if (inputHandler.isPlowing()) {
-//            collisionHandler.handlePlowing();
-//        }
-
-
     }
 
-    public void changeState(InterfacePlayerState newState) {
-        stateManager.changeState(this, newState);
-    }
+    public void updateMovement(float deltaTime){
 
-    public void updatePlayerState(float deltaTime){
-        if(!canAct) return;
-
-        Vector2 movement = inputHandler.handleMovementInput();
-        if(movement.x>0)        { isFacingRight=true; }
-        else if(movement.x<0)   { isFacingRight=false;}
-        String direction = isFacingRight ? "RIGHT" : "LEFT";
-
-        //check swim
-        Vector2 positionCheckSwim= new Vector2((int) (position.x / 16) ,(int) (position.y / 16));
-        if(collisionHandler.getMapInteractionHandler().checkTile(positionCheckSwim,"water")){
-            stateManager.changeState(this,new SwimState(direction));
-            isSwim=true;
+        if (Inventory.getInstance().isOpened()) {
+            inputHandler.handleInventoryInput();
+            body.setLinearVelocity(Vector2.Zero);
             return;
         }
-        else isSwim=false;
+        stateManager.updateState(this, deltaTime);
+        updateSpeed();
+
+        if(getCurrentState().startsWith("HURT_")){
+            return;
+        }
+
+        Vector2 movement = inputHandler.handleMovementInput();
+        body.setLinearVelocity(movement.scl(speed));
+        this.positionInMap.set(
+            isFacingRight ? (int) (body.getPosition().x / 16) + 1 : (int) (body.getPosition().x / 16) - 1,
+            (int) (body.getPosition().y / 16)
+        );
+    }
+
+    public void updatePlayerState(float deltaTime) {
+        if(Inventory.getInstance().isOpened()) return;
+
+
+        Vector2 movement = inputHandler.handleMovementInput();
+        if (movement.x > 0) {
+            isFacingRight = true;
+        } else if (movement.x < 0) {
+            isFacingRight = false;
+        }
+        String direction = isFacingRight ? "RIGHT" : "LEFT";
+
+        //hurt any whereeeeeeeeeeeeeeeeeeeeee
+        if(isHurt){
+            stateManager.changeState(this,new HurtState(direction,enemyDirection.toString()));
+            return;
+        }
+
+
+
+
+        //returnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+        Vector2 positionCheckSwim = new Vector2((int) (body.getPosition().x / 16), (int) (body.getPosition().y / 16));
+        if (collisionHandler.getMapInteractionHandler().checkTile(positionCheckSwim, "water")) {
+            stateManager.changeState(this, new SwimState(direction));
+            isSwim = true;
+            SoundManager.getInstance().stopFootStep();
+            return;
+        } else {
+            isSwim = false;
+        }
+
+        //sound moveeeeeeeeeeeeeeeeeeeeee
+        if(inputHandler.isMoving()&&!isSwim){
+            SoundManager.getInstance().playFootStep();
+        }
+        else {
+            SoundManager.getInstance().stopFootStep();
+        }
+
 
         if (inputHandler.isCasting()&&!isFishing)
         {
@@ -155,48 +205,58 @@ public class PlayerController implements Collider, Disposable {
                 System.out.println("del duoc cau ca dume m");
             }
         }
-        else if (inputHandler.isWatering())
-        {
-            stateManager.changeState(this,new WaterState(direction));
+
+
+        else if (inputHandler.isWatering()) {
+            stateManager.changeState(this, new WaterState(direction));
         }
-        else if (inputHandler.isHitting())
-        {
-            stateManager.changeState(this,new HitState(direction));
+        else if (inputHandler.isHitting()) {
+            stateManager.changeState(this, new HitState(direction));
         }
-        else if (inputHandler.isPlowing())
-        {
-            stateManager.changeState(this,new DigState(direction));
+        else if (inputHandler.isPlowing()) {
+
+            stateManager.changeState(this, new DigState(direction));
         }
-        else if (inputHandler.isMoving())
-        {
+        else if (inputHandler.isMoving()) {
             stateManager.changeState(this, new WalkState(direction));
         }
-        else if (isPlanting){
-            stateManager.changeState(this,new DoingState(direction));
+        else if (isPlanting) {
+            stateManager.changeState(this, new DoingState(direction));
         }
-        else if(!isFishing )
-        {
+        else if (!isFishing&&!stateManager.getCurrentStateName().startsWith("HURT_")) {
             stateManager.changeState(this, new IdleState(direction));
         }
-
-
-
-
         //is fishing
-        if(!stateManager.getCurrentStateName().startsWith("WAITING_")||!stateManager.getCurrentStateName().startsWith("CASTING_")||!stateManager.getCurrentStateName().startsWith("CAUGHT_")){
+        if(!stateManager.getCurrentStateName().matches("^(WAITING_|CASTING_|CAUGHT_).*")){
             isFishing=false;
         }
-        if(!stateManager.getCurrentStateName().startsWith("DOING_")){
-            isPlanting=false;
+        if (!stateManager.getCurrentStateName().startsWith("DOING_")) {
+            isPlanting = false;
         }
 
 
 
     }
 
+    public void updateExpress(){
+        expressionManager.render(body.getPosition(),camera,10f,0.4f);
+    }
+
+    public void updateSpeed(){
+        if(isSwim){
+            speed=40f;
+        }
+        else{
+            speed=50f;
+        }
+    }
+
+    public void changeState(InterfacePlayerState newState) {
+        stateManager.changeState(this, newState);
+    }
+
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
         world.destroyBody(body);
     }
 
@@ -207,15 +267,48 @@ public class PlayerController implements Collider, Disposable {
 
     @Override
     public void onCollision(Collider other) {
+        if (other instanceof Buffalo) {
+            Buffalo buffalo = (Buffalo) other;
+            selectionBox.ren(buffalo.location(),16,16);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!buffalo.isCheckeating()) {
+                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                    ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.location().cpy().scl(1/16f),1);
+                    buffalo.setCheckeating(true);
 
+                }
+            }
+
+        } else if (other instanceof PigReander) {
+            PigReander pig = (PigReander) other;
+            selectionBox.ren(pig.location(),16,16);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!pig.isCheckeating()) {
+                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                    ItemManager.getInstance().addItem("FOOD_pumpkin",pig.location().cpy().scl(1/16f),1);
+                    pig.setCheckeating(true);
+                    pig.getmau().damaged(20);
+                }
+            }
+
+        } else if (other instanceof ChickenRender) {
+            ChickenRender chicken = (ChickenRender) other;
+            selectionBox.ren(chicken.location(),16,16);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!chicken.isCheckeating()) {
+                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                    ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
+                    chicken.setCheckeating(true);
+                    chicken.getmau().damaged(20);
+                }
+            }
+        }
     }
+
 
     public float getDeltaTime() {
         return Gdx.graphics.getDeltaTime();
     }
 
     public Vector2 getPosition() {
-        return position;
+        return body.getPosition();
     }
 
     public String getCurrentState(){
@@ -226,7 +319,6 @@ public class PlayerController implements Collider, Disposable {
         return isFacingRight;
     }
 
-
     public CollisionHandler getCollisionHandler() {
         return collisionHandler;
     }
@@ -235,25 +327,12 @@ public class PlayerController implements Collider, Disposable {
         return inputHandler;
     }
 
-
     public Vector2 getPositionInMap() {
         return positionInMap;
     }
 
-    public void setPosition(Vector2 position){
-        this.position=position;
-    }
-
     public Heath getHeath(){
         return heath;
-    }
-
-    public boolean isCanAct() {
-        return canAct;
-    }
-
-    public void setCanAct(boolean canAct) {
-        this.canAct = canAct;
     }
 
     public void setPlanting(boolean planting) {
@@ -267,4 +346,43 @@ public class PlayerController implements Collider, Disposable {
     public Camera getCamera() {
         return camera;
     }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public boolean isHurt() {
+        return isHurt;
+    }
+
+    public void setHurt(boolean hurt) {
+        isHurt = hurt;
+    }
+
+    public void setEnemyDirection(String enemyDirection) {
+        this.enemyDirection = new StringBuilder(enemyDirection);
+    }
+
+    public void readPlayerData(Heath heath,Vector2 a) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode playerData = objectMapper.readTree(new File(link));
+                double posX = playerData.get("posX").asDouble();
+                double posY = playerData.get("posY").asDouble();
+                double health = playerData.get("health").asDouble();
+                a.set((float) posX,(float) posY);
+                heath.setCurrHp((float) health);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+    }
+
+    public boolean isDie(){
+        return heath.isDie();
+    }
+
+    public void eat(){
+
+    }
+
 }

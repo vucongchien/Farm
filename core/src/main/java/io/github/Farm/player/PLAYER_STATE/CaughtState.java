@@ -1,6 +1,8 @@
 package io.github.Farm.player.PLAYER_STATE;
 
+import com.badlogic.gdx.math.Vector2;
 import io.github.Farm.player.PlayerController;
+import io.github.Farm.inventory.ItemManager;
 
 public class CaughtState implements InterfacePlayerState {
 
@@ -20,7 +22,6 @@ public class CaughtState implements InterfacePlayerState {
     public void update(PlayerController player, float deltaTime) {
         if(waitTime<0.2f){
             waitTime+=deltaTime;
-            System.out.println(waitTime);
             return;
         }
         player.changeState(new IdleState(direction));
@@ -28,6 +29,7 @@ public class CaughtState implements InterfacePlayerState {
 
     @Override
     public void exit(PlayerController player) {
+        ItemManager.getInstance().addItemVip("FOOD_fish",new Vector2(player.getPositionInMap()), !player.isFacingRight(), 1);
         System.out.println("Exiting Caught State");
     }
 

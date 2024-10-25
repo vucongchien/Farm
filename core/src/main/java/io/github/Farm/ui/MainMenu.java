@@ -9,46 +9,55 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
-
-
+import io.github.Farm.SoundManager;
+import com.badlogic.gdx.graphics.GL20;
+import io.github.Farm.data.GameSaveManager;
 
 
 public class MainMenu {
+    private static MainMenu instance;
+    public static MainMenu getInstance() {
+        if (instance == null) {
+            instance = new MainMenu();
+        }
+        return instance;
+    }
     private BitmapFont font;
-    private Texture background; // Biến để lưu background
     private String[] menuItems;
     private int selectedIndex;
     private boolean isMenuActive;
     private float maxTextWidth;
     private float totalMenuHeight;
     private float itemSpacing = 10; // Khoảng cách giữa các mục menu
-    private Sound moveSound; // Biến để lưu âm thanh di chuyển
-    private Sound SoundEnter; // Biến để lưu âm thanh enter
     private Animation<TextureRegion> backgroundAnimation; // Animation cho background
-    private boolean isDemoActive; // Biến để kiểm soát trạng thái màn hình demo
-    private Animation<TextureRegion> demoAnimation; // Animation cho demo
     private float elapsedTime;
     private String controlsText; // Text chứa nội dung điều khiển
-    private boolean isControlsActive; // Kiểm soát trạng thái hiển thị của bảng điều khiển
+    private boolean isControlsActive;
+    private boolean isDataFileExists;
 
-
+    private static boolean checkcontinue;
 
     public MainMenu() {
         // Sử dụng FreeTypeFontGenerator để tạo font tùy chỉnh
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 36; // Kích thước chữ lớn hơn
-        parameter.borderWidth = 2; // Độ dày của viền để tạo cảm giác in đậm
+        parameter.borderWidth = 1; // Độ dày của viền để tạo cảm giác in đậm
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
+        isDataFileExists = true;
 
-
-        this.menuItems = new String[] {"Start Game", "Options", "Exit"};
+        if (isDataFileExists) {
+            this.menuItems = new String[] {"Continue", "New Game", "Controls", "Exit"};
+        } else {
+            this.menuItems = new String[] {"Start Game", "Controls", "Exit"};
+        }
         this.selectedIndex = 0;
         this.isMenuActive = true; // Mặc định menu đang hoạt động
         this.maxTextWidth = 0; // Khởi tạo maxTextWidth
@@ -59,7 +68,7 @@ public class MainMenu {
             "R: Water\n" +
             "I: Open Inventory\n" +
             "ESC: Open Settings";
-        this.isControlsActive = false;
+        this.isControlsActive = false; // Mặc định bảng điều khiển không hiển thị
 
         // Tính toán độ rộng lớn nhất của các text và tổng chiều cao của menu
         GlyphLayout layout = new GlyphLayout();
@@ -70,10 +79,6 @@ public class MainMenu {
         }
         // Thêm khoảng cách giữa các mục menu
         totalMenuHeight += (menuItems.length - 1) * itemSpacing; // Tổng chiều cao của menu cộng với khoảng cách giữa các mục
-        // Khởi tạo âm thanh di chuyển
-        moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
-
-
 
         // Tạo một mảng để lưu các frame
         Array<TextureRegion> frames = new Array<>();
@@ -93,23 +98,32 @@ public class MainMenu {
 
     }
 
+    public static boolean isCheckcontinue() {
+        return checkcontinue;
+    }
+
+    public static void setCheckcontinue(boolean checkcontinue) {
+        MainMenu.checkcontinue = checkcontinue;
+    }
+
     public void render(SpriteBatch batch) {
         if (isMenuActive) {
-            batch.begin();
             // Cập nhật thời gian đã trôi qua
             elapsedTime += Gdx.graphics.getDeltaTime();
 
             // Vẽ background hoạt ảnh
+
             TextureRegion currentFrame = backgroundAnimation.getKeyFrame(elapsedTime);
+            batch.begin();
             batch.draw(currentFrame, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
             float screenWidth = Gdx.graphics.getWidth(); // Lấy chiều rộng màn hình
             float screenHeight = Gdx.graphics.getHeight(); // Lấy chiều cao màn hình
+
             float startX = (screenWidth - maxTextWidth) / 2; // Tính toán vị trí x để căn giữa theo chiều ngang
 
             // Tính toán startY sao cho menu căn giữa theo chiều dọc
             float startY = (screenHeight - totalMenuHeight) / 2;
-
             if(!isControlsActive){
                 for (int i = 0; i < menuItems.length; i++) {
                     String text = menuItems[i];
@@ -140,35 +154,59 @@ public class MainMenu {
     }
 
 
-    public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
-            selectedIndex = (selectedIndex + 1) % menuItems.length;
-            moveSound.play(0.05f); // Phát âm thanh ngay lập tức để kiểm tra
-        } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.UP)) {
-            selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
-            moveSound.play(0.05f); // Phát âm thanh ngay lập tức để kiểm tra
-        } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
-            switch (selectedIndex) {
+    public void handleInput(TiledMap map) {
+        if (!isControlsActive) {
+            if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.DOWN)) {
+                selectedIndex = (selectedIndex + 1) % menuItems.length;
+                SoundManager.getInstance().playMoveSound();
+            } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.UP)) {
+                selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
+                SoundManager.getInstance().playMoveSound();
+            } else if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
+                switch (menuItems[selectedIndex]) {
 
-                case 0:
-                    // Start game
-                    isMenuActive = false;
-                    break;
-                case 1:
-                    // Options
-                    isControlsActive = true;
-                    break;
+                    case "Start Game":
+                        // Start game
+                        IntroGame.getInstance().setIntro(true);
 
-                case 2:
-                    // Exit
-                    Gdx.app.exit();
-                    break;
+                        isMenuActive = false;
+                        checkcontinue=false;
+                        break;
+
+                    case "New Game":
+                        IntroGame.getInstance().setIntro(true);
+                        isMenuActive = false;
+
+                        break;
+
+                    case "Continue":
+                        GameSaveManager.getInstance().saveMapData(map);
+                        isMenuActive = false;
+                        checkcontinue=true;
+                        break;
+
+                    case "Controls":
+                        isControlsActive = true;
+                        break;
+                    case "Exit":
+                        Gdx.app.exit();
+                        break;
+                }
             }
         }
         if (isControlsActive && Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             isControlsActive = false;
             isMenuActive = true;
         }
+    }
+    public String getControlsText() {
+        return controlsText;
+    }
+    public boolean isControlsActive(){
+        return isControlsActive;
+    }
+    public void setIsControlsActive(boolean isControlsActive) {
+        this.isControlsActive = isControlsActive;
     }
 
 
@@ -184,15 +222,6 @@ public class MainMenu {
         if (font != null) {
             font.dispose(); // Giải phóng tài nguyên font
         }
-
-        // Giải phóng âm thanh
-        if (moveSound != null) {
-            moveSound.dispose(); // Giải phóng âm thanh di chuyển
-        }
-        if (SoundEnter != null) {
-            SoundEnter.dispose(); // Giải phóng âm thanh enter
-        }
-
         // Giải phóng tài nguyên cho các texture trong animation
         for (TextureRegion frame : backgroundAnimation.getKeyFrames()) {
             if (frame.getTexture() != null) {
