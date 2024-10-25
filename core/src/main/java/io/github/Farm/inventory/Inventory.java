@@ -84,6 +84,15 @@ public class Inventory {
         return null;
     }
 
+    public boolean checkSoLuong(String name,int soluong){
+        for(InventorySlot slot:slots){
+            if(name.equals(slot.getFULL_NAME())){
+                return slot.getQuantity()==soluong;
+            }
+        }
+        return false;
+    }
+
     public boolean dropItem(String Full_Name){
         for(InventorySlot slot:slots){
             if(Full_Name.equals(slot.getFULL_NAME())){
