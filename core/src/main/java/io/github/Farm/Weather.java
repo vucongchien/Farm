@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.Farm.Map.MapManager;
 import io.github.Farm.SoundManager;
+import io.github.Farm.player.PlayerController;
 
 public class Weather {
     private static Weather instance;
@@ -20,6 +22,12 @@ public class Weather {
     private final float minWeatherDuration = 3f; // Thời gian tối thiểu của mỗi thời tiết
     private final float maxWeatherDuration = 5f; // Thời gian tối đa của mỗi thời tiết
     private Texture rainTexture; // Hình ảnh giọt mưa
+    private Texture sunnyIcon;
+    private Texture nightIcon;
+    private Texture rainIcon;
+    private Texture cloudIcon;
+    private Texture darkCloud;
+    private Texture darkRain;
     private final int rainDropCount = 5; // Số giọt mưa
     private Texture cloudTexture; // Hình ảnh đám mây
     private float cloudSpeed = 30f; // Tốc độ di chuyển của mây
@@ -32,7 +40,12 @@ public class Weather {
         this.currentWeather = "Sunny"; // Giá trị mặc định
         this.weatherDuration = getRandomDuration(); // Đặt thời gian ngẫu nhiên cho thời tiết ban đầu
         this.rainTexture = new Texture(Gdx.files.internal("Weather/rain_drops-01.png")); // Tải hình ảnh giọt mưa
-//      this.sunTexture = new Texture(Gdx.files.internal("Weather/Sunny/sunlight.png")); // Tải hình ảnh ánh sáng mặt trời
+        this.sunnyIcon = new Texture(Gdx.files.internal("Weather/sunnyIcon.png"));
+        this.nightIcon = new Texture(Gdx.files.internal("Weather/nightIcon.png"));
+        this.rainIcon = new Texture(Gdx.files.internal("Weather/rainIcon.png"));
+        this.cloudIcon = new Texture(Gdx.files.internal("Weather/cloudIcon.png"));
+        this.darkCloud = new Texture(Gdx.files.internal("Weather/darkCloud.png"));
+        this.darkRain = new Texture(Gdx.files.internal("Weather/darkRain.png"));
         this.cloudTexture = new Texture(Gdx.files.internal("Weather/cloudy.png")); // Tải hình ảnh đám mây
         this.cloudPositions = new float[cloudCount]; // Khởi tạo mảng vị trí mây
         initCloudPositions(); // Thiết lập vị trí đám mây
@@ -90,40 +103,64 @@ public class Weather {
         return minWeatherDuration + (float) Math.random() * (maxWeatherDuration - minWeatherDuration);
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch, PlayerController player) {
         batch.setColor(Color.WHITE); // Đặt màu mặc định
+
+        // Xác định vị trí của icon ở góc trên cùng bên phải
+        float iconX =player.getPosition().x + sunnyIcon.getWidth()*11;
+        float iconY =player.getPosition().y + sunnyIcon.getHeight()*6 - 20; // Cách lề trên 10 pixel
+
 
         switch (currentWeather) {
             case "Sunny":
                 SoundManager.getInstance().stopRainSound();
+                if(night){
+                    batch.draw(nightIcon, iconX, iconY);
+                }else{
+                    batch.draw(sunnyIcon, iconX, iconY);
+                }
                 break;
             case "Rainy":
                 SoundManager.getInstance().playRainSound();
                 if(night){
+                    batch.draw(darkRain, iconX, iconY);
                     batch.setColor(Color.GRAY.r, Color.GRAY.g, Color.GRAY.b, 0.8f);
+                }else{
+                    batch.draw(rainIcon, iconX, iconY);
                 }
                 drawClouds(batch);
-                drawRain(batch);
+                drawRain(batch,player);
                 break;
             case "Cloudy":
                 SoundManager.getInstance().stopRainSound();
+
                 if(timeOfDay > 0.5){
+                    batch.draw(darkCloud, iconX, iconY);
                     batch.setColor(Color.GRAY.r, Color.GRAY.g, Color.GRAY.b, 0.8f); // 0.5f cho độ trong suốt 50%
+                }else{
+                    batch.draw(cloudIcon, iconX, iconY);
                 }
                 drawClouds(batch);
                 break;
         }
 
     }
-    private void drawRain(SpriteBatch batch) {
+    private void drawRain(SpriteBatch batch, PlayerController player) {
         if(night){
-            batch.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, 5.0f); // 0.5f cho độ trong suốt 50%
+            batch.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, 10.0f); // 0.5f cho độ trong suốt 50%
         }else{
             batch.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, 2.5f); // 0.5f cho độ trong suốt 50%
         }
+        float playerX = player.getPosition().x;
+        float playerY = player.getPosition().y;
+
+        // Giới hạn mưa bao phủ một khu vực xung quanh nhân vật với chiều rộng và cao của màn hình
+        float rainAreaWidth = Gdx.graphics.getWidth();
+        float rainAreaHeight = Gdx.graphics.getHeight();
+
         for (int i = 0; i < rainDropCount; i++) {
-            float x = (float) Math.random() * Gdx.graphics.getWidth(); // Giới hạn x
-            float y = (float) Math.random() * Gdx.graphics.getHeight(); // Giới hạn y
+            float x = playerX + (float) Math.random() * rainAreaWidth - rainAreaWidth / 2;
+            float y = playerY + (float) Math.random() * rainAreaHeight - rainAreaHeight / 2;
             batch.draw(rainTexture, x, y);
         }
     }

@@ -181,7 +181,7 @@ public class Main extends ApplicationAdapter {
 
                 Weather.getInstance().update(Gdx.graphics.getDeltaTime());
                 batch.begin();
-                Weather.getInstance().render(batch);
+                Weather.getInstance().render(batch,playerControllerNew);
                 batch.end();
 
                 world.step(1 / 60f, 6, 2);
@@ -218,6 +218,11 @@ public class Main extends ApplicationAdapter {
                     batch.setColor(Color.WHITE);
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
 
+                }
+                if(Weather.getInstance().getNight()){
+                    mapManager.setNightLayerVisible(true);
+                }else{
+                    mapManager.setNightLayerVisible(false);
                 }
                 if(playerControllerNew.isDie()){
                     GameOverScreen.getInstance().setGameOverActive(true);
