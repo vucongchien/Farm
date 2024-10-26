@@ -155,11 +155,10 @@ public class Main extends ApplicationAdapter {
         }
         else {
             if(playerControllerNew==null){
-<<<<<<< HEAD
+                
                 playerControllerNew = new PlayerController(new Vector2(2500, 1700), world, mapInteractionHandler,camera);
-=======
                 playerControllerNew = new PlayerController(new Vector2(2500, 1500), world, mapInteractionHandler,camera);
->>>>>>> ca4edaf6da955b65813690c5c779b4a9ec543955
+
                 playerImageManagerNew = new PlayerImageManager();
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);
