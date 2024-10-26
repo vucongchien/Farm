@@ -227,13 +227,15 @@ public class Main extends ApplicationAdapter {
                 if(playerControllerNew.isDie()){
                     GameOverScreen.getInstance().setGameOverActive(true);
                 }
-                if(Inventory.getInstance().checkSoLuong("FOOD_pumpkin",3)){
+                if(Inventory.getInstance().checkSoLuong("FOOD_pumpkin",10)){
                     WinGame.getInstance().setIsWin(true);
+                    SettingGame.getInstance().clearFile();
                 }
             }
 
         }
     }
+
 
     @Override
     public void dispose() {

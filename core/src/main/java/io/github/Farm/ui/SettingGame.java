@@ -25,6 +25,9 @@ import io.github.Farm.data.*;
 import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.InventorySlot;
 import io.github.Farm.player.PlayerController;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +65,28 @@ public class SettingGame {
         isMusicPlaying = true; // Khởi tạo nhạc đang phát
         SoundManager.getInstance().playGameMusic();
         MainMenu.getInstance().setIsControlsActive(false);
+    }
+    private void saveGameToFile() {
+        String filePath = "data.txt"; // Đường dẫn đến file
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            // Ghi dữ liệu vào file
+            writer.write("Game Saved!");
+            writer.newLine(); // Xuống dòng
+            // Bạn có thể thêm nhiều thông tin hơn nếu cần
+        } catch (IOException e) {
+            e.printStackTrace(); // Xử lý lỗi nếu có
+        }
+    }
+    public void clearFile() {
+        String filePath = "data.txt"; // Đường dẫn đến file
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+            // Không ghi gì vào file, chỉ cần mở và ghi đè lên nội dung cũ
+            writer.write(""); // Ghi chuỗi rỗng để xóa nội dung
+        } catch (IOException e) {
+            e.printStackTrace(); // Xử lý lỗi nếu có
+        }
     }
 
     public boolean isActive() {
@@ -114,7 +139,7 @@ public class SettingGame {
                 GameSaveManager.getInstance().saveInventoryData(gameData.getInventory());
                 GameSaveManager.getInstance().saveAnimalData(gameData.getAnimal());
                 GameSaveManager.getInstance().saveMapData(map);
-
+                saveGameToFile();
                 System.out.println("Game Saved!");
                 break;
             case 1:
@@ -187,7 +212,6 @@ public class SettingGame {
                 float x = playerPosition.x - layout.width / 2;
                 float y = playerPosition.y + layout.height/ 2;
                 font.draw(batch, MainMenu.getInstance().getControlsText(), x, y);
-                System.out.println(MainMenu.getInstance().isControlsActive());
             }
 
             batch.end();

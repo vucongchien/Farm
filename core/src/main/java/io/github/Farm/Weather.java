@@ -2,6 +2,7 @@ package io.github.Farm.weather;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.Farm.Map.MapManager;
@@ -34,9 +35,14 @@ public class Weather {
     private float[] cloudPositions; // Vị trí đám mây trên màn hình
     private final int cloudCount = 3; // Số lượng đám mây
     private boolean night = false;
+    private final float STANDARD_WIDTH = 800f;
+    private final float STANDARD_HEIGHT = 450f;
+    private OrthographicCamera camera;
 
 
     public Weather() {
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.currentWeather = "Sunny"; // Giá trị mặc định
         this.weatherDuration = getRandomDuration(); // Đặt thời gian ngẫu nhiên cho thời tiết ban đầu
         this.rainTexture = new Texture(Gdx.files.internal("Weather/rain_drops-01.png")); // Tải hình ảnh giọt mưa
@@ -106,9 +112,14 @@ public class Weather {
     public void render(SpriteBatch batch, PlayerController player) {
         batch.setColor(Color.WHITE); // Đặt màu mặc định
 
-        // Xác định vị trí của icon ở góc trên cùng bên phải
-        float iconX =player.getPosition().x + sunnyIcon.getWidth()*11;
-        float iconY =player.getPosition().y + sunnyIcon.getHeight()*6 - 20; // Cách lề trên 10 pixel
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float scaleX = screenWidth / STANDARD_WIDTH;
+        float scaleY = screenHeight / STANDARD_HEIGHT;
+
+        // Tính toán vị trí của icon ở góc trên cùng bên phải
+        float iconX = player.getPosition().x + sunnyIcon.getWidth() * scaleX*3.5f;
+        float iconY = player.getPosition().y + sunnyIcon.getHeight()* scaleY*1.75f;
 
 
         switch (currentWeather) {

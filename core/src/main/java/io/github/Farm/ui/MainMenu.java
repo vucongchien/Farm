@@ -27,6 +27,10 @@ import io.github.Farm.data.GameData;
 import io.github.Farm.data.GameSaveManager;
 import io.github.Farm.data.PlayerData;
 import io.github.Farm.player.PlayerController;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 
 public class MainMenu {
@@ -61,10 +65,11 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
-
+        String data = readFromFile();
+    System.out.println(data);
 
 //        isDataFileExists=true;
-        if (isDataFileExists) {
+        if (data.startsWith("Game Saved!")) {
             this.menuItems = new String[] {"Continue", "New Game", "Controls", "Exit"};
         } else {
             this.menuItems = new String[] {"Start Game", "Controls", "Exit"};
@@ -107,6 +112,21 @@ public class MainMenu {
         // Tạo animation với tốc độ 10 frame mỗi giây (có thể điều chỉnh)
         backgroundAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
 
+    }
+    public String readFromFile() {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader("data.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n"); // Thêm dòng mới vào nội dung
+            }
+        } catch (IOException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ nếu có lỗi
+        }
+        return content.toString(); // Trả về nội dung đã đọc từ file
+    }
+    public void setIsDataFileExists(boolean isDataFileExists) {
+        this.isDataFileExists = isDataFileExists;
     }
 
     public static boolean isCheckcontinue() {
@@ -194,9 +214,7 @@ public class MainMenu {
                     case "Continue":
 
 
-                        GameSaveManager.getInstance().saveMapData(map);
-
-
+                        GameSaveManager.getInstance().loadMapData(map);
 
                         isMenuActive = false;
                         checkcontinue=true;
