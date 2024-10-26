@@ -74,7 +74,7 @@ public class Main extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 450);
+        camera.setToOrtho(false, 640, 360);
         world = new World(new Vector2(0, 0), false);
         Gdx.graphics.setWindowedMode(1920, 1080);
 

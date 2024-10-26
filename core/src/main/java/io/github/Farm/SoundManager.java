@@ -41,6 +41,7 @@ public class SoundManager implements Disposable {
         inTroGame1 = Gdx.audio.newMusic(Gdx.files.internal("soundgame/introGAME1.mp3"));
         gameOver = Gdx.audio.newMusic(Gdx.files.internal("soundgame/game_over_1.mp3"));
         endGame = Gdx.audio.newMusic(Gdx.files.internal("soundgame/dragonballGT.mp3"));
+
     }
 
     public void playMoveSound(){
@@ -49,7 +50,7 @@ public class SoundManager implements Disposable {
     public void playGameMusic(){
         gameMusic.play();
         gameMusic.setLooping(true);
-        gameMusic.setVolume(0f);
+        gameMusic.setVolume(0.5f);
     }
     public void pauseGameMusic(){
         gameMusic.pause();
