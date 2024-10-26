@@ -74,7 +74,7 @@ public class Main extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 450);
+        camera.setToOrtho(false, 600, 350);
         world = new World(new Vector2(0, 0), false);
         Gdx.graphics.setWindowedMode(1920, 1080);
 
@@ -111,6 +111,7 @@ public class Main extends ApplicationAdapter {
         GameOverScreen.getInstance().handleInput();
 
         if(WinGame.getInstance().isWin()){
+            camera.setToOrtho(false,800,450);
             batch.setColor(Color.WHITE);
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

@@ -62,7 +62,7 @@ public class WinGame {
         // Khởi tạo font bằng FreeTypeFontGenerator
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 50;
+        parameter.size = 40;
         parameter.borderWidth = 1.5f;
         parameter.borderColor = Color.BLACK;
         font = generator.generateFont(parameter);
@@ -71,7 +71,7 @@ public class WinGame {
 
         FreeTypeFontGenerator smallGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font_ingame/KaushanScript-Regular.ttf"));
         FreeTypeFontParameter smallParameter = new FreeTypeFontParameter();
-        smallParameter.size = 23; // Kích thước nhỏ hơn cho tiêu đề và tên thành viên\
+        smallParameter.size = 15; // Kích thước nhỏ hơn cho tiêu đề và tên thành viên\
         smallParameter.borderWidth = 0.5f;
         smallParameter.borderColor = Color.YELLOW;
         font2 = smallGenerator.generateFont(smallParameter);
@@ -90,12 +90,12 @@ public class WinGame {
             TextureRegion currentFrame = backgroundAnimation.getKeyFrame(elapsedTime);
 
             // Tính toán vị trí hiển thị của background animation
-            float x = playerPosition.x - Gdx.graphics.getWidth() / 4; // Điều chỉnh theo vị trí nhân vật
-            float y = playerPosition.y - Gdx.graphics.getHeight() / 4; // Điều chỉnh theo vị trí nhân vật
+            float x = playerPosition.x -300; // Điều chỉnh theo vị trí nhân vật
+            float y = playerPosition.y -175; // Điều chỉnh theo vị trí nhân vật
 
             // Kích thước mới cho khung hình nhỏ hơn
-            float width = Gdx.graphics.getWidth() / 2;  // Đặt chiều rộng mới
-            float height = Gdx.graphics.getHeight() / 2; // Đặt chiều cao mới
+            float width = 600;  // Đặt chiều rộng mới
+            float height = 350; // Đặt chiều cao mới
 
             // Vẽ animation ở vị trí tính toán với kích thước mới
             batch.draw(currentFrame, x, y, width, height);
@@ -115,11 +115,11 @@ public class WinGame {
             Color color = new Color(red, green, blue, 1);
             font.setColor(color);
 
-            float textY = playerPosition.y - layout.height + winTimer * (Gdx.graphics.getHeight() / winDuration);
-            float textX = playerPosition.x - layout.width / 2 - layout.width / 1.4f;
+            float textY = playerPosition.y +winTimer * (1080/winDuration);
+            float textX = playerPosition.x-290;
 
             // Dừng lại khi tới một khoảng cách nhất định
-            float targetY = playerPosition.y + Gdx.graphics.getHeight() / 4 - 50;
+            float targetY = playerPosition.y + Gdx.graphics.getHeight() / 4 - 100;
             if (textY >= targetY) {
                 textY = targetY;  // Dừng lại tại vị trí này
             }
@@ -129,20 +129,20 @@ public class WinGame {
 
             if(textY == targetY){
                 // Vẽ tiêu đề và tên thành viên
-                float titleY = textY - 100; // Dịch xuống dưới để hiển thị tiêu đề
+                float titleY = textY - 70; // Dịch xuống dưới để hiển thị tiêu đề
                 layout.setText(font2, titleText);
-                float titleTextX = playerPosition.x - layout.width / 2 - 230; // Điều chỉnh vị trí x phù hợp
+                float titleTextX = playerPosition.x - layout.width / 2 - 150; // Điều chỉnh vị trí x phù hợp
                 font2.draw(batch, layout, titleTextX, titleY);
 
                 float memberY = titleY - 30; // Dịch xuống dưới để hiển thị tiêu đề thành viên
                 layout.setText(font2, memberText);
-                float memberTextX = playerPosition.x - layout.width / 2 - 230; // Điều chỉnh vị trí x phù hợp
+                float memberTextX = playerPosition.x - layout.width / 2 - 150; // Điều chỉnh vị trí x phù hợp
                 font2.draw(batch, layout, memberTextX, memberY);
 
                 // Vẽ tên từng thành viên
                 for (int i = 0; i < members.length; i++) {
                     layout.setText(font2, members[i]);
-                    float individualTextX = playerPosition.x - layout.width / 2 - 230; // Điều chỉnh vị trí x phù hợp
+                    float individualTextX = playerPosition.x - layout.width / 2 - 150; // Điều chỉnh vị trí x phù hợp
                     float individualY = memberY - (i + 1) * 30; // Dịch xuống cho từng thành viên
                     font2.draw(batch, layout, individualTextX, individualY);
                 }

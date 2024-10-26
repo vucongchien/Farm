@@ -237,7 +237,6 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void updateExpress(){
-
         if(stamina<=0){
             expressionManager.setExpression(Expression.STRESS);
         }else{

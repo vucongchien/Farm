@@ -30,7 +30,7 @@ public class HammerState implements InterfacePlayerState{
     }
 
     public void hammer(PlayerController player){
-        player.setStamina(player.getStamina()-1);
+        player.setStamina(Math.max(player.getStamina()-1,0 ));
     }
 
     @Override
