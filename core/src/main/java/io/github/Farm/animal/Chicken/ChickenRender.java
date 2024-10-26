@@ -23,7 +23,7 @@ public class ChickenRender extends Pet implements RenderableEntity {
         super(location, hungry,100);
         imageManager = new ChickenImageManager();
         setcrencurrentState(PetState.IDLE_LEFT);
-        settargetLocation(randomlocation(800,950,850,950));
+        settargetLocation(randomlocation(2400,2550,1300,1400));
         setBox(new Rectangle(location().x-10f , location().y-10f , 10, 10));
     }
 

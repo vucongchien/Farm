@@ -22,11 +22,12 @@ public class Buffalo extends Pet implements RenderableEntity {
     private BuffaloImageManager imageManager;
     private Animation<TextureRegion> currentAnimation;
 
+
     public Buffalo(Vector2 location, long hungry) {
         super(location, hungry,100);
         imageManager = new BuffaloImageManager();
         setcrencurrentState(PetState.IDLE_LEFT);
-        settargetLocation(randomlocation(500,650,950,1050));
+        settargetLocation(randomlocation(2200,2350,1500,1600));
         setBox(new Rectangle(location().x , location().y , 15, 10));
     }
 
@@ -87,4 +88,5 @@ public class Buffalo extends Pet implements RenderableEntity {
             }
         }
     }
+
 }

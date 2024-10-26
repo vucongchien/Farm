@@ -29,11 +29,9 @@ public class ChickenManager {
     }
 
     public ChickenManager(){
+        chickenManager =new ArrayList<>();
         if(MainMenu.isCheckcontinue()){
-            chickenManager =new ArrayList<>();
             readChickeManagernData(chickenManager);
-        }else {
-            chickenManager = new ArrayList<>();
         }
     }
 
@@ -43,7 +41,7 @@ public class ChickenManager {
                 breedingTime = TimeUtils.millis();
             }
             if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-                chickenManager.add(new ChickenRender(new Vector2(850,1050),100));
+                chickenManager.add(new ChickenRender(new Vector2(2400,1300),100));
                 breedingTime = 0;
             }
         }
@@ -77,7 +75,7 @@ public class ChickenManager {
                     chicken.collide(chicken,chicken1);
                 }
             }
-            chicken.ativate(chicken,800,950,850,950);
+            chicken.ativate(chicken,2400,2550,1200,1300);
             chicken.update(Gdx.graphics.getDeltaTime());
         }
     }

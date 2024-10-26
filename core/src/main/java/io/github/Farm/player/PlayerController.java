@@ -60,19 +60,12 @@ public class PlayerController implements Collider, Disposable {
 
 
     public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
-        if(MainMenu.isCheckcontinue()){
-            System.out.println("da doc nha may");
-            System.out.println(MainMenu.isCheckcontinue());
-            this.heath = new Heath(100);
-            readPlayerData(this.getHeath(),startPosition);
-            this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
-            this.body = createBody(startPosition, world);
-
-        }else {
-            this.heath = new Heath(100);
-            this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
-            this.body = createBody(startPosition, world);
+        this.heath = new Heath(100);
+        if(MainMenu.isCheckcontinue()) {
+            readPlayerData(this.getHeath(), startPosition);
         }
+        this.positionInMap = new Vector2((int) (startPosition.x / 16), (int) (startPosition.y / 16));
+        this.body = createBody(startPosition, world);
         this.speed = 100f;
         this.inputHandler = new InputHandler(this);
         this.collisionHandler = new CollisionHandler(mapInteractionHandler, this);
@@ -274,7 +267,10 @@ public class PlayerController implements Collider, Disposable {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.location().cpy().scl(1/16f),1);
                     buffalo.setCheckeating(true);
-                    buffalo.getmau().damaged(20);
+                    if(buffalo.gethungry()<=80) {
+                        buffalo.recoverhungry(20);
+                    }
+                    System.out.println(buffalo.gethungry());
                 }
             }
 
@@ -285,7 +281,9 @@ public class PlayerController implements Collider, Disposable {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",pig.location().cpy().scl(1/16f),1);
                     pig.setCheckeating(true);
-                    pig.getmau().damaged(20);
+                    if(pig.gethungry()<=80) {
+                        pig.recoverhungry(20);
+                    }
                 }
             }
 
@@ -296,7 +294,9 @@ public class PlayerController implements Collider, Disposable {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
                     chicken.setCheckeating(true);
-                    chicken.getmau().damaged(20);
+                    if(chicken.gethungry()<=80) {
+                        chicken.recoverhungry(20);
+                    }
                 }
             }
         }

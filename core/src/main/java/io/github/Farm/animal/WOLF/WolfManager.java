@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.Farm.animal.PetManager;
 import io.github.Farm.animal.PetState;
+import io.github.Farm.data.AnimalData;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.ui.MainMenu;
 
@@ -42,20 +43,18 @@ public class WolfManager {
     private PetState currentState;
     private long timeacttacked;
     private final String link="animalData.json";
+    private AnimalData a;
 
 
 
     public WolfManager() {
+        wolfmanager = new ArrayList<>();
+        storagewolfmanager = new ArrayList<>();
+        home =new Vector2(3250, 1397);
         if(MainMenu.isCheckcontinue()){
-            System.out.println("yessir");
-            wolfmanager = new ArrayList<>();
-            storagewolfmanager = new ArrayList<>();
-            home =new Vector2(850,850);
+
             readWolfManagerData(storagewolfmanager,wolfmanager);
         }else {
-            wolfmanager = new ArrayList<>();
-            storagewolfmanager = new ArrayList<>();
-            home = new Vector2(850, 850);
             for (int i = 0; i < 5; i++) {
                 radius = ThreadLocalRandom.current().nextFloat(20, 40);
                 angle = (float) Math.toRadians(ThreadLocalRandom.current().nextFloat(-90, 90));
@@ -243,7 +242,7 @@ public class WolfManager {
                     if (wolfRender.getlocation().x > playerController.getPosition().x) {
                         if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
                             wolfRender.setCrencurrentState(PetState.ATTACK_LEFT);
-                            wolfRender.setKill(true);
+                            //wolfRender.setKill(true);
                             if (wolfRender.getTimeActack() < 0.32f) {
                                 wolfRender.setTimeActack(wolfRender.getTimeActack() + Gdx.graphics.getDeltaTime());
                             } else {
@@ -257,13 +256,13 @@ public class WolfManager {
                             }
                         } else {
                             movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.021f);
-                            wolfRender.setKill(false);
+                            //wolfRender.setKill(false);
                             wolfRender.recoverycooldown();
                         }
                     } else {
                         if (Math.abs(wolfRender.getlocation().x - playerController.getPosition().x) <= 10f && Math.abs(wolfRender.getlocation().y - playerController.getPosition().y) <= 10f) {
                             wolfRender.setCrencurrentState(PetState.ATTACK_RIGHT);
-                            wolfRender.setKill(true);
+                            //wolfRender.setKill(true);
                             if (wolfRender.getTimeActack() < 0.32f) {
                                 wolfRender.setTimeActack(wolfRender.getTimeActack() + Gdx.graphics.getDeltaTime());
                             } else {
@@ -274,7 +273,7 @@ public class WolfManager {
                                 wolfRender.setcooldown();
                             }
                         } else {
-                            wolfRender.setKill(false);
+                            //wolfRender.setKill(false);
                             movelocation(wolfRender, playerController.getPosition(), 10f, 10f, 0.021f);
                             wolfRender.recoverycooldown();
                         }
