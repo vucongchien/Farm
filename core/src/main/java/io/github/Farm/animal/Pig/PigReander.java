@@ -24,7 +24,7 @@ public class PigReander extends Pet implements RenderableEntity {
         super(location, hungry,100);
         imageManager = new PigImageManager();
         setcrencurrentState(PetState.IDLE_LEFT);
-        settargetLocation(randomlocation(300,450,850,950));
+        settargetLocation(randomlocation(2100,2200,1300,1400));
         setBox(new Rectangle(location().x , location().y , 20, 15));
     }
 

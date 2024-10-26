@@ -237,7 +237,6 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void updateExpress(){
-
         if(stamina<=0){
             expressionManager.setExpression(Expression.STRESS);
         }else{
@@ -278,7 +277,10 @@ public class PlayerController implements Collider, Disposable {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.location().cpy().scl(1/16f),1);
                     buffalo.setCheckeating(true);
-
+                    if(buffalo.gethungry()<=80) {
+                        buffalo.recoverhungry(20);
+                    }
+                    System.out.println(buffalo.gethungry());
                 }
             }
 
@@ -289,7 +291,9 @@ public class PlayerController implements Collider, Disposable {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",pig.location().cpy().scl(1/16f),1);
                     pig.setCheckeating(true);
-                    pig.getmau().damaged(20);
+                    if(pig.gethungry()<=80) {
+                        pig.recoverhungry(20);
+                    }
                 }
             }
 
@@ -300,7 +304,9 @@ public class PlayerController implements Collider, Disposable {
                 if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                     ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
                     chicken.setCheckeating(true);
-                    chicken.getmau().damaged(20);
+                    if(chicken.gethungry()<=80) {
+                        chicken.recoverhungry(20);
+                    }
                 }
             }
         }

@@ -124,7 +124,7 @@ public class MaterialsRender implements RenderableEntity,Collider{
         switch (materialType.toString()){
             case "tree":
                 drawX-=(float) currentFrame.getTexture().getWidth()/8;
-                drawY-=-(float)currentFrame.getTexture().getHeight()/4;
+                drawY-=(float)currentFrame.getTexture().getHeight()/4;
                 break;
             case"rock":
                 drawX-=16;

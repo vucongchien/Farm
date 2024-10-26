@@ -125,6 +125,8 @@ public abstract class Pet implements Collider {
         hungry -= a;
     }
 
+    public void recoverhungry(long a){hungry+=a;}
+
     public long gethungry() {
         return hungry;
     }
@@ -156,13 +158,6 @@ public abstract class Pet implements Collider {
     public Vector2 randomlocation(int x1,int x2,int y1,int y2) {
         int randomIntx;
         int randomInty;
-//        if(startpoint==null){
-//             randomIntx = ThreadLocalRandom.current().nextInt(0,1920);
-//             randomInty= ThreadLocalRandom.current().nextInt(0,1080);
-//        }else {
-//             randomIntx = ThreadLocalRandom.current().nextInt((int)(getStartpoint().x),(int)(getStartpoint().x+100));
-//             randomInty = ThreadLocalRandom.current().nextInt((int)(getStartpoint().y),(int)(getStartpoint().y+100));
-        //}
         randomIntx = ThreadLocalRandom.current().nextInt(x1, x2);
         randomInty = ThreadLocalRandom.current().nextInt(y1, y2);
         return new Vector2(randomIntx, randomInty);
@@ -416,7 +411,7 @@ public abstract class Pet implements Collider {
                     if (buffalo.getIsStopped()) {
                         if (TimeUtils.timeSinceMillis(buffalo.getCollisionStopTime()) >= 5000) {
                             buffalo.setIsStopped(false);
-                            buffalo.settargetLocation(buffalo.randomlocation(x1,x2,y1,y2));
+                                buffalo.settargetLocation(buffalo.randomlocation(x1, x2, y1, y2));
                         } else {
                             if (buffalo.getLeft()) {
                                 buffalo.setcrencurrentState(PetState.IDLE_LEFT);
@@ -569,7 +564,7 @@ public abstract class Pet implements Collider {
     }
 
 
-   
+
     public abstract Rectangle getCollider();
 
     public abstract void onCollision(Collider other);
