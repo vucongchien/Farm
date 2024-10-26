@@ -9,7 +9,7 @@ import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
-import io.github.Farm.Trees.TreeManager;
+import io.github.Farm.Materials.MaterialManager;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.Pig.PigManager;
@@ -70,7 +70,7 @@ public class GameRenderer {
 
         renderableEntities.addAll(ChickenManager.getChickenmanager().getChickenManager());
 
-        renderableEntities.addAll(TreeManager.getInstance().getTrees());
+        renderableEntities.addAll(MaterialManager.getInstance().getTrees());
 
        // renderableEntities.add(new MouseRener(new Vector2(850,1050)));
 

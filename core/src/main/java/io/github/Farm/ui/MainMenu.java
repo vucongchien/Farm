@@ -2,6 +2,7 @@ package io.github.Farm.ui;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,11 +13,17 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import io.github.Farm.Map.MapInteractionHandler;
+import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantType;
 import io.github.Farm.SoundManager;
 import com.badlogic.gdx.graphics.GL20;
 import io.github.Farm.data.GameSaveManager;
+import io.github.Farm.data.PlayerData;
+import io.github.Farm.player.PlayerController;
 
 
 public class MainMenu {
@@ -51,8 +58,9 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
-        isDataFileExists = true;
 
+
+//        isDataFileExists=true;
         if (isDataFileExists) {
             this.menuItems = new String[] {"Continue", "New Game", "Controls", "Exit"};
         } else {
@@ -166,21 +174,27 @@ public class MainMenu {
                 switch (menuItems[selectedIndex]) {
 
                     case "Start Game":
-                        // Start game
                         IntroGame.getInstance().setIntro(true);
+
 
                         isMenuActive = false;
                         checkcontinue=false;
                         break;
 
                     case "New Game":
+
                         IntroGame.getInstance().setIntro(true);
                         isMenuActive = false;
-
+                        checkcontinue=false;
                         break;
 
                     case "Continue":
+
+
                         GameSaveManager.getInstance().saveMapData(map);
+
+
+
                         isMenuActive = false;
                         checkcontinue=true;
                         break;
@@ -199,6 +213,21 @@ public class MainMenu {
             isMenuActive = true;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public String getControlsText() {
         return controlsText;
     }
@@ -228,6 +257,11 @@ public class MainMenu {
                 frame.getTexture().dispose(); // Giải phóng texture nếu không null
             }
         }
+    }
+
+    public void newPlantData(){
+        PlantManager.getInstance().addPlantFromInventory(new Vector2(125,95), PlantType.carrot);
+        PlantManager.getInstance().addPlantFromInventory(new Vector2(126,95),PlantType.cauliflower);
     }
 
 }

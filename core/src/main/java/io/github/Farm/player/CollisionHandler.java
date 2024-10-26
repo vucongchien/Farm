@@ -3,24 +3,18 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Timer;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.Trees.TreeManager;
-import io.github.Farm.animal.Buffalo.Buffalo;
-import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Pet;
 import io.github.Farm.animal.PetManager;
-import io.github.Farm.inventory.Inventory;
 import io.github.Farm.inventory.Item;
 import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.ui.Other.SelectionBox;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.TimerTask;
 
 /// chiu trach nhiem tuong tac giua nhan vat voi map ///
 public class CollisionHandler implements Collider {

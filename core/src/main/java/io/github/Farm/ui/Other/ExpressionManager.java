@@ -32,7 +32,7 @@ public class ExpressionManager {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(currentExpression.getTextureRegion(), position.x+5, position.y+10+ dropPositionY,5,7);
+        batch.draw(currentExpression.getTextureRegion(), position.x+5, position.y+10+ dropPositionY,currentExpression.getTextureRegion().getRegionWidth(),currentExpression.getTextureRegion().getRegionHeight());
         batch.end();
 
         if (timeElapsed > dropDuration) {

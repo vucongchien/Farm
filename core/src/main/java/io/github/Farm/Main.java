@@ -19,10 +19,9 @@ import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Map.MapManager;
 import io.github.Farm.Map.TiledObject;
 import io.github.Farm.Plants.PlantManager;
-import io.github.Farm.Plants.PlantType;
 import io.github.Farm.Renderer.GameRenderer;
-import io.github.Farm.Trees.TreeManager;
-import io.github.Farm.Trees.TreeType;
+import io.github.Farm.Materials.MaterialManager;
+import io.github.Farm.Materials.MaterialType;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.PetManager;
@@ -83,7 +82,7 @@ public class Main extends ApplicationAdapter {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         mapManager = new MapManager(map);
         mapInteractionHandler = new MapInteractionHandler(mapManager);
-//        googleMap=new GoogleMap(map);
+
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
@@ -95,7 +94,8 @@ public class Main extends ApplicationAdapter {
         gameData.setInventory(GameSaveManager.getInstance().loadInventoryData());
         gameData.setAnimal(GameSaveManager.getInstance().loadAnimalData());
 
-        TreeManager.getInstance().addTree(world, TreeType.tree,new Vector2(2300,1500));
+        MaterialManager.getInstance().add(world, MaterialType.tree,new Vector2(2300,1500));
+
 
 
         SelectionBox.setCamera(camera);
@@ -129,7 +129,6 @@ public class Main extends ApplicationAdapter {
             SoundManager.getInstance().playGameOver();
             GameOverScreen.getInstance().render(batch, playerControllerNew.getPosition());
         }
-        // Kiểm tra xem menu có đang hoạt động không
         else if (MainMenu.getInstance().isMenuActive()) {
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -155,16 +154,14 @@ public class Main extends ApplicationAdapter {
         }
         else {
             if(playerControllerNew==null){
-                playerControllerNew = new PlayerController(new Vector2(2500, 1500), world, mapInteractionHandler,camera);
+                playerControllerNew = new PlayerController(new Vector2(3817, 954), world, mapInteractionHandler,camera);
                 playerImageManagerNew = new PlayerImageManager();
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);
-                System.out.println("1");
             }
 
 
             SettingGame.getInstance().handleInput(gameData,playerControllerNew,map);
-            // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (SettingGame.getInstance().isActive()) {
                 batch.setColor(Color.WHITE);
                 Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
@@ -198,8 +195,8 @@ public class Main extends ApplicationAdapter {
                 shapeRenderer.setColor(Color.RED);
                 Rectangle collider = playerControllerNew.getCollider();
                 shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
-                if(TreeManager.getInstance().getTrees().get(0)!=null) {
-                    Rectangle a = TreeManager.getInstance().getTrees().get(0).getRectangle();
+                if(MaterialManager.getInstance().getTrees().get(0)!=null) {
+                    Rectangle a = MaterialManager.getInstance().getTrees().get(0).getRectangle();
                     shapeRenderer.rect(a.x, a.y, a.width, a.height);
                 }
                 shapeRenderer.end();

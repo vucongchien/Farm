@@ -6,15 +6,17 @@ public class PlayerData {
     private float posX;
     private float posY;
     private float health;
+    private float stamina;
 
     public PlayerData() {
 
     }
 
-    public PlayerData(float posX, float posY, float health) {
+    public PlayerData(float posX, float posY, float health,float stamina) {
         this.posX = posX;
         this.posY = posY;
         this.health = health;
+        this.stamina=stamina;
     }
 
     public Vector2 getPosition() {
@@ -32,6 +34,14 @@ public class PlayerData {
 
     public void setHealth(float health) {
         this.health = health;
+    }
+
+    public float getStamina() {
+        return stamina;
+    }
+
+    public void setStamina(float stamina) {
+        this.stamina = stamina;
     }
 }
 

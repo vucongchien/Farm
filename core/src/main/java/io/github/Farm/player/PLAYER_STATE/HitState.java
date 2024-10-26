@@ -1,9 +1,8 @@
 package io.github.Farm.player.PLAYER_STATE;
 
-import com.badlogic.gdx.Gdx;
 import io.github.Farm.Plants.PlantManager;
-import io.github.Farm.Trees.TreeManager;
-import io.github.Farm.Trees.TreeRender;
+import io.github.Farm.Materials.MaterialManager;
+import io.github.Farm.Materials.MaterialsRender;
 import io.github.Farm.animal.WOLF.WolfManager;
 import io.github.Farm.animal.WOLF.WolfRender;
 import io.github.Farm.player.PlayerController;
@@ -51,9 +50,9 @@ public class HitState implements InterfacePlayerState {
             }
         }
 
-        Iterator<TreeRender> iteratorTrees= TreeManager.getInstance().getTrees().iterator();
+        Iterator<MaterialsRender> iteratorTrees= MaterialManager.getInstance().getTrees().iterator();
         while(iteratorTrees.hasNext()){
-            TreeRender tree=iteratorTrees.next();
+            MaterialsRender tree=iteratorTrees.next();
             if(player.getCollider().overlaps(tree.getCollider())){
                 tree.onCollision(player);
             }
