@@ -161,25 +161,11 @@ public class WinGame {
 
     }
 
-    public void handleInput() {
-        // Nhấn phím P để bắt đầu demo Win Game
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.P)) {
-            if (SoundManager.getInstance().isInTroGamePlaying()) {
-                SoundManager.getInstance().stopInTroGame();
-            }
-            if (SoundManager.getInstance().isInTroGame1Playing()) {
-                SoundManager.getInstance().stopInTroGame1();
-            }
-            SoundManager.getInstance().stopGameMusic();
-            SoundManager.getInstance().playEndGame();
-            winTimer = 0f; // Đặt lại bộ đếm thời gian
-            elapsedTime = 0f; // Đặt lại thời gian đã trôi qua
-            isWin = true;
-        }
-    }
-
     public boolean isWin() {
         return isWin;
+    }
+    public void setIsWin(boolean isWin) {
+        this.isWin = isWin;
     }
     private void exitWinGame() {
         System.out.println("Thoát khỏi màn hình Win Game.");

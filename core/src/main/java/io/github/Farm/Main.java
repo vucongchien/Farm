@@ -114,6 +114,8 @@ public class Main extends ApplicationAdapter {
             batch.setColor(Color.WHITE);
             Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            SoundManager.getInstance().stopGameMusic();
+            SoundManager.getInstance().playEndGame();
             WinGame.getInstance().render(batch,playerControllerNew.getPosition());
         }
         else if (GameOverScreen.getInstance().isGameOverActive()) {
@@ -123,6 +125,8 @@ public class Main extends ApplicationAdapter {
             mapRenderer.setView(camera);
             mapRenderer.render();
             mapManager.setNightLayerVisible(true);
+            SoundManager.getInstance().stopGameMusic();
+            SoundManager.getInstance().playGameOver();
             GameOverScreen.getInstance().render(batch, playerControllerNew.getPosition());
         }
         // Kiểm tra xem menu có đang hoạt động không
@@ -151,7 +155,11 @@ public class Main extends ApplicationAdapter {
         }
         else {
             if(playerControllerNew==null){
+<<<<<<< HEAD
                 playerControllerNew = new PlayerController(new Vector2(2500, 1700), world, mapInteractionHandler,camera);
+=======
+                playerControllerNew = new PlayerController(new Vector2(2500, 1500), world, mapInteractionHandler,camera);
+>>>>>>> ca4edaf6da955b65813690c5c779b4a9ec543955
                 playerImageManagerNew = new PlayerImageManager();
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);
@@ -160,7 +168,6 @@ public class Main extends ApplicationAdapter {
 
 
             SettingGame.getInstance().handleInput(gameData,playerControllerNew,map);
-            WinGame.getInstance().handleInput();
             // Nếu menu không hoạt động, kiểm tra xem setting có đang hoạt động không
             if (SettingGame.getInstance().isActive()) {
                 batch.setColor(Color.WHITE);
@@ -218,6 +225,12 @@ public class Main extends ApplicationAdapter {
                     batch.setColor(Color.WHITE);
                     Inventory.getInstance().draw(batch, camera, playerControllerNew.getPosition());
 
+                }
+                if(playerControllerNew.isDie()){
+                    GameOverScreen.getInstance().setGameOverActive(true);
+                }
+                if(Inventory.getInstance().checkSoLuong("FOOD_pumpkin",3)){
+                    WinGame.getInstance().setIsWin(true);
                 }
             }
 

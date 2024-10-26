@@ -32,6 +32,7 @@ public class Item implements RenderableEntity, Collider, Disposable {
         this.name = name;
         this.position=position;
         this.endPosition=position;
+        this.remainingTime=2;
 
         velocity=new Vector2(1,1);
 

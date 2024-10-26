@@ -27,15 +27,15 @@
         "Map.tmx": {
             "expandedGroupLayers": [
                 31,
-                29,
                 16,
+                29,
                 20
             ],
-            "scale": 2,
+            "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 2477,
-                "y": 1388.25
+                "x": 2478,
+                "y": 1665
             }
         },
         "Other.tsx": {
