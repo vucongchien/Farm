@@ -29,11 +29,9 @@ public class PigManager {
     }
 
     public PigManager(){
+        pigManager =new ArrayList<>();
         if(MainMenu.isCheckcontinue()){
-            pigManager =new ArrayList<>();
             readPigManagernData(pigManager);
-        }else {
-            pigManager = new ArrayList<>();
         }
     }
 
@@ -43,7 +41,7 @@ public class PigManager {
                 breedingTime = TimeUtils.millis();
             }
             if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-                pigManager.add(new PigReander(new Vector2(350,1050),100));
+                pigManager.add(new PigReander(new Vector2(2150,1300),100));
                 breedingTime = 0;
             }
         }
@@ -78,7 +76,7 @@ public class PigManager {
                     pig.collide(pig,pig1);
                 }
             }
-            pig.ativate(pig,300,450,850,950);
+            pig.ativate(pig,2100,2200,1300,1400);
             pig.update(Gdx.graphics.getDeltaTime());
         }
     }

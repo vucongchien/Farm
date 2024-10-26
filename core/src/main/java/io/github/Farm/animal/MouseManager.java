@@ -25,7 +25,6 @@ public class MouseManager {
     }
 
 
-
     public void checkquantity(){
         if(!PlantManager.getInstance().getListPlants().isEmpty()){
 

@@ -18,6 +18,7 @@ public class BuffaloManager  {
     private ArrayList<Buffalo> buffaloManager;
     private long breedingTime;
     private long hptime=0;
+    private Vector2 startpoint;
     private final String link="animalData.json";
 
     private static BuffaloManager buffalomanager;
@@ -30,12 +31,9 @@ public class BuffaloManager  {
     }
 
     public BuffaloManager(){
+        buffaloManager=new ArrayList<>();
         if(MainMenu.isCheckcontinue()){
-            System.out.println("doc oke");
-            buffaloManager=new ArrayList<>();
             readBuffaloData(buffaloManager);
-        }else {
-            buffaloManager = new ArrayList<>();
         }
     }
 
@@ -45,7 +43,7 @@ public class BuffaloManager  {
                 breedingTime = TimeUtils.millis();
             }
             if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-                buffaloManager.add(new Buffalo(new Vector2(2300,1500),100));
+                buffaloManager.add(new Buffalo(new Vector2(2300,1300),100));
                 breedingTime = 0;
             }
         }
@@ -64,7 +62,9 @@ public class BuffaloManager  {
             }
             if(TimeUtils.timeSinceMillis(hptime) > 5000){
                 for(Buffalo buffalo:buffaloManager) {
-                    buffalo.sethungry(10);
+                    if(buffalo.gethungry()>=10) {
+                        buffalo.sethungry(10);
+                    }
                 }
                 hptime=0;
             }
@@ -80,7 +80,11 @@ public class BuffaloManager  {
                     buffalo.collide(buffalo,buffalo1);
                 }
             }
-            buffalo.ativate(buffalo,500,650,950,1050);
+            if(startpoint==null) {
+                buffalo.ativate(buffalo, 2200, 2350, 1500, 1600);
+            }else{
+                buffalo.ativate(buffalo,(int)startpoint.x,(int)startpoint.cpy().x+100,(int)startpoint.y,(int)startpoint.cpy().y+100);
+            }
             buffalo.update(Gdx.graphics.getDeltaTime());
         }
     }
@@ -116,4 +120,11 @@ public class BuffaloManager  {
         }
     }
 
+    public Vector2 getStartpoint() {
+        return startpoint;
+    }
+
+    public void setStartpoint(Vector2 startpoint) {
+        this.startpoint = startpoint;
+    }
 }
