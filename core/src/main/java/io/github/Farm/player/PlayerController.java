@@ -114,10 +114,6 @@ public class PlayerController implements Collider, Disposable {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             Inventory.getInstance().setOpened();
-            Inventory.getInstance().addItem("SEED_pumpkin", 1);
-            Inventory.getInstance().addItem("FOOD_pumpkin", 1);
-            Inventory.getInstance().addItem("SEED_kale", 1);
-            Inventory.getInstance().addItem("SEED_carrot", 1);
         }
 
         updateMovement(deltaTime);
@@ -274,13 +270,12 @@ public class PlayerController implements Collider, Disposable {
             Buffalo buffalo = (Buffalo) other;
             selectionBox.ren(buffalo.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!buffalo.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_wheat")) {
-                    ItemManager.getInstance().addItem("FOOD_wheat",buffalo.location().cpy().scl(1/16f),1);
-                    buffalo.setCheckeating(true);
-                    if(buffalo.gethungry()<=80) {
+                if(buffalo.gethungry()<=80) {
+                    if(Inventory.getInstance().dropItem("FOOD_wheat")) {
+                        ItemManager.getInstance().addItem("FOOD_wheat",buffalo.location().cpy().scl(1/16f),1);
+                        buffalo.setCheckeating(true);
                         buffalo.recoverhungry(20);
                     }
-                    System.out.println(buffalo.gethungry());
                 }
             }
 
@@ -288,10 +283,10 @@ public class PlayerController implements Collider, Disposable {
             PigReander pig = (PigReander) other;
             selectionBox.ren(pig.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!pig.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_kale")) {
-                    ItemManager.getInstance().addItem("FOOD_kale",pig.location().cpy().scl(1/16f),1);
-                    pig.setCheckeating(true);
-                    if(pig.gethungry()<=50) {
+                if(pig.gethungry()<=50) {
+                    if(Inventory.getInstance().dropItem("FOOD_kale")) {
+                        ItemManager.getInstance().addItem("FOOD_kale",pig.location().cpy().scl(1/16f),1);
+                        pig.setCheckeating(true);
                         pig.recoverhungry(20);
                     }
                 }
