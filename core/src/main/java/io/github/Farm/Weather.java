@@ -20,8 +20,8 @@ public class Weather {
     private String currentWeather;
     private float timeOfDay;
     private float weatherDuration; // Thời gian duy trì thời tiết hiện tại
-    private final float minWeatherDuration = 10f; // Thời gian tối thiểu của mỗi thời tiết
-    private final float maxWeatherDuration = 20f; // Thời gian tối đa của mỗi thời tiết
+    private final float minWeatherDuration = 20f; // Thời gian tối thiểu của mỗi thời tiết
+    private final float maxWeatherDuration = 30f; // Thời gian tối đa của mỗi thời tiết
     private Texture rainTexture; // Hình ảnh giọt mưa
     private Texture sunnyIcon;
     private Texture nightIcon;
@@ -29,7 +29,7 @@ public class Weather {
     private Texture cloudIcon;
     private Texture darkCloud;
     private Texture darkRain;
-    private final int rainDropCount = 5; // Số giọt mưa
+    private final int rainDropCount = 4; // Số giọt mưa
     private Texture cloudTexture; // Hình ảnh đám mây
     private float cloudSpeed = 30f; // Tốc độ di chuyển của mây
     private float[] cloudPositions; // Vị trí đám mây trên màn hình
@@ -45,7 +45,7 @@ public class Weather {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.currentWeather = "Sunny"; // Giá trị mặc định
         this.weatherDuration = getRandomDuration(); // Đặt thời gian ngẫu nhiên cho thời tiết ban đầu
-        this.rainTexture = new Texture(Gdx.files.internal("Weather/rain_drops-01.png")); // Tải hình ảnh giọt mưa
+        this.rainTexture = new Texture(Gdx.files.internal("Weather/rain_light.png")); // Tải hình ảnh giọt mưa
         this.sunnyIcon = new Texture(Gdx.files.internal("Weather/sunnyIcon.png"));
         this.nightIcon = new Texture(Gdx.files.internal("Weather/nightIcon.png"));
         this.rainIcon = new Texture(Gdx.files.internal("Weather/rainIcon.png"));
@@ -65,7 +65,7 @@ public class Weather {
     }
     public void update(float deltaTime) {
         // Cập nhật thời gian trong ngày
-        timeOfDay += deltaTime / 200; // Thay đổi tỷ lệ tùy theo tốc độ bạn muốn thời gian trôi qua
+        timeOfDay += deltaTime / 300; // Thay đổi tỷ lệ tùy theo tốc độ bạn muốn thời gian trôi qua
         if (timeOfDay > 1) {
             timeOfDay = 0; // Reset lại khi qua 1
         }
@@ -158,9 +158,9 @@ public class Weather {
     }
     private void drawRain(SpriteBatch batch, PlayerController player) {
         if(night){
-            batch.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, 10.0f); // 0.5f cho độ trong suốt 50%
+            batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 5.0f); // 0.5f cho độ trong suốt 50%
         }else{
-            batch.setColor(Color.BLUE.r, Color.BLUE.g, Color.BLUE.b, 2.5f); // 0.5f cho độ trong suốt 50%
+            batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 5.0f); // 0.5f cho độ trong suốt 50%
         }
         float playerX = player.getPosition().x;
         float playerY = player.getPosition().y;
