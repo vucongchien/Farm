@@ -87,7 +87,7 @@ public class SoundManager implements Disposable {
         footStep.stop();
     }
     public void playPickUp(){
-        pickUp.play();
+        pickUp.play(5f);
     }
 
 

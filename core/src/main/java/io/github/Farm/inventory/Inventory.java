@@ -99,6 +99,17 @@ public class Inventory {
         return false;
     }
 
+    public int getQuantitySlot(String name){
+        for(InventorySlot slot:slots){
+            if(name.equals(slot.getFULL_NAME())){
+                return slot.getQuantity();
+            }
+        }
+        return 0;
+    }
+
+
+
     public boolean dropItem(String Full_Name){
         for(InventorySlot slot:slots){
             if(Full_Name.equals(slot.getFULL_NAME())){

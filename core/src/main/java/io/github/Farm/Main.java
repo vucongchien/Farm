@@ -100,6 +100,7 @@ public class Main extends ApplicationAdapter {
 
         //default
         MaterialManager.getInstance().add(world, MaterialType.tree,new Vector2(2300,1500));
+        MaterialManager.getInstance().add(world,MaterialType.rock,new Vector2(3232,1344));
         ship =new Ship();
         shipRender=new ShipRender(ship);
 
@@ -221,6 +222,7 @@ public class Main extends ApplicationAdapter {
 
 
                 gameRenderer.render();
+                batch.setColor(Color.WHITE);
                 ship.update(playerControllerNew);
                 shipRender.render(batch,camera);
 
@@ -236,10 +238,6 @@ public class Main extends ApplicationAdapter {
                 }
                 if(playerControllerNew.isDie()){
                     GameOverScreen.getInstance().setGameOverActive(true);
-                }
-                if(Inventory.getInstance().checkSoLuong("FOOD_pumpkin",10)){
-                    WinGame.getInstance().setIsWin(true);
-                    SettingGame.getInstance().clearFile();
                 }
             }
 

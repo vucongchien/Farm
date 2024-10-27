@@ -36,6 +36,14 @@ public class PlantManager {
         }
     }
 
+    public void addPlantDefault(Vector2 position, PlantType type,PlantStage stage) {
+        if (plants.containsKey(position)) {
+            return;
+        }
+        plants.put(new Vector2(position), new PlantRenderer(new Vector2(position), type,stage));
+    }
+
+
     public void addPlantFromInventory(Vector2 position, PlantType type) {
         if (plants.containsKey(position)) {
             return;

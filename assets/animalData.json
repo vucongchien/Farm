@@ -1,87 +1,74 @@
 {
   "wolfRenders": [
     {
-      "posX": 3249.41,
-      "posY": 1396.4133,
+      "posX": 2567.4949,
+      "posY": 1402.8344,
       "health": 100.0,
       "leader": true,
-      "distancefrombossx": 23.765385,
-      "distancefrombossy": -28.72967
+      "distancefrombossx": 16.664785,
+      "distancefrombossy": 30.616915
     },
     {
-      "posX": 3270.6895,
-      "posY": 1375.3629,
+      "posX": 2476.9932,
+      "posY": 1349.9916,
       "health": 100.0,
       "leader": false,
-      "distancefrombossx": 21.949112,
-      "distancefrombossy": -20.37696
+      "distancefrombossx": 19.385723,
+      "distancefrombossy": 26.919258
     },
     {
-      "posX": 3257.1648,
-      "posY": 1360.2177,
+      "posX": 2437.589,
+      "posY": 1300.66,
       "health": 100.0,
       "leader": false,
-      "distancefrombossx": 8.424648,
-      "distancefrombossy": -35.522194
+      "distancefrombossx": 19.454449,
+      "distancefrombossy": 17.071865
     },
     {
-      "posX": 3271.579,
-      "posY": 1404.3367,
+      "posX": 2440.819,
+      "posY": 1303.6761,
       "health": 100.0,
       "leader": false,
-      "distancefrombossx": 22.838936,
-      "distancefrombossy": 8.596751
+      "distancefrombossx": 36.961685,
+      "distancefrombossy": 12.947315
     },
     {
-      "posX": 3282.9824,
-      "posY": 1386.0571,
+      "posX": 2478.4023,
+      "posY": 1352.3958,
       "health": 100.0,
       "leader": false,
-      "distancefrombossx": 34.242104,
-      "distancefrombossy": -9.682739
+      "distancefrombossx": 4.837781,
+      "distancefrombossy": -21.081816
     }
   ],
   "storageWolfRenders": [],
   "buffalo": [
     {
-      "posX": 2252.017,
-      "posY": 1536.8634,
+      "posX": 2267.9106,
+      "posY": 1532.9679,
       "hp": 100.0,
       "hungry": 0.0
     },
     {
-      "posX": 2336.1292,
-      "posY": 1591.1251,
+      "posX": 2243.264,
+      "posY": 1593.9696,
       "hp": 100.0,
       "hungry": 0.0
     }
   ],
-  "chicken": [
-    {
-      "posX": 2466.0503,
-      "posY": 1388.0511,
-      "hp": 100.0,
-      "hungry": -10.0
-    },
-    {
-      "posX": 2466.954,
-      "posY": 1325.8524,
-      "hp": 100.0,
-      "hungry": -10.0
-    }
-  ],
+  "chicken": [],
   "pig": [
     {
-      "posX": 2162.8464,
-      "posY": 1339.9117,
+      "posX": 2162.903,
+      "posY": 1347.8949,
       "hp": 100.0,
-      "hungry": -10.0
+      "hungry": -20.0
     },
     {
-      "posX": 2139.6025,
-      "posY": 1357.0654,
+      "posX": 2152.2349,
+      "posY": 1366.3062,
       "hp": 100.0,
-      "hungry": -10.0
+      "hungry": -20.0
     }
   ]
 }

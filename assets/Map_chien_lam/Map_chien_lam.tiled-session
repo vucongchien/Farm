@@ -31,11 +31,11 @@
                 16,
                 31
             ],
-            "scale": 0.25,
-            "selectedLayer": 18,
+            "scale": 0.75,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 3304,
-                "y": 1274
+                "x": 2206.6666666666665,
+                "y": 1355.3333333333333
             }
         },
         "Other.tsx": {
@@ -45,12 +45,12 @@
         },
         "tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1.5,
+            "scaleInDock": 0.75,
             "scaleInEditor": 5.5
         },
         "tileset_vippp.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 2,
+            "scaleInDock": 1,
             "scaleInEditor": 5.5
         }
     },

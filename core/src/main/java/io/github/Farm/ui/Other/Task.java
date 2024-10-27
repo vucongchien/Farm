@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import io.github.Farm.inventory.Inventory;
 
 public class Task implements Disposable {
     private Texture label_left, label_right, label_middle;
@@ -70,18 +71,18 @@ public class Task implements Disposable {
 
         float yItem=y+20;
 
-        drawItem(batch, carrot, 9, x , yItem+0  );
-        drawItem(batch, pumpkin, 9, x , yItem +15 );
-        drawItem(batch, milk, 9, x , yItem+30 );
-        drawItem(batch,potato,9,x,yItem+45);
-        drawItem(batch,kale,9,x,yItem+60);
+        drawItem(batch, carrot, Inventory.getInstance().getQuantitySlot("FOOD_carrot"), x , yItem+0  );
+        drawItem(batch, pumpkin, Inventory.getInstance().getQuantitySlot("FOOD_pumpkin"), x , yItem +15 );
+        drawItem(batch, milk, Inventory.getInstance().getQuantitySlot("FOOD_milk"), x , yItem+30 );
+        drawItem(batch,potato,Inventory.getInstance().getQuantitySlot("FOOD_potato"),x,yItem+45);
+        drawItem(batch,kale,Inventory.getInstance().getQuantitySlot("FOOD_kale"),x,yItem+60);
 
         float x2=x+70;
-        drawItem(batch,cabbage,9,x2,yItem+0);
-        drawItem(batch,egg,9,x2,yItem+15);
-        drawItem(batch,fish,9,x2,yItem+30);
-        drawItem(batch,wood,9,x2,yItem+45);
-        drawItem(batch,rock,9,x2,yItem+60);
+        drawItem(batch,cabbage,Inventory.getInstance().getQuantitySlot("FOOD_cabbage"),x2,yItem+0);
+        drawItem(batch,egg,Inventory.getInstance().getQuantitySlot("FOOD_egg"),x2,yItem+15);
+        drawItem(batch,fish,Inventory.getInstance().getQuantitySlot("FOOD_fish"),x2,yItem+30);
+        drawItem(batch,wood,Inventory.getInstance().getQuantitySlot("MATERIAL_wood"),x2,yItem+45);
+        drawItem(batch,rock,Inventory.getInstance().getQuantitySlot("MATERIAL_rock"),x2,yItem+60);
 
         dropY-= Gdx.graphics.getDeltaTime()*1.5f;
         time+=Gdx.graphics.getDeltaTime();
