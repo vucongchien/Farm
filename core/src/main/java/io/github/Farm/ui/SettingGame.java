@@ -205,7 +205,6 @@ public class SettingGame {
 
                     font.draw(batch, options[i], x, y);
                 }
-                System.out.println(MainMenu.getInstance().isControlsActive());
             } else if(MainMenu.getInstance().isControlsActive()) {
                 // Vẽ nội dung điều khiển
                 GlyphLayout layout = new GlyphLayout(font, MainMenu.getInstance().getControlsText());

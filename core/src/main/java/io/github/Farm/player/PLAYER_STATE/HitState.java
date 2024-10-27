@@ -40,7 +40,6 @@ public class HitState implements InterfacePlayerState {
     }
 
     public void hitSomeThing(PlayerController player){
-        System.out.println("start hit ");
 
         Iterator<WolfRender> iteratorwolf = WolfManager.getwolfmanage().getwolfmanafer().iterator();
         while (iteratorwolf.hasNext()){
