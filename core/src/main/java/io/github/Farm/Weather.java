@@ -20,8 +20,8 @@ public class Weather {
     private String currentWeather;
     private float timeOfDay;
     private float weatherDuration; // Thời gian duy trì thời tiết hiện tại
-    private final float minWeatherDuration = 3f; // Thời gian tối thiểu của mỗi thời tiết
-    private final float maxWeatherDuration = 5f; // Thời gian tối đa của mỗi thời tiết
+    private final float minWeatherDuration = 10f; // Thời gian tối thiểu của mỗi thời tiết
+    private final float maxWeatherDuration = 20f; // Thời gian tối đa của mỗi thời tiết
     private Texture rainTexture; // Hình ảnh giọt mưa
     private Texture sunnyIcon;
     private Texture nightIcon;
@@ -65,7 +65,7 @@ public class Weather {
     }
     public void update(float deltaTime) {
         // Cập nhật thời gian trong ngày
-        timeOfDay += deltaTime / 100; // Thay đổi tỷ lệ tùy theo tốc độ bạn muốn thời gian trôi qua
+        timeOfDay += deltaTime / 200; // Thay đổi tỷ lệ tùy theo tốc độ bạn muốn thời gian trôi qua
         if (timeOfDay > 1) {
             timeOfDay = 0; // Reset lại khi qua 1
         }

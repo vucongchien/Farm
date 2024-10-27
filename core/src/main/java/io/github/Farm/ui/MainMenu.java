@@ -81,10 +81,12 @@ public class MainMenu {
         this.maxTextWidth = 0; // Khởi tạo maxTextWidth
         this.totalMenuHeight = 0; // Khởi tạo totalMenuHeight
         this.controlsText = "W S A D: Move character\n" +
-            "C: Fish\n" +
-            "F: Dig\n" +
+            "C: Fishing\n" +
+            "J: Attack\n" +
+            "K: Dig\n" +
+            "F: Feed or Pick up\n" +
             "R: Water\n" +
-            "I: Open Inventory\n" +
+            "Space: Open Inventory\n" +
             "ESC: Open Settings";
         this.isControlsActive = false; // Mặc định bảng điều khiển không hiển thị
 

@@ -253,6 +253,5 @@ public class Main extends ApplicationAdapter {
         Inventory.getInstance().dispose();
         shapeRenderer.dispose();
         debugRenderer.dispose();
-
     }
 }
