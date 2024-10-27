@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantStage;
 import io.github.Farm.Plants.PlantType;
 import io.github.Farm.SoundManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,6 +27,7 @@ import io.github.Farm.data.AnimalData;
 import io.github.Farm.data.GameData;
 import io.github.Farm.data.GameSaveManager;
 import io.github.Farm.data.PlayerData;
+import io.github.Farm.inventory.Inventory;
 import io.github.Farm.player.PlayerController;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -198,7 +200,8 @@ public class MainMenu {
 
                     case "Start Game":
                         IntroGame.getInstance().setIntro(true);
-
+                        newPlantData();
+                        newInventoryData();
 
                         isMenuActive = false;
                         checkcontinue=false;
@@ -207,6 +210,8 @@ public class MainMenu {
                     case "New Game":
 
                         IntroGame.getInstance().setIntro(true);
+                        newPlantData();
+                        newInventoryData();
                         isMenuActive = false;
                         checkcontinue=false;
                         break;
@@ -234,19 +239,6 @@ public class MainMenu {
             isMenuActive = true;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public String getControlsText() {
@@ -281,8 +273,19 @@ public class MainMenu {
     }
 
     public void newPlantData(){
-        PlantManager.getInstance().addPlantFromInventory(new Vector2(125,95), PlantType.carrot);
-        PlantManager.getInstance().addPlantFromInventory(new Vector2(126,95),PlantType.cauliflower);
+        PlantManager.getInstance().addPlantDefault(new Vector2(126,95),PlantType.cauliflower,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(194,65),PlantType.parsnip,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(170,86),PlantType.cabbage,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(156,104),PlantType.radish,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(223,68),PlantType.beetroot,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(159,70),PlantType.parsnip,PlantStage.HARVESTED);
+    }
+
+    public void newInventoryData(){
+        Inventory.getInstance().addItem("SEED_carrot",3);
+        Inventory.getInstance().addItem("SEED_potato",3);
+        Inventory.getInstance().addItem("SEED_wheat",2);
+        Inventory.getInstance().addItem("FOOD_pumpkin",2);
     }
 
 }

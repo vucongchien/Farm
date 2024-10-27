@@ -274,8 +274,8 @@ public class PlayerController implements Collider, Disposable {
             Buffalo buffalo = (Buffalo) other;
             selectionBox.ren(buffalo.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!buffalo.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
-                    ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.location().cpy().scl(1/16f),1);
+                if(Inventory.getInstance().dropItem("FOOD_wheat")) {
+                    ItemManager.getInstance().addItem("FOOD_wheat",buffalo.location().cpy().scl(1/16f),1);
                     buffalo.setCheckeating(true);
                     if(buffalo.gethungry()<=80) {
                         buffalo.recoverhungry(20);
@@ -288,10 +288,10 @@ public class PlayerController implements Collider, Disposable {
             PigReander pig = (PigReander) other;
             selectionBox.ren(pig.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!pig.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
-                    ItemManager.getInstance().addItem("FOOD_pumpkin",pig.location().cpy().scl(1/16f),1);
+                if(Inventory.getInstance().dropItem("FOOD_kale")) {
+                    ItemManager.getInstance().addItem("FOOD_kale",pig.location().cpy().scl(1/16f),1);
                     pig.setCheckeating(true);
-                    if(pig.gethungry()<=80) {
+                    if(pig.gethungry()<=50) {
                         pig.recoverhungry(20);
                     }
                 }
@@ -301,12 +301,13 @@ public class PlayerController implements Collider, Disposable {
             ChickenRender chicken = (ChickenRender) other;
             selectionBox.ren(chicken.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!chicken.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
-                    ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
-                    chicken.setCheckeating(true);
-                    if(chicken.gethungry()<=80) {
+                if(chicken.gethungry()<=50) {
+                    if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                        chicken.setCheckeating(true);
+                        ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
                         chicken.recoverhungry(20);
                     }
+
                 }
             }
         }

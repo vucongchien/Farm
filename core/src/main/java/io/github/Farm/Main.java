@@ -22,6 +22,8 @@ import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Renderer.GameRenderer;
 import io.github.Farm.Materials.MaterialManager;
 import io.github.Farm.Materials.MaterialType;
+import io.github.Farm.Ship.Ship;
+import io.github.Farm.Ship.ShipRender;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.PetManager;
@@ -62,6 +64,8 @@ public class Main extends ApplicationAdapter {
 
 
     private GameData gameData;
+    private Ship ship;
+    private ShipRender shipRender;
 
     //------------------render
     private GameRenderer gameRenderer;
@@ -94,8 +98,11 @@ public class Main extends ApplicationAdapter {
         gameData.setInventory(GameSaveManager.getInstance().loadInventoryData());
         gameData.setAnimal(GameSaveManager.getInstance().loadAnimalData());
 
+        //default
         MaterialManager.getInstance().add(world, MaterialType.tree,new Vector2(2300,1500));
-
+        MaterialManager.getInstance().add(world,MaterialType.rock,new Vector2(3232,1344));
+        ship =new Ship();
+        shipRender=new ShipRender(ship);
 
 
         SelectionBox.setCamera(camera);
@@ -162,6 +169,7 @@ public class Main extends ApplicationAdapter {
 
 
             SettingGame.getInstance().handleInput(gameData,playerControllerNew,map);
+
             if (SettingGame.getInstance().isActive()) {
                 batch.setColor(Color.WHITE);
                 Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
@@ -199,6 +207,7 @@ public class Main extends ApplicationAdapter {
                     Rectangle a = MaterialManager.getInstance().getTrees().get(0).getRectangle();
                     shapeRenderer.rect(a.x, a.y, a.width, a.height);
                 }
+                shapeRenderer.rect(ship.getCollider().x, ship.getCollider().y, ship.getCollider().width, ship.getCollider().height);
                 shapeRenderer.end();
 
                 batch.setProjectionMatrix(camera.combined);
@@ -213,6 +222,9 @@ public class Main extends ApplicationAdapter {
 
 
                 gameRenderer.render();
+                batch.setColor(Color.WHITE);
+                ship.update(playerControllerNew);
+                shipRender.render(batch,camera);
 
                 if (Inventory.getInstance().isOpened()) {
                     batch.setColor(Color.WHITE);
@@ -226,10 +238,6 @@ public class Main extends ApplicationAdapter {
                 }
                 if(playerControllerNew.isDie()){
                     GameOverScreen.getInstance().setGameOverActive(true);
-                    SettingGame.getInstance().clearFile();
-                }
-                if(Inventory.getInstance().checkSoLuong("FOOD_pumpkin",10)){
-                    WinGame.getInstance().setIsWin(true);
                     SettingGame.getInstance().clearFile();
                 }
             }
