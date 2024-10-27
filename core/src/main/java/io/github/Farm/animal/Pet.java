@@ -10,8 +10,12 @@ import io.github.Farm.Interface.Heath;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Chicken.ChickenRender;
 import io.github.Farm.animal.Pig.PigReander;
+import io.github.Farm.inventory.ItemManager;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.badlogic.gdx.Input.Keys.S;
+import static com.badlogic.gdx.Input.Keys.T;
 
 public abstract class Pet implements Collider {
     private Vector2 location;
@@ -39,12 +43,14 @@ public abstract class Pet implements Collider {
     private boolean checkmove;
     private boolean checkeating;
     private long timeeating;
-    //........readdata
+    //........chacbox
+    private chatbox chatbox;
 
     public Pet(Vector2 location, long hungry, int a) {
         heath = new Heath(a);
         this.hungry = hungry;
         this.location = location;
+        chatbox=new chatbox();
     }
 
 
@@ -568,6 +574,14 @@ public abstract class Pet implements Collider {
     public abstract Rectangle getCollider();
 
     public abstract void onCollision(Collider other);
+
+    public io.github.Farm.animal.chatbox getChatbox() {
+        return chatbox;
+    }
+
+    public void setChatbox(io.github.Farm.animal.chatbox chatbox) {
+        this.chatbox = chatbox;
+    }
 }
 
 

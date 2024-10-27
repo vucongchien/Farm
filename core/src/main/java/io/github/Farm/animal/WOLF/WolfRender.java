@@ -25,13 +25,15 @@ public class WolfRender implements Collider, RenderableEntity {
     private boolean thulinh;
     private Vector2 location;
     private final Rectangle box;
+    private float   distancefrombossx;
+    private float   distancefrombossy;
+    private PetState crencurrentState;
+    private PetState lastState;
+    //
     private boolean trangthaitancong=false;
     private Pet prey;
     private Pet fistprey;
-    private PetState crencurrentState;
-    private PetState lastState;
-    private float   distancefrombossx;
-    private float   distancefrombossy;
+
     private Animation<TextureRegion> currentAnimation;
     private final WolfImageManager imageManager;
     private  float stateTime =0;
@@ -41,7 +43,6 @@ public class WolfRender implements Collider, RenderableEntity {
 
     //...........hitall
     private boolean hit;
-    private boolean kill;
     private float cooldown;
 
     //........knockback
@@ -161,8 +162,6 @@ public class WolfRender implements Collider, RenderableEntity {
     public void recoverycooldown(){cooldown=0.6f;}
 
     public boolean gethit(){return hit;}
-
-    public void setKill(boolean a){this.kill = a;}
 
     public float getTimeActack() {
         return timeActack;

@@ -17,6 +17,7 @@ public class PigManager {
     private ArrayList<PigReander> pigManager;
     private long breedingTime;
     private long hptime=0;
+    private static long timeCreate=0;
     private final String link="animalData.json";
 
     private static PigManager pigmanager;
@@ -60,7 +61,16 @@ public class PigManager {
         }
         if(TimeUtils.timeSinceMillis(hptime) > 5000){
             for(PigReander pig: pigManager) {
-                pig.sethungry(10);
+                pig.sethungry(2);
+                if(pig.gethungry()>50){
+                    pig.getChatbox().setCurrent("UI/other/happiness_01.png",7,8);
+                }else{
+
+                    pig.getChatbox().setCurrent("UI/other/happiness_03.png",7,8);
+                    if(pig.gethungry()==0){
+                        pig.getChatbox().setCurrent("UI/other/happiness_04.png",7,8);
+                    }
+                }
             }
             hptime=0;
         }

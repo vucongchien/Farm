@@ -51,6 +51,7 @@ public class Buffalo extends Pet implements RenderableEntity {
 
     @Override
     public void render(SpriteBatch batch, Camera camera) {
+        getChatbox().setBatch(batch);
          getbox().setPosition(location().x, location().y);
 //        shapeRenderer = new ShapeRenderer();
 //        shapeRenderer.setProjectionMatrix(camera.combined);
@@ -61,6 +62,9 @@ public class Buffalo extends Pet implements RenderableEntity {
         currentAnimation = imageManager.getAnimation(getCrencurrentState());
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        if(getChatbox().getCurrent()!=null){
+            getChatbox().Render(location().cpy().add(5,20));
+        }
         setStateTime(getStateTime()+ Gdx.graphics.getDeltaTime()); ;
         TextureRegion frame = currentAnimation.getKeyFrame(getStateTime(), true);
         batch.draw(frame, location().x-10f, location().y-5f, 32, 32);
