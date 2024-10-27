@@ -38,7 +38,6 @@ public class Inventory {
     private final float totalWidth = columns * slotSize;
     private final float totalHeight = rows * slotSize;
     private final String link="inventoryData.json";
-    private Texture slotBackgroundTexture;  // Texture cho background của inventory
     private Texture slotBorderTexture;      // Texture cho viền ô
     private Texture selectedSlotBorderTexture;
 
@@ -49,7 +48,6 @@ public class Inventory {
 
     public Inventory() {
 
-        this.slotBackgroundTexture=new Texture("UI/Inventory/background.png");
         this.slotBorderTexture=new Texture("UI/Inventory/Inventory_Slot.png");
         this.selectedSlotBorderTexture=new Texture("UI/Inventory/Inventory_select.png");
         if(MainMenu.isCheckcontinue()){

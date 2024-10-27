@@ -7,6 +7,7 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
+import io.github.Farm.SoundManager;
 import io.github.Farm.animal.Pet;
 import io.github.Farm.animal.PetManager;
 import io.github.Farm.inventory.Item;
@@ -53,6 +54,7 @@ public class CollisionHandler implements Collider {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
                     item.onCollision(playerController);
                     iterator.remove();
+                    SoundManager.getInstance().playPickUp();
                 }
             }
         }

@@ -1,40 +1,40 @@
 {
   "wolfRenders": [
     {
-      "posX": 3149.0486,
-      "posY": 1388.4325,
+      "posX": 3249.41,
+      "posY": 1396.4133,
       "health": 100.0,
       "leader": true,
       "distancefrombossx": 23.765385,
       "distancefrombossy": -28.72967
     },
     {
-      "posX": 3170.3281,
-      "posY": 1376.623,
+      "posX": 3270.6895,
+      "posY": 1375.3629,
       "health": 100.0,
       "leader": false,
       "distancefrombossx": 21.949112,
       "distancefrombossy": -20.37696
     },
     {
-      "posX": 3156.8035,
-      "posY": 1369.0386,
+      "posX": 3257.1648,
+      "posY": 1360.2177,
       "health": 100.0,
       "leader": false,
       "distancefrombossx": 8.424648,
       "distancefrombossy": -35.522194
     },
     {
-      "posX": 3171.2178,
-      "posY": 1388.375,
+      "posX": 3271.579,
+      "posY": 1404.3367,
       "health": 100.0,
       "leader": false,
       "distancefrombossx": 22.838936,
       "distancefrombossy": 8.596751
     },
     {
-      "posX": 3182.621,
-      "posY": 1387.3173,
+      "posX": 3282.9824,
+      "posY": 1386.0571,
       "health": 100.0,
       "leader": false,
       "distancefrombossx": 34.242104,
@@ -44,44 +44,44 @@
   "storageWolfRenders": [],
   "buffalo": [
     {
-      "posX": 2252.9587,
-      "posY": 1536.8589,
+      "posX": 2252.017,
+      "posY": 1536.8634,
       "hp": 100.0,
-      "hungry": 30.0
+      "hungry": 0.0
     },
     {
-      "posX": 2248.0073,
-      "posY": 1552.9921,
+      "posX": 2336.1292,
+      "posY": 1591.1251,
       "hp": 100.0,
-      "hungry": 30.0
+      "hungry": 0.0
     }
   ],
   "chicken": [
     {
-      "posX": 2439.9985,
-      "posY": 1242.7029,
+      "posX": 2466.0503,
+      "posY": 1388.0511,
       "hp": 100.0,
-      "hungry": 30.0
+      "hungry": -10.0
     },
     {
-      "posX": 2430.9075,
-      "posY": 1373.0472,
+      "posX": 2466.954,
+      "posY": 1325.8524,
       "hp": 100.0,
-      "hungry": 30.0
+      "hungry": -10.0
     }
   ],
   "pig": [
     {
-      "posX": 2186.1187,
-      "posY": 1353.9755,
+      "posX": 2162.8464,
+      "posY": 1339.9117,
       "hp": 100.0,
-      "hungry": 30.0
+      "hungry": -10.0
     },
     {
-      "posX": 2113.1797,
-      "posY": 1380.0632,
+      "posX": 2139.6025,
+      "posY": 1357.0654,
       "hp": 100.0,
-      "hungry": 30.0
+      "hungry": -10.0
     }
   ]
 }

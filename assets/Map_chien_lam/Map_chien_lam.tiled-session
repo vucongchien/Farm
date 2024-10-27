@@ -26,10 +26,10 @@
         },
         "Map.tmx": {
             "expandedGroupLayers": [
-                16,
                 20,
-                31,
-                29
+                29,
+                16,
+                31
             ],
             "scale": 0.25,
             "selectedLayer": 18,
