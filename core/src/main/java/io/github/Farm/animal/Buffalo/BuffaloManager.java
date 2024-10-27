@@ -63,13 +63,13 @@ public class BuffaloManager  {
             if(TimeUtils.timeSinceMillis(hptime) > 5000){
                 for(Buffalo buffalo:buffaloManager) {
                     if(buffalo.gethungry()>=10) {
-                        buffalo.sethungry(2);
+                        buffalo.sethungry(20);
                         if(buffalo.gethungry()>50){
                             buffalo.getChatbox().setCurrent("UI/other/happiness_01.png",7,8);
                         }else{
 
-                            buffalo.getChatbox().setCurrent("UI/other/happiness_03.png",7,8);
-                            if(buffalo.gethungry()==0){
+                            buffalo.getChatbox().setCurrent("UI/Item/FOOD/wheat.png",7,8);
+                            if(buffalo.gethungry()<=0){
                                 buffalo.getChatbox().setCurrent("UI/other/happiness_04.png",7,8);
                             }
                         }

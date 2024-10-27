@@ -61,13 +61,12 @@ public class PigManager {
         }
         if(TimeUtils.timeSinceMillis(hptime) > 5000){
             for(PigReander pig: pigManager) {
-                pig.sethungry(2);
+                pig.sethungry(20);
                 if(pig.gethungry()>50){
                     pig.getChatbox().setCurrent("UI/other/happiness_01.png",7,8);
                 }else{
-
-                    pig.getChatbox().setCurrent("UI/other/happiness_03.png",7,8);
-                    if(pig.gethungry()==0){
+                    pig.getChatbox().setCurrent("UI/Item/FOOD/kale.png",7,8);
+                    if(pig.gethungry()<=0){
                         pig.getChatbox().setCurrent("UI/other/happiness_04.png",7,8);
                     }
                 }
