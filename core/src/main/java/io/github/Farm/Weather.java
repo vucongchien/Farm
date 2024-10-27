@@ -65,7 +65,7 @@ public class Weather {
     }
     public void update(float deltaTime) {
         // Cập nhật thời gian trong ngày
-        timeOfDay += deltaTime / 200; // Thay đổi tỷ lệ tùy theo tốc độ bạn muốn thời gian trôi qua
+        timeOfDay += deltaTime / 300; // Thay đổi tỷ lệ tùy theo tốc độ bạn muốn thời gian trôi qua
         if (timeOfDay > 1) {
             timeOfDay = 0; // Reset lại khi qua 1
         }
