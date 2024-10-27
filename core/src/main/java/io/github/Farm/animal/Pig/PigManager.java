@@ -42,7 +42,7 @@ public class PigManager {
                 breedingTime = TimeUtils.millis();
             }
             if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-                pigManager.add(new PigReander(new Vector2(2150,1300),100));
+                pigManager.add(new PigReander(new Vector2(2150,1500),100));
                 breedingTime = 0;
             }
         }
@@ -85,7 +85,7 @@ public class PigManager {
                     pig.collide(pig,pig1);
                 }
             }
-            pig.ativate(pig,2100,2200,1300,1400);
+            pig.ativate(pig,2100,2200,1500,1600);
             pig.update(Gdx.graphics.getDeltaTime());
         }
     }

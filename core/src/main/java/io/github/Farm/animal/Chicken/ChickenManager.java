@@ -41,7 +41,7 @@ public class ChickenManager {
                 breedingTime = TimeUtils.millis();
             }
             if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
-                chickenManager.add(new ChickenRender(new Vector2(2400,1300),100));
+                chickenManager.add(new ChickenRender(new Vector2(2500,1700),100));
                 breedingTime = 0;
             }
         }
@@ -85,7 +85,7 @@ public class ChickenManager {
                     chicken.collide(chicken,chicken1);
                 }
             }
-            chicken.ativate(chicken,2400,2550,1200,1300);
+            chicken.ativate(chicken,2500,2650,1700,1800);
             chicken.update(Gdx.graphics.getDeltaTime());
         }
     }
