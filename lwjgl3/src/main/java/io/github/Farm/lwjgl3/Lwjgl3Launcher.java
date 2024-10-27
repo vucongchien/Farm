@@ -26,7 +26,7 @@ public class Lwjgl3Launcher {
         configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
 
         //// Thay đổi icon của cửa sổ game nếu cần
-        configuration.setWindowIcon("pixil-frame-0.png", "pixil-frame-0.png", "pixil-frame-0.png", "pixil-frame-0.png");
+        configuration.setWindowIcon("resources/pixil-frame-0 - Copy.png", "resources/pixil-frame-0 - Copy.png", "resources/pixil-frame-0 - Copy.png", "resources/pixil-frame-0 - Copy.png");
         return configuration;
     }
 }

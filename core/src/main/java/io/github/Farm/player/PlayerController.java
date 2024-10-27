@@ -297,9 +297,9 @@ public class PlayerController implements Collider, Disposable {
             selectionBox.ren(chicken.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!chicken.isCheckeating()) {
                 if(chicken.gethungry()<=50) {
-                    if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
+                    if(Inventory.getInstance().dropItem("SEED_wheat")) {
                         chicken.setCheckeating(true);
-                        ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
+                        ItemManager.getInstance().addItem("SEED_wheat",chicken.location().cpy().scl(1/16f),1);
                         chicken.recoverhungry(20);
                     }
 
