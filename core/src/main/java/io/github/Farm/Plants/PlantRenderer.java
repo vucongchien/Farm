@@ -28,12 +28,7 @@
         private static final long GROWTH_TIME = 12000;
         private static final long NEED_WATER_TIME = 45000;
 
-
-
         private ExpressionManager expressionManager;
-
-
-
 
         private Texture currentTexture;
         private PlantImageManager imageManager;
@@ -52,6 +47,23 @@
             this.lastWaterTime =plantTime;
             this.isWatered = false;
             this.isHarvestable = false;
+            this.expressionManager=new ExpressionManager();
+
+            this.imageManager = new PlantImageManager(type);
+            this.currentTexture = imageManager.getTexture(PlantStage.HARVESTED);
+
+            this.plantCollider = new Rectangle(this.position.x * 16, this.position.y * 16, width, height);
+        }
+
+        public PlantRenderer(Vector2 position, PlantType type,PlantStage stage) {
+            this.position = position.cpy();
+            this.type = type;
+            this.stage = stage;
+            this.plantTime = TimeUtils.millis();
+            this.lastStageChangeTime = plantTime;
+            this.lastWaterTime =plantTime;
+            this.isWatered = false;
+            this.isHarvestable = true;
             this.expressionManager=new ExpressionManager();
 
             this.imageManager = new PlantImageManager(type);

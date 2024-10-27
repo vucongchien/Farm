@@ -1,1 +1,58 @@
-[]
+[
+  {
+    "type": "parsnip",
+    "stage": "HARVESTED",
+    "position": {
+      "x": 194.0,
+      "y": 65.0
+    }
+  },
+  {
+    "type": "cauliflower",
+    "stage": "HARVESTED",
+    "position": {
+      "x": 126.0,
+      "y": 95.0
+    }
+  },
+  {
+    "type": "cabbage",
+    "stage": "HARVESTED",
+    "position": {
+      "x": 170.0,
+      "y": 86.0
+    }
+  },
+  {
+    "type": "radish",
+    "stage": "HARVESTED",
+    "position": {
+      "x": 156.0,
+      "y": 104.0
+    }
+  },
+  {
+    "type": "beetroot",
+    "stage": "HARVESTED",
+    "position": {
+      "x": 223.0,
+      "y": 68.0
+    }
+  },
+  {
+    "type": "parsnip",
+    "stage": "HARVESTED",
+    "position": {
+      "x": 159.0,
+      "y": 70.0
+    }
+  },
+  {
+    "type": "carrot",
+    "stage": "SPROUT",
+    "position": {
+      "x": 202.0,
+      "y": 84.0
+    }
+  }
+]

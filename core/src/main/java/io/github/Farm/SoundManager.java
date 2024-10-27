@@ -16,11 +16,13 @@ public class SoundManager implements Disposable {
     private Sound moveSound;
     private Music gameMusic;
     private Music rainSound;
+
+
     private Music footStep;
     private Music watering;
     private Sound hurt;
     private Sound shovel;
-
+    private Sound pickUp;
 
     private Music inTroGame;
     private Music inTroGame1;
@@ -32,15 +34,19 @@ public class SoundManager implements Disposable {
         moveSound = Gdx.audio.newSound(Gdx.files.internal("soundgame/sound_movebuttonmenu.wav"));
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("soundgame/gamemusic.mp3"));
         rainSound = Gdx.audio.newMusic(Gdx.files.internal("soundgame/rain_2.mp3"));
+
+
         footStep = Gdx.audio.newMusic(Gdx.files.internal("soundgame/running-in-grass-6237.mp3"));
         watering =Gdx.audio.newMusic(Gdx.files.internal("soundgame/watering.mp3"));
         hurt = Gdx.audio.newSound(Gdx.files.internal("soundgame/hurt.mp3"));
         shovel=Gdx.audio.newSound(Gdx.files.internal("soundgame/shovel.mp3"));
+        pickUp=Gdx.audio.newSound(Gdx.files.internal("soundgame/take-item-sound-effect.mp3"));
 
         inTroGame = Gdx.audio.newMusic(Gdx.files.internal("soundgame/introGAME.mp3"));
         inTroGame1 = Gdx.audio.newMusic(Gdx.files.internal("soundgame/introGAME1.mp3"));
         gameOver = Gdx.audio.newMusic(Gdx.files.internal("soundgame/game_over_1.mp3"));
         endGame = Gdx.audio.newMusic(Gdx.files.internal("soundgame/dragonballGT.mp3"));
+
     }
 
     public void playMoveSound(){
@@ -49,7 +55,7 @@ public class SoundManager implements Disposable {
     public void playGameMusic(){
         gameMusic.play();
         gameMusic.setLooping(true);
-        gameMusic.setVolume(0f);
+        gameMusic.setVolume(0.5f);
     }
     public void pauseGameMusic(){
         gameMusic.pause();
@@ -68,16 +74,26 @@ public class SoundManager implements Disposable {
     public void stopRainSound(){
         rainSound.stop();
     }
+
+
+
     public void playFootStep() {
         if(footStep.isPlaying())return;
         footStep.play();
         footStep.setLooping(true);
         footStep.setVolume(5f);
     }
-
     public void stopFootStep() {
         footStep.stop();
     }
+    public void playPickUp(){
+        pickUp.play(5f);
+    }
+
+
+
+
+
     public void playInTroGame(){
         inTroGame.play();
         inTroGame.setVolume(0.3f);
