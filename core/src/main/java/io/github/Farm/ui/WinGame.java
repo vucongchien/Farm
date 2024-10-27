@@ -49,6 +49,9 @@ public class WinGame {
     private String memberText = "Thành viên:";
     private String[] members = {"VU CONG CHIEN", "DANG VIET HUNG", "TRUONG ANH TUNG"};
 
+    private float congratulationsY;
+    private final float congratulationsSpeed = 100f;
+
 
     public WinGame() {
         camera = new OrthographicCamera();
@@ -90,6 +93,7 @@ public class WinGame {
 
         layout = new GlyphLayout();
         isWin = false;
+        congratulationsY = -20;
     }
 
     public void render(SpriteBatch batch, Vector2 playerPosition) {
@@ -126,19 +130,26 @@ public class WinGame {
             // Giữ vị trí chữ "Congratulations" cố định dựa vào tỷ lệ màn hình
             float textX = 50;
             float textY = Gdx.graphics.getHeight() * 0.95f;
-            font.draw(batch, layout, textX, textY);
+            if (congratulationsY < textY) {
+                congratulationsY += congratulationsSpeed * Gdx.graphics.getDeltaTime();
+            } else {
+                congratulationsY = textY; // Giữ cố định khi đã đến đỉnh
+            }
+            font.draw(batch, layout, textX, congratulationsY);
             font.getData().setScale(1);
 
-            // Các nội dung khác giữ nguyên như tiêu đề và thành viên, tính toán vị trí dựa trên chiều cao màn hình
-            layout.setText(font2, titleText);
-            font2.draw(batch, titleText, textX, textY - 100 * scaleY);
+            if(congratulationsY >= textY){
+                // Các nội dung khác giữ nguyên như tiêu đề và thành viên, tính toán vị trí dựa trên chiều cao màn hình
+                layout.setText(font2, titleText);
+                font2.draw(batch, titleText, textX, textY - 100 * scaleY);
 
-            layout.setText(font2, memberText);
-            font2.draw(batch, memberText, textX, textY - 130 * scaleY);
+                layout.setText(font2, memberText);
+                font2.draw(batch, memberText, textX, textY - 130 * scaleY);
 
-            for (int i = 0; i < members.length; i++) {
-                layout.setText(font2, members[i]);
-                font2.draw(batch, members[i], textX, textY - (160 + i * 30) * scaleY);
+                for (int i = 0; i < members.length; i++) {
+                    layout.setText(font2, members[i]);
+                    font2.draw(batch, members[i], textX, textY - (160 + i * 30) * scaleY);
+                }
             }
 
             batch.end();

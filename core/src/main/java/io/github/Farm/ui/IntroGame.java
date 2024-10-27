@@ -29,7 +29,7 @@ public class IntroGame {
         Array<TextureRegion> frames = new Array<>();
 
         // Giả sử bạn đã tách GIF thành các file ảnh với tên định dạng như "frame_00_delay-0.1s.png", "frame_01_delay-0.1s.png",...
-        int totalFrames = 173; // Số lượng frame mà bạn có (có thể thay đổi tùy theo số frame bạn tách từ GIF)
+        int totalFrames = 179; // Số lượng frame mà bạn có (có thể thay đổi tùy theo số frame bạn tách từ GIF)
 
         for (int i = 12; i <= totalFrames; i++) {
 

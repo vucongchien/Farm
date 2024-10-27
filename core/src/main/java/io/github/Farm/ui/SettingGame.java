@@ -98,7 +98,7 @@ public class SettingGame {
     }
 
     public void handleInput(GameData gameData,PlayerController playerController,TiledMap map) {
-        if(GameOverScreen.getInstance().isNotGameOverActive() ){
+        if(!GameOverScreen.getInstance().isGameOverActive() ){
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 SoundManager.getInstance().playMoveSound();
                 isActive = !isActive;

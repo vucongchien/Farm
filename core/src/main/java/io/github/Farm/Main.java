@@ -143,7 +143,7 @@ public class Main extends ApplicationAdapter {
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 IntroGame.getInstance().render(batch);
             }
-            if (IntroGame.getInstance().getElapsedTime() > 16.1) {
+            if (IntroGame.getInstance().getElapsedTime() > 16.7) {
                 IntroGame.getInstance().setIntro(false);
                 SoundManager.getInstance().stopInTroGame();
             }else if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
@@ -226,6 +226,7 @@ public class Main extends ApplicationAdapter {
                 }
                 if(playerControllerNew.isDie()){
                     GameOverScreen.getInstance().setGameOverActive(true);
+                    SettingGame.getInstance().clearFile();
                 }
                 if(Inventory.getInstance().checkSoLuong("FOOD_pumpkin",10)){
                     WinGame.getInstance().setIsWin(true);
