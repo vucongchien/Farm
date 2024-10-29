@@ -63,7 +63,7 @@ public class BuffaloManager  {
             if(TimeUtils.timeSinceMillis(hptime) > 5000){
                 for(Buffalo buffalo:buffaloManager) {
                     if(buffalo.gethungry()>=10) {
-                        buffalo.sethungry(20);
+                        buffalo.sethungry(2);
                         if(buffalo.gethungry()>50){
                             buffalo.getChatbox().setCurrent("UI/other/happiness_01.png",7,8);
                         }else{

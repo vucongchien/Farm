@@ -60,7 +60,7 @@ public class ChickenManager {
         }
         if(TimeUtils.timeSinceMillis(hptime) > 5000){
             for(ChickenRender chicken: chickenManager) {
-                chicken.sethungry(20);
+                chicken.sethungry(2);
                 if(chicken.gethungry()>50){
                     chicken.getChatbox().setCurrent("UI/other/happiness_01.png",7/2,8/2);
                 }else{

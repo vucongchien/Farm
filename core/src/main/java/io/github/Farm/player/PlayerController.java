@@ -274,7 +274,7 @@ public class PlayerController implements Collider, Disposable {
                     if(Inventory.getInstance().dropItem("FOOD_wheat")) {
                         ItemManager.getInstance().addItem("FOOD_wheat",buffalo.location().cpy().scl(1/16f),1);
                         buffalo.setCheckeating(true);
-                        buffalo.recoverhungry(20);
+                        buffalo.recoverhungry(50);
                     }
                 }
             }
@@ -287,7 +287,7 @@ public class PlayerController implements Collider, Disposable {
                     if(Inventory.getInstance().dropItem("FOOD_kale")) {
                         ItemManager.getInstance().addItem("FOOD_kale",pig.location().cpy().scl(1/16f),1);
                         pig.setCheckeating(true);
-                        pig.recoverhungry(20);
+                        pig.recoverhungry(50);
                     }
                 }
             }
@@ -300,7 +300,7 @@ public class PlayerController implements Collider, Disposable {
                     if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
                         chicken.setCheckeating(true);
                         ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
-                        chicken.recoverhungry(20);
+                        chicken.recoverhungry(50);
                     }
 
                 }
