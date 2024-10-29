@@ -69,8 +69,8 @@ public class Main extends ApplicationAdapter {
 
     //------------------render
     private GameRenderer gameRenderer;
-    private ShapeRenderer shapeRenderer;
-    private Box2DDebugRenderer debugRenderer;
+//    private ShapeRenderer shapeRenderer;
+//    private Box2DDebugRenderer debugRenderer;
 
 
     @Override
@@ -87,8 +87,8 @@ public class Main extends ApplicationAdapter {
         mapManager = new MapManager(map);
         mapInteractionHandler = new MapInteractionHandler(mapManager);
 
-        shapeRenderer = new ShapeRenderer();
-        debugRenderer = new Box2DDebugRenderer();
+//        shapeRenderer = new ShapeRenderer();
+//        debugRenderer = new Box2DDebugRenderer();
         TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
 
 
@@ -150,7 +150,7 @@ public class Main extends ApplicationAdapter {
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 IntroGame.getInstance().render(batch);
             }
-            if (IntroGame.getInstance().getElapsedTime() > 16.1) {
+            if (IntroGame.getInstance().getElapsedTime() > 16.7) {
                 IntroGame.getInstance().setIntro(false);
                 SoundManager.getInstance().stopInTroGame();
             }else if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
@@ -196,19 +196,19 @@ public class Main extends ApplicationAdapter {
 
                 float deltaTime = Gdx.graphics.getDeltaTime();
 
-
-                debugRenderer.render(world, camera.combined);
-                shapeRenderer.setProjectionMatrix(camera.combined);
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.setColor(Color.RED);
-                Rectangle collider = playerControllerNew.getCollider();
-                shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
-                if(MaterialManager.getInstance().getTrees().get(0)!=null) {
-                    Rectangle a = MaterialManager.getInstance().getTrees().get(0).getRectangle();
-                    shapeRenderer.rect(a.x, a.y, a.width, a.height);
-                }
-                shapeRenderer.rect(ship.getCollider().x, ship.getCollider().y, ship.getCollider().width, ship.getCollider().height);
-                shapeRenderer.end();
+//
+//                debugRenderer.render(world, camera.combined);
+//                shapeRenderer.setProjectionMatrix(camera.combined);
+//                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//                shapeRenderer.setColor(Color.RED);
+//                Rectangle collider = playerControllerNew.getCollider();
+//                shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);
+//                if(MaterialManager.getInstance().getTrees().get(0)!=null) {
+//                    Rectangle a = MaterialManager.getInstance().getTrees().get(0).getRectangle();
+//                    shapeRenderer.rect(a.x, a.y, a.width, a.height);
+//                }
+//                shapeRenderer.rect(ship.getCollider().x, ship.getCollider().y, ship.getCollider().width, ship.getCollider().height);
+//                shapeRenderer.end();
 
                 batch.setProjectionMatrix(camera.combined);
                 PlantManager.getInstance().update(deltaTime);
@@ -238,6 +238,7 @@ public class Main extends ApplicationAdapter {
                 }
                 if(playerControllerNew.isDie()){
                     GameOverScreen.getInstance().setGameOverActive(true);
+                    SettingGame.getInstance().clearFile();
                 }
             }
 
@@ -250,8 +251,7 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         map.dispose();
         Inventory.getInstance().dispose();
-        shapeRenderer.dispose();
-        debugRenderer.dispose();
-
+//        shapeRenderer.dispose();
+//        debugRenderer.dispose();
     }
 }
