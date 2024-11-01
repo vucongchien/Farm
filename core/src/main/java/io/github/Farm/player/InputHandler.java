@@ -56,6 +56,10 @@ public class InputHandler {
         return Gdx.input.isKeyPressed(Input.Keys.J);
     }
 
+    public boolean isHammer(){
+        return Gdx.input.isKeyPressed(Input.Keys.L);
+    }
+
     public boolean isOpeningInventory() {
         return Gdx.input.isKeyPressed(Input.Keys.SPACE);
 

@@ -25,7 +25,7 @@ public class Item implements RenderableEntity, Collider, Disposable {
 
     private boolean canTake;
 
-    private float remainingTime=5f;
+    private float remainingTime=20f;
 
     public Item(String name,Vector2 position){
         canTake=false;

@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.SoundManager;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import io.github.Farm.player.PlayerController;
-import io.github.Farm.player.PlayerRenderer;
+
 
 public class GameOverScreen {
     private static GameOverScreen INSTANCE;

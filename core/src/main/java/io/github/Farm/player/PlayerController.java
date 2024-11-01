@@ -30,6 +30,7 @@ import io.github.Farm.ui.Other.SelectionBox;
 
 public class PlayerController implements Collider, Disposable {
     private final Heath heath;
+    private float stamina=100;
     private float speed;
     private final Vector2 positionInMap;
 
@@ -52,15 +53,15 @@ public class PlayerController implements Collider, Disposable {
     private final Camera camera;
 
     private ExpressionManager expressionManager;
-
+    private float time;
 
     //..................readfile
     private final String link="playerData.json";
     private SelectionBox selectionBox;
 
-
     public PlayerController(Vector2 startPosition, World world, MapInteractionHandler mapInteractionHandler, Camera camera) {
         this.heath = new Heath(100);
+        this.stamina=100;
         if(MainMenu.isCheckcontinue()) {
             readPlayerData(this.getHeath(), startPosition);
         }
@@ -102,19 +103,17 @@ public class PlayerController implements Collider, Disposable {
 
         updatePlayerState(deltaTime);
         updateExpress();
-
-
-
+        time+=deltaTime;
+        if(time>50f){
+            time=0f;
+            stamina=Math.max(0,stamina-1);
+        }
 
 
         collider.setPosition(isFacingRight ? body.getPosition().x + 5 : body.getPosition().x - 20, body.getPosition().y - 5);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             Inventory.getInstance().setOpened();
-            Inventory.getInstance().addItem("SEED_pumpkin", 1);
-            Inventory.getInstance().addItem("FOOD_pumpkin", 1);
-            Inventory.getInstance().addItem("SEED_kale", 1);
-            Inventory.getInstance().addItem("SEED_carrot", 1);
         }
 
         updateMovement(deltaTime);
@@ -199,12 +198,14 @@ public class PlayerController implements Collider, Disposable {
             }
         }
 
-
         else if (inputHandler.isWatering()) {
             stateManager.changeState(this, new WaterState(direction));
         }
         else if (inputHandler.isHitting()) {
             stateManager.changeState(this, new HitState(direction));
+        }
+        else if (inputHandler.isHammer()) {
+            stateManager.changeState(this,new HammerState(direction));
         }
         else if (inputHandler.isPlowing()) {
 
@@ -232,6 +233,11 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void updateExpress(){
+        if(stamina<=0){
+            expressionManager.setExpression(Expression.STRESS);
+        }else{
+            expressionManager.setExpression(Expression.NULL);
+        }
         expressionManager.render(body.getPosition(),camera,10f,0.4f);
     }
 
@@ -264,13 +270,12 @@ public class PlayerController implements Collider, Disposable {
             Buffalo buffalo = (Buffalo) other;
             selectionBox.ren(buffalo.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!buffalo.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
-                    ItemManager.getInstance().addItem("FOOD_pumpkin",buffalo.location().cpy().scl(1/16f),1);
-                    buffalo.setCheckeating(true);
-                    if(buffalo.gethungry()<=80) {
-                        buffalo.recoverhungry(20);
+                if(buffalo.gethungry()<=80) {
+                    if(Inventory.getInstance().dropItem("FOOD_wheat")) {
+                        ItemManager.getInstance().addItem("FOOD_wheat",buffalo.location().cpy().scl(1/16f),1);
+                        buffalo.setCheckeating(true);
+                        buffalo.recoverhungry(50);
                     }
-                    System.out.println(buffalo.gethungry());
                 }
             }
 
@@ -278,11 +283,11 @@ public class PlayerController implements Collider, Disposable {
             PigReander pig = (PigReander) other;
             selectionBox.ren(pig.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!pig.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
-                    ItemManager.getInstance().addItem("FOOD_pumpkin",pig.location().cpy().scl(1/16f),1);
-                    pig.setCheckeating(true);
-                    if(pig.gethungry()<=80) {
-                        pig.recoverhungry(20);
+                if(pig.gethungry()<=50) {
+                    if(Inventory.getInstance().dropItem("FOOD_kale")) {
+                        ItemManager.getInstance().addItem("FOOD_kale",pig.location().cpy().scl(1/16f),1);
+                        pig.setCheckeating(true);
+                        pig.recoverhungry(50);
                     }
                 }
             }
@@ -291,12 +296,13 @@ public class PlayerController implements Collider, Disposable {
             ChickenRender chicken = (ChickenRender) other;
             selectionBox.ren(chicken.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!chicken.isCheckeating()) {
-                if(Inventory.getInstance().dropItem("FOOD_pumpkin")) {
-                    ItemManager.getInstance().addItem("FOOD_pumpkin",chicken.location().cpy().scl(1/16f),1);
-                    chicken.setCheckeating(true);
-                    if(chicken.gethungry()<=80) {
+                if(chicken.gethungry()<=50) {
+                    if(Inventory.getInstance().dropItem("SEED_wheat")) {
+                        chicken.setCheckeating(true);
+                        ItemManager.getInstance().addItem("SEED_wheat",chicken.location().cpy().scl(1/16f),1);
                         chicken.recoverhungry(20);
                     }
+
                 }
             }
         }
@@ -364,17 +370,19 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void readPlayerData(Heath heath,Vector2 a) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                JsonNode playerData = objectMapper.readTree(new File(link));
-                double posX = playerData.get("posX").asDouble();
-                double posY = playerData.get("posY").asDouble();
-                double health = playerData.get("health").asDouble();
-                a.set((float) posX,(float) posY);
-                heath.setCurrHp((float) health);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode playerData = objectMapper.readTree(new File(link));
+            double posX = playerData.get("posX").asDouble();
+            double posY = playerData.get("posY").asDouble();
+            double health = playerData.get("health").asDouble();
+            double satmina=playerData.get("stamina").asDouble();
+            a.set((float) posX,(float) posY);
+            heath.setCurrHp((float) health);
+            setStamina((float) satmina);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean isDie(){
@@ -382,7 +390,16 @@ public class PlayerController implements Collider, Disposable {
     }
 
     public void eat(){
-
+        heath.heal(10);
+        stamina+=Math.min(stamina+10,100);
+        expressionManager.setExpression(Expression.NULL);
     }
 
+    public float getStamina() {
+        return stamina;
+    }
+
+    public void setStamina(float stamina) {
+        this.stamina = stamina;
+    }
 }

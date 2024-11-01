@@ -1,6 +1,7 @@
 package io.github.Farm.inventory;
 
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -37,6 +38,8 @@ public class Inventory {
     private final float totalWidth = columns * slotSize;
     private final float totalHeight = rows * slotSize;
     private final String link="inventoryData.json";
+    private Texture slotBorderTexture;      // Texture cho viền ô
+    private Texture selectedSlotBorderTexture;
 
     private int selectedItemIndex = 0;
 
@@ -44,6 +47,9 @@ public class Inventory {
 
 
     public Inventory() {
+
+        this.slotBorderTexture=new Texture("UI/Inventory/Inventory_Slot.png");
+        this.selectedSlotBorderTexture=new Texture("UI/Inventory/Inventory_select.png");
         if(MainMenu.isCheckcontinue()){
             font.setColor(Color.BLACK);
             readInventoty(slots);
@@ -92,6 +98,17 @@ public class Inventory {
         }
         return false;
     }
+
+    public int getQuantitySlot(String name){
+        for(InventorySlot slot:slots){
+            if(name.equals(slot.getFULL_NAME())){
+                return slot.getQuantity();
+            }
+        }
+        return 0;
+    }
+
+
 
     public boolean dropItem(String Full_Name){
         for(InventorySlot slot:slots){
@@ -143,44 +160,34 @@ public class Inventory {
         float inventoryX = playerPosition.x - (totalWidth / 2);
         float inventoryY = playerPosition.y - (totalHeight / 2);
 
-        // Vẽ background và khung của inventory
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.LIGHT_GRAY);  // Màu nền xám nhạt
-        shapeRenderer.rect(inventoryX, inventoryY, totalWidth, totalHeight);
-        shapeRenderer.end();
-
-        // Vẽ viền cho các ô
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.DARK_GRAY);
-        for (int i = 0; i <= columns; i++) {
-            shapeRenderer.line(inventoryX + i * slotSize, inventoryY, inventoryX + i * slotSize, inventoryY + totalHeight);
-        }
-        for (int i = 0; i <= maxSlots / columns; i++) {
-            shapeRenderer.line(inventoryX, inventoryY + i * slotSize, inventoryX + totalWidth, inventoryY + i * slotSize);
-        }
-        shapeRenderer.end();
-
-        // Vẽ các vật phẩm trước
+        // Bắt đầu vẽ background cho inventory
         batch.begin();
+        // batch.draw(slotBackgroundTexture, inventoryX, inventoryY, totalWidth, totalHeight); // Vẽ nền inventory
+
+        // Vẽ viền cho các ô bằng cách dùng texture slotBorderTexture
+        for (int i = 0; i < maxSlots ; i++) {
+            float x = inventoryX + (i % columns) * slotSize;
+            float y = inventoryY + totalHeight - ((i / columns + 1) * slotSize);
+            batch.draw(slotBorderTexture, x, y, slotSize, slotSize); // Vẽ viền của ô
+        }
+
+        // Vẽ các vật phẩm trong các ô
         for (int i = 0; i < slots.size(); i++) {
             InventorySlot inventorySlot = slots.get(i);
             float x = inventoryX + (i % columns) * slotSize;
             float y = inventoryY + totalHeight - ((i / columns + 1) * slotSize);
 
-            // Vẽ texture item
-            batch.draw(inventorySlot.getTexture(), x + 5, y + 5, slotSize - 10, slotSize - 10);
-            // Vẽ số lượng item
+            batch.draw(inventorySlot.getTexture(), x +20- inventorySlot.getTexture().getWidth()/2, y + 20-inventorySlot.getTexture().getHeight()/2, inventorySlot.getTexture().getWidth()*3, inventorySlot.getTexture().getHeight()*3);
+
             font.draw(batch, String.valueOf(inventorySlot.getQuantity()), x + slotSize - 20, y + 20);
         }
-        batch.end();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.WHITE);
-        float selectedX = (selectedItemIndex % columns) * slotSize;
-        float selectedY = totalHeight - ((selectedItemIndex / columns + 1) * slotSize);
-        shapeRenderer.rect(inventoryX + selectedX, inventoryY + selectedY, slotSize, slotSize);  // Vẽ viền đỏ quanh ô được chọn
-        shapeRenderer.end();
+        // Vẽ viền của ô được chọn
+        float selectedX = inventoryX + (selectedItemIndex % columns) * slotSize;
+        float selectedY = inventoryY + totalHeight - ((selectedItemIndex / columns + 1) * slotSize);
+        batch.draw(selectedSlotBorderTexture, selectedX, selectedY, slotSize, slotSize); // Vẽ viền ô được chọn
+
+        batch.end();
     }
 
 

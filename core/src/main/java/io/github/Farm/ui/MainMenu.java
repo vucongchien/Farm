@@ -2,6 +2,7 @@ package io.github.Farm.ui;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,14 +13,26 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import io.github.Farm.Map.MapInteractionHandler;
+import io.github.Farm.Plants.PlantManager;
+import io.github.Farm.Plants.PlantStage;
+import io.github.Farm.Plants.PlantType;
 import io.github.Farm.SoundManager;
 import com.badlogic.gdx.graphics.GL20;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.data.AnimalData;
 import io.github.Farm.data.GameData;
 import io.github.Farm.data.GameSaveManager;
+import io.github.Farm.data.PlayerData;
+import io.github.Farm.inventory.Inventory;
+import io.github.Farm.player.PlayerController;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 
 public class MainMenu {
@@ -54,9 +67,11 @@ public class MainMenu {
         parameter.borderColor = Color.BLACK; // Màu viền
         this.font = generator.generateFont(parameter); // Tạo font tùy chỉnh
         generator.dispose(); // Giải phóng tài nguyên của generator
-        isDataFileExists = true;
+        String data = readFromFile();
+        System.out.println(data);
 
-        if (isDataFileExists) {
+//        isDataFileExists=true;
+        if (data.startsWith("Game Saved!")) {
             this.menuItems = new String[] {"Continue", "New Game", "Controls", "Exit"};
         } else {
             this.menuItems = new String[] {"Start Game", "Controls", "Exit"};
@@ -66,10 +81,12 @@ public class MainMenu {
         this.maxTextWidth = 0; // Khởi tạo maxTextWidth
         this.totalMenuHeight = 0; // Khởi tạo totalMenuHeight
         this.controlsText = "W S A D: Move character\n" +
-            "C: Fish\n" +
-            "F: Dig\n" +
+            "C: Fishing\n" +
+            "J: Attack\n" +
+            "K: Dig\n" +
+            "F: Feed or Pick up\n" +
             "R: Water\n" +
-            "I: Open Inventory\n" +
+            "Space: Open Inventory\n" +
             "ESC: Open Settings";
         this.isControlsActive = false; // Mặc định bảng điều khiển không hiển thị
 
@@ -99,6 +116,21 @@ public class MainMenu {
         // Tạo animation với tốc độ 10 frame mỗi giây (có thể điều chỉnh)
         backgroundAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
 
+    }
+    public String readFromFile() {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader("data.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n"); // Thêm dòng mới vào nội dung
+            }
+        } catch (IOException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ nếu có lỗi
+        }
+        return content.toString(); // Trả về nội dung đã đọc từ file
+    }
+    public void setIsDataFileExists(boolean isDataFileExists) {
+        this.isDataFileExists = isDataFileExists;
     }
 
     public static boolean isCheckcontinue() {
@@ -169,21 +201,28 @@ public class MainMenu {
                 switch (menuItems[selectedIndex]) {
 
                     case "Start Game":
-                        // Start game
                         IntroGame.getInstance().setIntro(true);
+                        newPlantData();
+                        newInventoryData();
 
                         isMenuActive = false;
                         checkcontinue=false;
                         break;
 
                     case "New Game":
-                        IntroGame.getInstance().setIntro(true);
-                        isMenuActive = false;
 
+                        IntroGame.getInstance().setIntro(true);
+                        newPlantData();
+                        newInventoryData();
+                        isMenuActive = false;
+                        checkcontinue=false;
                         break;
 
                     case "Continue":
-                        GameSaveManager.getInstance().saveMapData(map);
+
+
+                        GameSaveManager.getInstance().loadMapData(map);
+
                         isMenuActive = false;
                         checkcontinue=true;
                         break;
@@ -202,6 +241,8 @@ public class MainMenu {
             isMenuActive = true;
         }
     }
+
+
     public String getControlsText() {
         return controlsText;
     }
@@ -211,6 +252,7 @@ public class MainMenu {
     public void setIsControlsActive(boolean isControlsActive) {
         this.isControlsActive = isControlsActive;
     }
+
 
     public boolean isMenuActive() {
         return isMenuActive;
@@ -232,5 +274,20 @@ public class MainMenu {
         }
     }
 
+    public void newPlantData(){
+        PlantManager.getInstance().addPlantDefault(new Vector2(126,95),PlantType.cauliflower,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(194,65),PlantType.parsnip,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(170,86),PlantType.cabbage,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(156,104),PlantType.radish,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(223,68),PlantType.beetroot,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(159,70),PlantType.parsnip,PlantStage.HARVESTED);
+    }
+
+    public void newInventoryData(){
+        Inventory.getInstance().addItem("SEED_carrot",3);
+        Inventory.getInstance().addItem("SEED_potato",3);
+        Inventory.getInstance().addItem("SEED_wheat",2);
+        Inventory.getInstance().addItem("FOOD_pumpkin",2);
+    }
 
 }
