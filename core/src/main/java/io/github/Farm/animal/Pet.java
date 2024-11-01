@@ -367,6 +367,7 @@ public abstract class Pet implements Collider {
                 }
                 if (pig1.getKnockbackDuration() <= 0 && pig2.getKnockbackDuration() <= 0) {
                     knockBack(pig1, pig2);
+                    knockBack(pig2,pig1);
                 }
             }
         }
@@ -397,6 +398,7 @@ public abstract class Pet implements Collider {
                     buffalo.setTimeeating(TimeUtils.millis());
                 }
                 if(TimeUtils.timeSinceMillis(buffalo.getTimeeating())>2000){
+                    ItemManager.getInstance().addItemVip("FOOD_milk",buffalo.location().cpy().scl(1/16f),true,1);
                     buffalo.setCheckeating(false);
                     buffalo.setTimeeating(0);
                 }else {
@@ -456,6 +458,7 @@ public abstract class Pet implements Collider {
                     pig.setTimeeating(TimeUtils.millis());
                 }
                 if(TimeUtils.timeSinceMillis(pig.getTimeeating())>2000){
+                    ItemManager.getInstance().addItemVip("FOOD_potato",pig.location().cpy().scl(1/16f),true,1);
                     pig.setCheckeating(false);
                     pig.setTimeeating(0);
                 }else {
@@ -474,15 +477,17 @@ public abstract class Pet implements Collider {
                     }
                 } else {
                     if (pig.getIsStopped()) {
-                        if (TimeUtils.timeSinceMillis(pig.getCollisionStopTime()) >= 5000) {
-                            pig.setIsStopped(false);
-                            pig.settargetLocation(pig.randomlocation(x1,x2,y1,y2));
-                        } else {
+                        if (TimeUtils.timeSinceMillis(pig.getCollisionStopTime()) < 5000) {
                             if (pig.getLeft()) {
                                 pig.setcrencurrentState(PetState.IDLE_LEFT);
+
                             } else {
                                 pig.setcrencurrentState(PetState.IDLE_RIGHT);
                             }
+                        } else {
+                            pig.setIsStopped(false);
+                            pig.settargetLocation(pig.randomlocation(x1,x2,y1,y2));
+                            pig.setCollisionStopTime(0);
                         }
                     } else {
                         if (pig.getTargetLocation() == null || pig.location().epsilonEquals(pig.getTargetLocation(), 1f)) {
@@ -515,6 +520,7 @@ public abstract class Pet implements Collider {
                     chicken.setTimeeating(TimeUtils.millis());
                 }
                 if(TimeUtils.timeSinceMillis(chicken.getTimeeating())>2000){
+                    ItemManager.getInstance().addItemVip("FOOD_egg",chicken.location().cpy().scl(1/16f),true,1);
                     chicken.setCheckeating(false);
                     chicken.setTimeeating(0);
                 }else {

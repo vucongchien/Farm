@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.Farm.animal.PetState;
+import io.github.Farm.animal.Pig.PigReander;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.ui.MainMenu;
 
@@ -82,11 +83,11 @@ public class BuffaloManager  {
     public void update(PlayerController playerController){
         checkquantity();
         checkHungry();
-        for(Buffalo buffalo:buffaloManager){
-            for(Buffalo buffalo1:buffaloManager){
-                if(buffalo!=buffalo1){
-                    buffalo.collide(buffalo,buffalo1);
-                }
+        for (int i = 0; i < buffaloManager.size(); i++) {
+            Buffalo buffalo = buffaloManager.get(i);
+            for (int j = i + 1; j < buffaloManager.size(); j++) {
+                Buffalo buffalo1 = buffaloManager.get(j);
+                buffalo.collide(buffalo, buffalo1);
             }
             if(startpoint==null) {
                 buffalo.ativate(buffalo, 2200, 2350, 1500, 1600);

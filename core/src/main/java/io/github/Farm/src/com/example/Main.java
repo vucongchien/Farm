@@ -161,7 +161,7 @@ public class Main extends ApplicationAdapter {
         }
         else {
             if(playerControllerNew==null){
-                playerControllerNew = new PlayerController(new Vector2(3817, 954), world, mapInteractionHandler,camera);
+                playerControllerNew = new PlayerController(new Vector2(3817,954), world, mapInteractionHandler,camera);
                 playerImageManagerNew = new PlayerImageManager();
                 playerRendererNew = new PlayerRenderer(playerControllerNew, playerImageManagerNew, 64);
                 gameRenderer = new GameRenderer(playerRendererNew, camera,map);
@@ -216,7 +216,7 @@ public class Main extends ApplicationAdapter {
                 PigManager.getPigmanager().update(playerControllerNew);
                 ChickenManager.getChickenmanager().update(playerControllerNew);
                 PetManager.getPetmanager().update(BuffaloManager.getbuffalomanager(),ChickenManager.getChickenmanager(),PigManager.getPigmanager());
-                WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
+                //WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
 
 

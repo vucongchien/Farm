@@ -83,7 +83,7 @@ public class WolfManager {
     }
 
     public void checkquantity() {
-        if (wolfmanager.size() < 5) {
+        if (wolfmanager.size() < 1) {
                 if (breedingTime == 0) {
                     breedingTime = TimeUtils.millis();
                 }

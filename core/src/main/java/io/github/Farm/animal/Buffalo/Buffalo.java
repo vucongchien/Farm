@@ -37,7 +37,6 @@ public class Buffalo extends Pet implements RenderableEntity {
             setKnockbackDuration(getKnockbackDuration() - deltaTime) ;
             if (getKnockbackDuration() <= 0) {
                 getKnockbackVelocity().set(0, 0);
-                setIsStopped(false);
             }
         }
         getbox().setPosition(location().x + 10, location().y + 5);

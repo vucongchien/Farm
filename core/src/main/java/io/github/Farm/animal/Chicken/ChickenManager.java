@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.Farm.animal.Pig.PigReander;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.ui.MainMenu;
 
@@ -60,7 +61,7 @@ public class ChickenManager {
         }
         if(TimeUtils.timeSinceMillis(hptime) > 5000){
             for(ChickenRender chicken: chickenManager) {
-                chicken.sethungry(2);
+                chicken.sethungry(10);
                 if(chicken.gethungry()>50){
                     chicken.getChatbox().setCurrent("UI/other/happiness_01.png",7/2,8/2);
                 }else{
@@ -79,11 +80,11 @@ public class ChickenManager {
     public void update(PlayerController playerController){
         checkquantity();
         checkHungry();
-        for(ChickenRender chicken: chickenManager){
-            for(ChickenRender chicken1: chickenManager){
-                if(chicken!=chicken1){
-                    chicken.collide(chicken,chicken1);
-                }
+        for (int i = 0; i < chickenManager.size(); i++) {
+            ChickenRender chicken = chickenManager.get(i);
+            for (int j = i + 1; j < chickenManager.size(); j++) {
+                ChickenRender chicken1 = chickenManager.get(j);
+                chicken.collide(chicken, chicken1);
             }
             chicken.ativate(chicken,2500,2650,1700,1800);
             chicken.update(Gdx.graphics.getDeltaTime());
