@@ -16,7 +16,7 @@ import io.github.Farm.animal.Pig.PigManager;
 import io.github.Farm.animal.WOLF.WolfManager;
 import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerRenderer;
-import io.github.Farm.weather.Weather;
+import io.github.Farm.ui.Weather;
 
 import java.util.ArrayList;
 import java.util.Comparator;

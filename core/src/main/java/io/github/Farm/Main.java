@@ -7,13 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Map.MapManager;
@@ -39,7 +36,7 @@ import io.github.Farm.inventory.Inventory;
 import io.github.Farm.ui.MainMenu;
 import io.github.Farm.ui.Other.SelectionBox;
 import io.github.Farm.ui.SettingGame;
-import io.github.Farm.weather.Weather;
+import io.github.Farm.ui.Weather;
 
 
 
@@ -89,7 +86,7 @@ public class Main extends ApplicationAdapter {
 
 //        shapeRenderer = new ShapeRenderer();
 //        debugRenderer = new Box2DDebugRenderer();
-        TiledObject.parseTiledObject(world, map.getLayers().get("aduvip").getObjects());
+        TiledObject.parseTiledObject(world, map.getLayers().get("wall").getObjects());
 
 
         gameData = new GameData();

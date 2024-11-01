@@ -2,7 +2,6 @@ package io.github.Farm.ui;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,22 +12,14 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantStage;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.SoundManager;
-import com.badlogic.gdx.graphics.GL20;
-import io.github.Farm.animal.Buffalo.BuffaloManager;
-import io.github.Farm.data.AnimalData;
-import io.github.Farm.data.GameData;
 import io.github.Farm.data.GameSaveManager;
-import io.github.Farm.data.PlayerData;
 import io.github.Farm.inventory.Inventory;
-import io.github.Farm.player.PlayerController;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

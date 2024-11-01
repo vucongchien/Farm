@@ -1,4 +1,4 @@
-package io.github.Farm;
+package io.github.Farm.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;

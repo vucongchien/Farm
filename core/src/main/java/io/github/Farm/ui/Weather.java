@@ -1,15 +1,14 @@
-package io.github.Farm.weather;
+package io.github.Farm.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import io.github.Farm.Map.MapManager;
-import io.github.Farm.SoundManager;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.player.PlayerController;
 
-public class Weather {
+public class Weather implements Disposable {
     private static Weather instance;
     public static Weather getInstance() {
         if (instance == null) {
@@ -22,15 +21,15 @@ public class Weather {
     private float weatherDuration; // Thời gian duy trì thời tiết hiện tại
     private final float minWeatherDuration = 20f; // Thời gian tối thiểu của mỗi thời tiết
     private final float maxWeatherDuration = 30f; // Thời gian tối đa của mỗi thời tiết
-    private Texture rainTexture; // Hình ảnh giọt mưa
-    private Texture sunnyIcon;
-    private Texture nightIcon;
-    private Texture rainIcon;
-    private Texture cloudIcon;
-    private Texture darkCloud;
-    private Texture darkRain;
+    private final Texture rainTexture; // Hình ảnh giọt mưa
+    private final Texture sunnyIcon;
+    private final Texture nightIcon;
+    private final Texture rainIcon;
+    private final Texture cloudIcon;
+    private final Texture darkCloud;
+    private final Texture darkRain;
     private final int rainDropCount = 4; // Số giọt mưa
-    private Texture cloudTexture; // Hình ảnh đám mây
+    private final Texture cloudTexture; // Hình ảnh đám mây
     private float cloudSpeed = 30f; // Tốc độ di chuyển của mây
     private float[] cloudPositions; // Vị trí đám mây trên màn hình
     private final int cloudCount = 3; // Số lượng đám mây
@@ -141,6 +140,7 @@ public class Weather {
                 }
                 drawClouds(batch);
                 drawRain(batch,player);
+
                 break;
             case "Cloudy":
                 SoundManager.getInstance().stopRainSound();
@@ -191,8 +191,16 @@ public class Weather {
         return currentWeather;
     }
 
+    @Override
     public void dispose() {
         rainTexture.dispose();
+        sunnyIcon.dispose();
+        nightIcon.dispose();
+        rainIcon.dispose();
+        cloudIcon.dispose();
+        darkCloud.dispose();
+        darkRain.dispose();
         cloudTexture.dispose();
     }
+
 }

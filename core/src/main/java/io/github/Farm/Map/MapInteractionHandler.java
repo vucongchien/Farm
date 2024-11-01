@@ -17,15 +17,22 @@ import java.util.ArrayList;
 public class MapInteractionHandler {
 
     private MapManager mapManager;
+    private static final String GRASS_TILE = "grass";
+    private static final String DUG_SOIL_TILE = "dug_soil";
+    private static final String CAN_FISH_LAYER = "canFish";
+    private static final String LAND_LAYER="land";
+
+
+    private ArrayList<Rectangle> canFishRectangles;
 
 
     private final float TIME_TO_PLANT =2f;
-
     private Timer.Task currentTask;
 
 
     public MapInteractionHandler(MapManager mapManager) {
         this.mapManager = mapManager;
+
     }
 
     public boolean checkTile(Vector2 positonInMap,String tileType){
@@ -37,9 +44,9 @@ public class MapInteractionHandler {
     public void digSoil(PlayerController playerController) {
 
         String tileClass = mapManager.getTileClass(playerController.getPositionInMap());
-        if ("grass".equals(tileClass)) {
+        if (GRASS_TILE.equals(tileClass)) {
 
-            mapManager.changeTile(playerController.getPositionInMap(), "dug_soil", "land");
+            mapManager.changeTile(playerController.getPositionInMap(), DUG_SOIL_TILE, LAND_LAYER);
             System.out.println(playerController.getPositionInMap());
 
         }
@@ -53,7 +60,7 @@ public class MapInteractionHandler {
         Inventory.getInstance().setOpened();
         if(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap())!=null) return;
         String tileClass=mapManager.getTileClass(playerController.getPositionInMap());
-        if("dug_soil".equals(tileClass)){
+        if(DUG_SOIL_TILE.equals(tileClass)){
             playerController.setPlanting(true);
 
             if (currentTask != null) {
@@ -66,31 +73,38 @@ public class MapInteractionHandler {
                         PlantManager.getInstance().addPlantFromInventory(playerController.getPositionInMap(), plantType);
                         playerController.changeState(new IdleState(playerController.isFacingRight()?"RIGHT":"LEFT"));
                         playerController.setPlanting(false);
-                        System.out.println("thanh cong "+ playerController.getPositionInMap());
+                        if (Inventory.getInstance().getSelectedItem().getQuantity() <= 0) {
+                            Inventory.getInstance().getSlots().remove(Inventory.getInstance().getSelectedItem());
+                        }
+
                     }
                 }
             };
             Timer.schedule(currentTask, TIME_TO_PLANT);
 
         } else {
-            System.out.println("Cannot plant: " + tileClass+ "  "+playerController.getPositionInMap());
+//            System.out.println("Cannot plant: " + tileClass+ "  "+playerController.getPositionInMap());
         }
 
 
     }
 
-    public ArrayList<Rectangle> getCanFishZoneLayer(){
-        MapLayer canFishLayer=mapManager.getTiledMap().getLayers().get("canFish");
-        ArrayList<Rectangle> canFishRectangles=new ArrayList<>();
-        if(canFishLayer!=null){
-            for(MapObject object: canFishLayer.getObjects()){
-                if(object instanceof RectangleMapObject){
-                    canFishRectangles.add(((RectangleMapObject) object).getRectangle());
+
+    public ArrayList<Rectangle> getCanFishZoneLayer() {
+        if (canFishRectangles == null) {
+            canFishRectangles = new ArrayList<>();
+            MapLayer canFishLayer = mapManager.getTiledMap().getLayers().get(CAN_FISH_LAYER);
+            if (canFishLayer != null) {
+                for (MapObject object : canFishLayer.getObjects()) {
+                    if (object instanceof RectangleMapObject) {
+                        canFishRectangles.add(((RectangleMapObject) object).getRectangle());
+                    }
                 }
             }
         }
         return canFishRectangles;
     }
+
 
 
 }

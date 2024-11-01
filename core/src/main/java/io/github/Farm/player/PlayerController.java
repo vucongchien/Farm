@@ -3,7 +3,6 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -13,12 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Interface.Heath;
 import io.github.Farm.Map.MapInteractionHandler;
-import io.github.Farm.SoundManager;
+import io.github.Farm.ui.Other.GreenBar;
+import io.github.Farm.ui.SoundManager;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Chicken.ChickenRender;
 import io.github.Farm.animal.Pig.PigReander;
 import io.github.Farm.inventory.Inventory;
-import io.github.Farm.inventory.Item;
 import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PLAYER_STATE.*;
 import io.github.Farm.ui.MainMenu;
@@ -52,8 +51,10 @@ public class PlayerController implements Collider, Disposable {
 
     private final Camera camera;
 
+    //ui
     private ExpressionManager expressionManager;
     private float time;
+    private GreenBar greenBar=new GreenBar();
 
     //..................readfile
     private final String link="playerData.json";
@@ -194,7 +195,7 @@ public class PlayerController implements Collider, Disposable {
             }
             else
             {
-                System.out.println("del duoc cau ca dume m");
+                //ko cau
             }
         }
 
@@ -209,7 +210,7 @@ public class PlayerController implements Collider, Disposable {
         }
         else if (inputHandler.isPlowing()) {
 
-            stateManager.changeState(this, new DigState(direction));
+            stateManager.changeState(this, new DigState(direction,greenBar));
         }
         else if (inputHandler.isMoving()) {
             stateManager.changeState(this, new WalkState(direction));
