@@ -34,11 +34,9 @@ public class PigReander extends Pet implements RenderableEntity {
             setKnockbackDuration(getKnockbackDuration() - deltaTime) ;
             if (getKnockbackDuration() <= 0) {
                 getKnockbackVelocity().set(0, 0);
-                setIsStopped(false);
             }
         }
         getbox().setPosition(location().x , location().y );
-
     }
 
     @Override

@@ -33,7 +33,6 @@ public class ChickenRender extends Pet implements RenderableEntity {
             setKnockbackDuration(getKnockbackDuration() - deltaTime) ;
             if (getKnockbackDuration() <= 0) {
                 getKnockbackVelocity().set(0, 0);
-                setIsStopped(false);
             }
         }
         getbox().setPosition(location().x -10f, location().y -10f);

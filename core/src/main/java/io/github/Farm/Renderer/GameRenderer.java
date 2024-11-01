@@ -44,7 +44,7 @@ public class GameRenderer {
 
     public void render() {
         if(Weather.getInstance().getNight()){
-            batch.setColor(Color.GRAY);
+            batch.setColor(Color.WHITE);
         }else{
             batch.setColor(Color.WHITE);
         }

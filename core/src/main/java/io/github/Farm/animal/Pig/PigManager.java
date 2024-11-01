@@ -37,11 +37,11 @@ public class PigManager {
     }
 
     public  void checkquantity(){
-        if (pigManager.size() < 2) {
+        if (pigManager.size() < 3) {
             if (breedingTime == 0) {
                 breedingTime = TimeUtils.millis();
             }
-            if (TimeUtils.timeSinceMillis(breedingTime) > 2000) {
+            if (TimeUtils.timeSinceMillis(breedingTime) > 5000) {
                 pigManager.add(new PigReander(new Vector2(2150,1500),100));
                 breedingTime = 0;
             }
@@ -73,17 +73,16 @@ public class PigManager {
             }
             hptime=0;
         }
-
     }
 
     public void update(PlayerController playerController){
         checkquantity();
         checkHungry();
-        for(PigReander pig: pigManager){
-            for(PigReander pig1: pigManager){
-                if(pig!=pig1){
-                    pig.collide(pig,pig1);
-                }
+        for (int i = 0; i < pigManager.size(); i++) {
+            PigReander pig = pigManager.get(i);
+            for (int j = i + 1; j < pigManager.size(); j++) {
+                PigReander pig1 = pigManager.get(j);
+                pig.collide(pig, pig1);
             }
             pig.ativate(pig,2100,2200,1500,1600);
             pig.update(Gdx.graphics.getDeltaTime());

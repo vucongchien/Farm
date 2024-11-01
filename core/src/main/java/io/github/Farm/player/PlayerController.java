@@ -284,6 +284,7 @@ public class PlayerController implements Collider, Disposable {
             PigReander pig = (PigReander) other;
             selectionBox.ren(pig.location(),16,16);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!pig.isCheckeating()) {
+                pig.getHeath().damaged(50);
                 if(pig.gethungry()<=50) {
                     if(Inventory.getInstance().dropItem("FOOD_kale")) {
                         ItemManager.getInstance().addItem("FOOD_kale",pig.location().cpy().scl(1/16f),1);
