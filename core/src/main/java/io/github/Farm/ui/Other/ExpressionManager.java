@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 
-public class ExpressionManager {
+public class ExpressionManager implements Disposable {
     private Expression currentExpression;
     private SpriteBatch batch;
 
@@ -13,7 +14,7 @@ public class ExpressionManager {
     private float dropPositionY = 0f;
     private float timeElapsed = 0f;
 
-    public ExpressionManager() {
+    public ExpressionManager()  {
         currentExpression = Expression.NULL;
         batch=new SpriteBatch();
     }
@@ -42,4 +43,8 @@ public class ExpressionManager {
 
     }
 
+    @Override
+    public void dispose() {
+        batch.dispose();
+    }
 }

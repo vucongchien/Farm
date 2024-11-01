@@ -48,7 +48,7 @@ public class PlantManager {
         if (plants.containsKey(position)) {
             return;
         }
-        plants.put(new Vector2(position), new PlantRenderer(new Vector2(position), type));
+        plants.put(new Vector2(position), new PlantRenderer(new Vector2(position), type,PlantStage.SPROUT));
         Inventory.getInstance().getSelectedItem().reduceQuantity();
     }
 
@@ -82,12 +82,17 @@ public class PlantManager {
                 JsonNode vector = plantsNode.get("position");
                 float x = (float) vector.get("x").asDouble();
                 float y = (float) vector.get("y").asDouble();
-                PlantRenderer plantRenderer = new PlantRenderer(new Vector2(x,y), type);
+                PlantRenderer plantRenderer = new PlantRenderer(new Vector2(x,y), type,stage);
                 plantRenderer.setStage(stage);
                 plants.put(plantRenderer.getPosition(),plantRenderer);
             }
         }catch (IOException e) {
             throw new RuntimeException("Lỗi khi đọc file JSON", e);
+        }
+    }
+    public void dispose() {
+        for (PlantRenderer plant : plants.values()) {
+            plant.dispose();
         }
     }
 }

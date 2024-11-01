@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantStage;
 import io.github.Farm.Plants.PlantType;
@@ -26,7 +27,7 @@ import java.io.IOException;
 
 
 
-public class MainMenu {
+public class MainMenu implements Disposable {
     private static MainMenu instance;
     public static MainMenu getInstance() {
         if (instance == null) {
@@ -131,6 +132,7 @@ public class MainMenu {
     public static void setCheckcontinue(boolean checkcontinue) {
         MainMenu.checkcontinue = checkcontinue;
     }
+
 
     public void render(SpriteBatch batch) {
         if (isMenuActive) {
@@ -253,6 +255,7 @@ public class MainMenu {
         this.isMenuActive = isMenuActive;
     }
 
+    @Override
     public void dispose() {
         if (font != null) {
             font.dispose(); // Giải phóng tài nguyên font
@@ -271,7 +274,7 @@ public class MainMenu {
         PlantManager.getInstance().addPlantDefault(new Vector2(170,86),PlantType.cabbage,PlantStage.HARVESTED);
         PlantManager.getInstance().addPlantDefault(new Vector2(156,104),PlantType.radish,PlantStage.HARVESTED);
         PlantManager.getInstance().addPlantDefault(new Vector2(223,68),PlantType.beetroot,PlantStage.HARVESTED);
-        PlantManager.getInstance().addPlantDefault(new Vector2(159,70),PlantType.parsnip,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(159,70),PlantType.cabbage,PlantStage.HARVESTED);
     }
 
     public void newInventoryData(){

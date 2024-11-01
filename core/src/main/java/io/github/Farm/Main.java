@@ -21,12 +21,15 @@ import io.github.Farm.Materials.MaterialManager;
 import io.github.Farm.Materials.MaterialType;
 import io.github.Farm.Ship.Ship;
 import io.github.Farm.Ship.ShipRender;
+import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
 import io.github.Farm.animal.PetManager;
 import io.github.Farm.animal.Pig.PigManager;
+import io.github.Farm.animal.Pig.PigReander;
 import io.github.Farm.animal.WOLF.WolfManager;
 import io.github.Farm.data.*;
+import io.github.Farm.inventory.ItemManager;
 import io.github.Farm.player.PlayerController;
 import io.github.Farm.player.PlayerRenderer;
 import io.github.Farm.player.PlayerImageManager;
@@ -101,8 +104,6 @@ public class Main extends ApplicationAdapter {
         ship =new Ship();
         shipRender=new ShipRender(ship);
 
-
-        SelectionBox.setCamera(camera);
         gameRenderer = new GameRenderer(null, camera,map);
 
         IntroGame.getInstance();
@@ -248,7 +249,23 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         map.dispose();
         Inventory.getInstance().dispose();
-//        shapeRenderer.dispose();
-//        debugRenderer.dispose();
+        SoundManager.getInstance().dispose();
+        Weather.getInstance().dispose();
+        WinGame.getInstance().dispose();
+        IntroGame.getInstance().dispose();
+        SettingGame.getInstance().dispose();
+        GameOverScreen.getInstance().dispose();
+        Inventory.getInstance().dispose();
+        ItemManager.getInstance().dispose();
+        ChickenManager.getChickenmanager().dispose();
+        PigManager.getPigmanager().dispose();
+        WolfManager.getwolfmanage().dispose();
+        BuffaloManager.getbuffalomanager().dispose();
+        if (world != null) {
+            world.dispose();
+        }
+        if (gameRenderer != null) {
+            gameRenderer.dispose();
+        }
     }
 }

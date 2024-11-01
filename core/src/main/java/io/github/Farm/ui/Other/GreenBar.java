@@ -6,55 +6,44 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 
-/// TIME COOL DOWN
-
-public class GreenBar {
+public class GreenBar implements Disposable {
     private SpriteBatch batch;
     private TextureRegion[] greenBar;
+    private Texture[] textures;
 
-
-
-    public GreenBar(){
-
-        greenBar =new TextureRegion[7];
-        greenBar[0] =new TextureRegion(new Texture("UI/other/greenbar_00.png"));
-        greenBar[1] =new TextureRegion(new Texture("UI/other/greenbar_01.png"));
-        greenBar[2] =new TextureRegion(new Texture("UI/other/greenbar_02.png"));
-        greenBar[3] =new TextureRegion(new Texture("UI/other/greenbar_03.png"));
-        greenBar[4] =new TextureRegion(new Texture("UI/other/greenbar_04.png"));
-        greenBar[5] =new TextureRegion(new Texture("UI/other/greenbar_05.png"));
-        greenBar[6] =new TextureRegion(new Texture("UI/other/greenbar_06.png"));
-
-//        BlueBar=new TextureRegion[7];
-//        BlueBar[0] =new TextureRegion(new Texture("UI/other/bluebar_00.png"));
-//        BlueBar[1] =new TextureRegion(new Texture("UI/other/bluebar_01.png"));
-//        BlueBar[2] =new TextureRegion(new Texture("UI/other/bluebar_02.png"));
-//        BlueBar[3] =new TextureRegion(new Texture("UI/other/bluebar_03.png"));
-//        BlueBar[4] =new TextureRegion(new Texture("UI/other/bluebar_04.png"));
-//        BlueBar[5] =new TextureRegion(new Texture("UI/other/bluebar_05.png"));
-        batch=new SpriteBatch();
+    public GreenBar() {
+        batch = new SpriteBatch();
+        textures = new Texture[7];
+        greenBar = new TextureRegion[7];
+        for (int i = 0; i < greenBar.length; i++) {
+            textures[i] = new Texture("UI/other/greenbar_0" + i + ".png");
+            greenBar[i] = new TextureRegion(textures[i]);
+        }
     }
 
-    private int getIndex(float time,float timeMax){
-        float tmp=timeMax/6;
+    private int getIndex(float time, float timeMax) {
+        if (timeMax <= 0) return greenBar.length - 1;
 
-        int index =(int) (time/tmp);
-        if(index<0) return 0;
-        return Math.min(index, greenBar.length-1);
+        float tmp = timeMax / 6;
+        int index = (int) (time / tmp);
+        return Math.max(0, Math.min(index, greenBar.length - 1));
     }
 
-    public void render(Vector2 position, Camera camera, float time,float timeMax, float width, float height){
-        int index=getIndex(time,timeMax);
+    public void render(Vector2 position, Camera camera, float time, float timeMax, float width, float height) {
+        int index = getIndex(time, timeMax);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(greenBar[index],position.x-height,position.y+width ,width, height);
+        batch.draw(greenBar[index], position.x-height, position.y+width, width, height);
         batch.end();
     }
 
-
-
-
-
-
+    @Override
+    public void dispose() {
+        for (Texture texture : textures) {
+            texture.dispose();
+        }
+        batch.dispose();
+    }
 }

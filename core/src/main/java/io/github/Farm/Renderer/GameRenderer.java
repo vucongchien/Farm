@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Interface.Animal;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.Map.MapManager;
@@ -22,14 +23,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class GameRenderer {
+public class GameRenderer implements Disposable {
     private SpriteBatch batch;
     private PlayerRenderer player;
-    private List<Animal> animal;
     private Camera camera;
-    private TiledMap map;
-    private Weather weather;
-    private MapManager mapManager;
+
 
     List<RenderableEntity> renderableEntities = new ArrayList<>();
 
@@ -38,8 +36,6 @@ public class GameRenderer {
         batch=new SpriteBatch();
         this.player =player;
         this.camera=camera;
-        this.map=map;
-        this.animal= new ArrayList<>();
     }
 
     public void render() {
@@ -57,41 +53,30 @@ public class GameRenderer {
         renderableEntities.clear();
 
         renderableEntities.add(player);
+        gatherEntities();
 
-        renderableEntities.addAll(PlantManager.getInstance().getListPlants());
+        renderableEntities.sort(Comparator.comparing(RenderableEntity::getY).reversed());
 
-        renderableEntities.addAll(ItemManager.getInstance().getItemList());
-
-        renderableEntities.addAll(BuffaloManager.getbuffalomanager().getBuffaloManager());
-
-        renderableEntities.addAll(WolfManager.getwolfmanage().getwolfmanafer());
-
-        renderableEntities.addAll(PigManager.getPigmanager().getPigManager());
-
-        renderableEntities.addAll(ChickenManager.getChickenmanager().getChickenManager());
-
-        renderableEntities.addAll(MaterialManager.getInstance().getTrees());
-
-       // renderableEntities.add(new MouseRener(new Vector2(850,1050)));
-
-
-        renderableEntities.sort(new Comparator<RenderableEntity>() {
-            @Override
-            public int compare(RenderableEntity e1, RenderableEntity e2) {
-                return Float.compare(e2.getY(), e1.getY());
-            }
-        });
-
-
-
+        // Render all entities
         for (RenderableEntity entity : renderableEntities) {
-            entity.render(batch,camera);
-            if (entity instanceof PlantRenderer) {
-                PlantRenderer plantRenderer = (PlantRenderer) entity;
-            }
-
+            entity.render(batch, camera);
         }
+    }
 
+    private void gatherEntities() {
+        renderableEntities.addAll(PlantManager.getInstance().getListPlants());
+        renderableEntities.addAll(ItemManager.getInstance().getItemList());
+        renderableEntities.addAll(BuffaloManager.getbuffalomanager().getBuffaloManager());
+        renderableEntities.addAll(WolfManager.getwolfmanage().getwolfmanafer());
+        renderableEntities.addAll(PigManager.getPigmanager().getPigManager());
+        renderableEntities.addAll(ChickenManager.getChickenmanager().getChickenManager());
+        renderableEntities.addAll(MaterialManager.getInstance().getTrees());
+        // Optionally add other entities like mouse pointer if needed
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
 
     }
 }

@@ -3,9 +3,10 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.inventory.Inventory;
 
-public class InputHandler {
+public class InputHandler implements Disposable {
     PlayerController playerController;
 
     public InputHandler(PlayerController playerController){
@@ -78,4 +79,8 @@ public class InputHandler {
     }
 
 
+    @Override
+    public void dispose() {
+
+    }
 }

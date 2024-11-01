@@ -5,6 +5,7 @@
     import com.badlogic.gdx.graphics.Texture;
     import com.badlogic.gdx.math.Rectangle;
     import com.badlogic.gdx.math.Vector2;
+    import com.badlogic.gdx.utils.Disposable;
     import com.badlogic.gdx.utils.TimeUtils;
     import io.github.Farm.Interface.RenderableEntity;
     import io.github.Farm.Interface.Collider;
@@ -38,42 +39,31 @@
         private float width = 16f;
         private float height = 16f;
 
-        public PlantRenderer(Vector2 position, PlantType type) {
-            this.position = position.cpy();
-            this.type = type;
-            this.stage = PlantStage.SPROUT;
-            this.plantTime = TimeUtils.millis();
-            this.lastStageChangeTime = plantTime;
-            this.lastWaterTime =plantTime;
-            this.isWatered = false;
-            this.isHarvestable = false;
-            this.expressionManager=new ExpressionManager();
-
-            this.imageManager = new PlantImageManager(type);
-            this.currentTexture = imageManager.getTexture(PlantStage.HARVESTED);
-
-            this.plantCollider = new Rectangle(this.position.x * 16, this.position.y * 16, width, height);
-        }
-
-        public PlantRenderer(Vector2 position, PlantType type,PlantStage stage) {
+        public PlantRenderer(Vector2 position, PlantType type, PlantStage stage) {
             this.position = position.cpy();
             this.type = type;
             this.stage = stage;
+            initialize();
+        }
+
+        private void initialize() {
             this.plantTime = TimeUtils.millis();
             this.lastStageChangeTime = plantTime;
-            this.lastWaterTime =plantTime;
+            this.lastWaterTime = plantTime;
             this.isWatered = false;
-            this.isHarvestable = true;
-            this.expressionManager=new ExpressionManager();
-
+            this.isHarvestable = false;
+            this.expressionManager = new ExpressionManager();
             this.imageManager = new PlantImageManager(type);
-            this.currentTexture = imageManager.getTexture(PlantStage.HARVESTED);
-
+            this.currentTexture = imageManager.getTexture(stage);
             this.plantCollider = new Rectangle(this.position.x * 16, this.position.y * 16, width, height);
         }
 
+
         public void update(float deltaTime) {
            // if(isdie) return;
+            if(stage==PlantStage.HARVESTED){
+                isHarvestable=true;
+            }
 
             long timeSinceLastStageChange = TimeUtils.timeSinceMillis(lastStageChangeTime);
             long timeSinceLastWatered = TimeUtils.timeSinceMillis(lastWaterTime);
@@ -224,5 +214,11 @@
 
         public boolean isHarvestable() {
             return isHarvestable;
+        }
+
+        public void dispose(){
+            if (currentTexture != null) {
+                currentTexture.dispose();
+            }
         }
     }

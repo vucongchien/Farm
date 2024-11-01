@@ -46,4 +46,10 @@ public class Heath {
     public float getMaxHp() {
         return maxHp;
     }
+
+    public void dispose() {
+        if (healBar != null) {
+            healBar.dispose();
+        }
+    }
 }

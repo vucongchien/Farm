@@ -5,17 +5,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.math.Vector2;
 
-public class SelectionBox {
-
-
+public class SelectionBox implements Disposable {
     private TextureRegion[] selectionBoxTextures;
-    private Vector2 position;
     private SpriteBatch batch;
-    private static Camera camera;
 
     private float dropPositionY = 0f;
     private float timeElapsed = 0f;
@@ -28,21 +23,20 @@ public class SelectionBox {
         selectionBoxTextures[1] = new TextureRegion(new Texture("UI/other/selectbox_tr.png"));
         selectionBoxTextures[2] = new TextureRegion(new Texture("UI/other/selectbox_bl.png"));
         selectionBoxTextures[3] = new TextureRegion(new Texture("UI/other/selectbox_br.png"));
-        batch=new SpriteBatch();
+        batch = new SpriteBatch();
     }
 
-    public void ren(Vector2 position, float width, float height) {
+    public void render(Vector2 position, float width, float height, Camera camera) {
         batch.setProjectionMatrix(camera.combined);
-
-        timeElapsed += Gdx.graphics.getDeltaTime();
+        float deltaTime = Gdx.graphics.getDeltaTime();
         if (isShrinking) {
-            scaleFactor -= 1 * Gdx.graphics.getDeltaTime();
+            scaleFactor -= 1 * deltaTime;
             if (scaleFactor <= 0.9f) {
                 scaleFactor = 0.9f;
                 isShrinking = false;
             }
         } else {
-            scaleFactor += 1 * Gdx.graphics.getDeltaTime();
+            scaleFactor += 1 * deltaTime;
             if (scaleFactor >= 1f) {
                 scaleFactor = 1f;
                 isShrinking = true;
@@ -53,15 +47,20 @@ public class SelectionBox {
         float scaledHeight = height * scaleFactor;
 
         batch.begin();
-        batch.draw(selectionBoxTextures[0], position.x - scaledWidth * 1 / 3, position.y + scaledHeight, scaledWidth / 2, scaledHeight / 2);
-        batch.draw(selectionBoxTextures[1], position.x + scaledWidth, position.y + scaledHeight, scaledWidth / 2, scaledHeight / 2);
-        batch.draw(selectionBoxTextures[2], position.x - scaledWidth * 1 / 3, position.y - scaledHeight * 1 / 2, scaledWidth / 2, scaledHeight / 2);
-        batch.draw(selectionBoxTextures[3], position.x + scaledWidth, position.y - scaledHeight * 1 / 2, scaledWidth / 2, scaledHeight / 2);
+        batch.draw(selectionBoxTextures[0], position.x - scaledWidth / 3, position.y + scaledHeight, scaledWidth / 2, scaledHeight / 2);
+        batch.draw(selectionBoxTextures[1], position.x + scaledWidth , position.y + scaledHeight, scaledWidth / 2, scaledHeight / 2);
+        batch.draw(selectionBoxTextures[2], position.x - scaledWidth / 3, position.y - scaledHeight / 2, scaledWidth / 2, scaledHeight / 2);
+        batch.draw(selectionBoxTextures[3], position.x + scaledWidth , position.y - scaledHeight / 2, scaledWidth / 2, scaledHeight / 2);
         batch.end();
     }
 
-
-    public static void setCamera(Camera cam) {
-        camera = cam;
+    @Override
+    public void dispose() {
+        for (TextureRegion region : selectionBoxTextures) {
+            if (region.getTexture() != null) {
+                region.getTexture().dispose();
+            }
+        }
+        batch.dispose();
     }
 }

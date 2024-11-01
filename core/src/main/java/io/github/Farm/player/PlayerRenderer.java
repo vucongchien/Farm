@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Interface.RenderableEntity;
 import io.github.Farm.player.PLAYER_STATE.PlayerState;
 import io.github.Farm.ui.Other.SelectionBox;
 
-public class PlayerRenderer implements RenderableEntity {
+public class PlayerRenderer implements RenderableEntity, Disposable {
     private final PlayerController player;
     private final PlayerImageManager imageManager;
     private Animation<TextureRegion> currentAnimation;
@@ -47,7 +48,6 @@ public class PlayerRenderer implements RenderableEntity {
 
     private void updateAnimation() {
         PlayerState currentState = PlayerState.valueOf(player.getCurrentState());
-        currentAnimation = imageManager.getAnimation(currentState);
         if (currentState !=lastState) {
             stateTime = 0f;
             currentAnimation = imageManager.getAnimation(currentState);
@@ -59,7 +59,9 @@ public class PlayerRenderer implements RenderableEntity {
         this.size = newSize;
     }
 
+    @Override
     public void dispose() {
         imageManager.dispose();
+        player.dispose();
     }
 }

@@ -3,6 +3,7 @@ package io.github.Farm.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /// chiu trach nhiem tuong tac giua nhan vat voi map ///
-public class CollisionHandler implements Collider {
+public class CollisionHandler implements Collider, Disposable {
 
     private MapInteractionHandler mapInteractionHandler;
     private PlayerController playerController;
@@ -46,7 +47,7 @@ public class CollisionHandler implements Collider {
         while (iterator.hasNext()) {
             Item item = iterator.next();
             if (playerController.getCollider().overlaps(item.getCollider()) && item.isCanTake()) {
-                selectionBox.ren(item.getPosition(), item.getWidth(), item.getHeight());
+                selectionBox.render(item.getPosition(), item.getWidth(), item.getHeight(), playerController.getCamera());
                 if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
                     item.onCollision(playerController);
                     iterator.remove();
@@ -71,10 +72,9 @@ public class CollisionHandler implements Collider {
         if (PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()) != null) {
             if (PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).isHarvestable()) {
 
-                selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(3, 5.5f), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2, PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 3);
+                selectionBox.render(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(3, 5.5f), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2, PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 3, playerController.getCamera());
             } else {
-                System.out.println(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2);
-                selectionBox.ren(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(4.8f, 5.5f), Math.max((int) PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2,6), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 2);
+                selectionBox.render(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getPosition().cpy().scl(16f).add(4.8f, 5.5f), Math.max((int) PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getWidth() - 2,6), PlantManager.getInstance().getPlantAt(playerController.getPositionInMap()).getHeight() - 2,playerController.getCamera());
             }
         }
 
@@ -120,4 +120,8 @@ public class CollisionHandler implements Collider {
         return mapInteractionHandler;
     }
 
+    @Override
+    public void dispose() {
+        selectionBox.dispose();
+    }
 }

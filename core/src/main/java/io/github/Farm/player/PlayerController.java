@@ -258,6 +258,23 @@ public class PlayerController implements Collider, Disposable {
     @Override
     public void dispose() {
         world.destroyBody(body);
+        if (expressionManager != null) {
+            expressionManager.dispose();
+        }
+
+        if (greenBar != null) {
+            greenBar.dispose();
+        }
+
+        if (inputHandler != null) {
+            inputHandler.dispose();
+        }
+
+        if (collisionHandler != null) {
+            collisionHandler.dispose();
+        }
+
+        heath.dispose();
     }
 
     @Override
@@ -269,7 +286,7 @@ public class PlayerController implements Collider, Disposable {
     public void onCollision(Collider other) {
         if (other instanceof Buffalo) {
             Buffalo buffalo = (Buffalo) other;
-            selectionBox.ren(buffalo.location(),16,16);
+            selectionBox.render(buffalo.location(),16,16,camera);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!buffalo.isCheckeating()) {
                 if(buffalo.gethungry()<=80) {
                     if(Inventory.getInstance().dropItem("FOOD_wheat")) {
@@ -282,7 +299,7 @@ public class PlayerController implements Collider, Disposable {
 
         } else if (other instanceof PigReander) {
             PigReander pig = (PigReander) other;
-            selectionBox.ren(pig.location(),16,16);
+            selectionBox.render(pig.location(),16,16,camera);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!pig.isCheckeating()) {
                 pig.getHeath().damaged(50);
                 if(pig.gethungry()<=50) {
@@ -296,7 +313,7 @@ public class PlayerController implements Collider, Disposable {
 
         } else if (other instanceof ChickenRender) {
             ChickenRender chicken = (ChickenRender) other;
-            selectionBox.ren(chicken.location(),16,16);
+            selectionBox.render(chicken.location(),16,16,camera);
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)&&!chicken.isCheckeating()) {
                 if(chicken.gethungry()<=50) {
                     if(Inventory.getInstance().dropItem("SEED_wheat")) {
