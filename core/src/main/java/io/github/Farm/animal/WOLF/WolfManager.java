@@ -52,7 +52,6 @@ public class WolfManager {
         storagewolfmanager = new ArrayList<>();
         home =new Vector2(3250, 1397);
         if(MainMenu.isCheckcontinue()){
-
             readWolfManagerData(storagewolfmanager,wolfmanager);
         }else {
             for (int i = 0; i < 5; i++) {
@@ -83,7 +82,7 @@ public class WolfManager {
     }
 
     public void checkquantity() {
-        if (wolfmanager.size() < 1) {
+        if (wolfmanager.size() < 5) {
                 if (breedingTime == 0) {
                     breedingTime = TimeUtils.millis();
                 }
@@ -131,7 +130,8 @@ public class WolfManager {
                         if (TimeUtils.timeSinceMillis(starttime) < 20000) {
                             wolf.setcheck(0);
                             wolf.setCrencurrentState(PetState.IDLE_RIGHT);
-                        } else {
+                        }
+                        else {
                             wolf.setprey(buffaloManager);
                             preyleader = wolf.getPrey().location().cpy().add(50, 50);
                             wolf.setcheck(1);
@@ -157,7 +157,8 @@ public class WolfManager {
                                 wolf.setCrencurrentState(PetState.IDLE_RIGHT);
                                 wolf.getSpeak().setCurrent("UI/other/expression_chat.png",8,8);
                                 wolf.setcheck(0);
-                            } else {
+                            }
+                            else {
                                 wolf.getSpeak().setCurrent(null,8,8);
                                 wolf.setTrangthaitancong(false);
                                 wolf.setcheck(2);
@@ -194,7 +195,7 @@ public class WolfManager {
     }
 
     public void suppotativate(WolfRender wolf,Vector2 prey){
-            if(wolf.getlocation().epsilonEquals(prey,5f)){
+        if(wolf.getlocation().epsilonEquals(prey,5f)){
             wolf.getPrey().setCheckmove(true);
             if(wolf.getTimeActack() <0.32f){
                 wolf.setTimeActack(wolf.getTimeActack() + Gdx.graphics.getDeltaTime());
@@ -249,7 +250,6 @@ public class WolfManager {
                                 playerController.setHurt(true);
                                 playerController.setEnemyDirection("RIGHT");
                             }
-
                             wolfRender.setanimationattack(true);
                             while (wolfRender.getcooldown() > 0) {
                                 wolfRender.setcooldown();
