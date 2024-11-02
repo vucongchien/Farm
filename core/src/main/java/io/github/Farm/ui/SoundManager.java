@@ -55,7 +55,7 @@ public class SoundManager implements Disposable {
     public void playGameMusic(){
         gameMusic.play();
         gameMusic.setLooping(true);
-        gameMusic.setVolume(0.5f);
+        gameMusic.setVolume(0.05f);
     }
     public void pauseGameMusic(){
         gameMusic.pause();
@@ -96,14 +96,14 @@ public class SoundManager implements Disposable {
 
     public void playInTroGame(){
         inTroGame.play();
-        inTroGame.setVolume(0.3f);
+        inTroGame.setVolume(0.1f);
     }
     public void stopInTroGame(){
         inTroGame.stop();
     }
     public void playInTroGame1(){
         inTroGame1.play();
-        inTroGame1.setVolume(0.4f);
+        inTroGame1.setVolume(0.05f);
     }
     public void stopInTroGame1(){
         inTroGame1.stop();

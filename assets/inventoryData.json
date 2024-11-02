@@ -1,20 +1,44 @@
 {
   "items": [
     {
-      "name": "SEED_carrot",
-      "quantity": 3
-    },
-    {
-      "name": "SEED_potato",
-      "quantity": 3
-    },
-    {
-      "name": "SEED_wheat",
-      "quantity": 2
-    },
-    {
       "name": "FOOD_pumpkin",
-      "quantity": 2
+      "quantity": 50
+    },
+    {
+      "name": "MATERIAL_rock",
+      "quantity": 50
+    },
+    {
+      "name": "MATERIAL_wood",
+      "quantity": 50
+    },
+    {
+      "name": "FOOD_fish",
+      "quantity": 50
+    },
+    {
+      "name": "FOOD_carrot",
+      "quantity": 50
+    },
+    {
+      "name": "FOOD_potato",
+      "quantity": 50
+    },
+    {
+      "name": "FOOD_milk",
+      "quantity": 50
+    },
+    {
+      "name": "FOOD_egg",
+      "quantity": 50
+    },
+    {
+      "name": "FOOD_kale",
+      "quantity": 50
+    },
+    {
+      "name": "FOOD_cabbage",
+      "quantity": 50
     }
   ]
 }

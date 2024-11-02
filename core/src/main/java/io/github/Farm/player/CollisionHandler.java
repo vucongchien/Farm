@@ -88,8 +88,6 @@ public class CollisionHandler implements Collider, Disposable {
     }
 
     public void plantSeed( PlantType plantType) {
-
-
         mapInteractionHandler.plantSeed(plantType,playerController);
     }
 
@@ -98,7 +96,6 @@ public class CollisionHandler implements Collider, Disposable {
 
         for (Rectangle canFishRect : canFishRectangles) {
             if (playerCollider.overlaps(canFishRect)) {
-                System.out.println("dc cau ca");
                 return true;
             }
         }

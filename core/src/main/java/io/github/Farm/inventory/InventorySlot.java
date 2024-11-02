@@ -2,7 +2,6 @@ package io.github.Farm.inventory;
 
 import com.badlogic.gdx.graphics.Texture;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.player.PLAYER_STATE.DoingState;
 import io.github.Farm.player.PlayerController;
 
 public class InventorySlot {

@@ -22,7 +22,6 @@ import java.util.Set;
 
 public class MapManager {
     private TiledMap map;
-    private boolean nightLayerVisible=false;
     private final String link ="Map_chien_lam/dataContinueMap.tmx";
 
     public MapManager(TiledMap map) {
@@ -65,7 +64,6 @@ public class MapManager {
                 }
             }
         }
-        //saveMapWithChanges(map,link, Set<String> changedTiles);
 
     }
 

@@ -28,7 +28,7 @@ public class PlayerStateManager {
             currentState.update(player, deltaTime);
         }
         else {
-            System.out.println("null roi anh zai");
+//            System.out.println("null roi anh zai");
         }
     }
 

@@ -1,10 +1,7 @@
 package io.github.Farm.player.PLAYER_STATE;
 
 import io.github.Farm.Plants.PlantManager;
-import io.github.Farm.Plants.PlantRenderer;
 import io.github.Farm.player.PlayerController;
-
-import java.util.Iterator;
 
 public class WaterState implements InterfacePlayerState {
     String direction;

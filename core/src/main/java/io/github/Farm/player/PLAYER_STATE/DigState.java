@@ -23,20 +23,15 @@ public class DigState implements InterfacePlayerState {
 
     @Override
     public void update(PlayerController player, float deltaTime) {
-        // Reset time if the player position has changed
         if (!lastPosition.epsilonEquals(player.getPositionInMap(), 0.01f)) {
             lastPosition.set(player.getPositionInMap());
             time = 0f;
         }
-
-        // Accumulate time and trigger plowing if enough time has passed
         time += deltaTime;
         if (time >= 1f) {
             player.getCollisionHandler().handlePlowing();
             time = 0f;
         }
-
-        // Render the GreenBar if digging is in progress
         if (time > 0) {
             greenBar.render(player.getPosition(), player.getCamera(), time, 1f, 14f, 7f);
         }
@@ -44,7 +39,6 @@ public class DigState implements InterfacePlayerState {
 
     @Override
     public void exit(PlayerController player) {
-        // Clean up resources or reset any state if necessary
     }
 
     @Override

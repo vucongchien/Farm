@@ -36,7 +36,7 @@ public class PlantManager {
         }
     }
 
-    public void addPlantDefault(Vector2 position, PlantType type,PlantStage stage) {
+    public void addPlantDefault(Vector2 position, PlantType type, PlantStage stage) {
         if (plants.containsKey(position)) {
             return;
         }
@@ -48,7 +48,7 @@ public class PlantManager {
         if (plants.containsKey(position)) {
             return;
         }
-        plants.put(new Vector2(position), new PlantRenderer(new Vector2(position), type,PlantStage.SPROUT));
+        plants.put(new Vector2(position), new PlantRenderer(new Vector2(position), type, PlantStage.SPROUT));
         Inventory.getInstance().getSelectedItem().reduceQuantity();
     }
 
@@ -84,7 +84,7 @@ public class PlantManager {
                 float y = (float) vector.get("y").asDouble();
                 PlantRenderer plantRenderer = new PlantRenderer(new Vector2(x,y), type,stage);
                 plantRenderer.setStage(stage);
-                plants.put(plantRenderer.getPosition(),plantRenderer);
+                plants.put(plantRenderer.getPosition(), plantRenderer);
             }
         }catch (IOException e) {
             throw new RuntimeException("Lỗi khi đọc file JSON", e);

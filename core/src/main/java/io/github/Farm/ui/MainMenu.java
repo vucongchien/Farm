@@ -269,12 +269,12 @@ public class MainMenu implements Disposable {
     }
 
     public void newPlantData(){
-        PlantManager.getInstance().addPlantDefault(new Vector2(126,95),PlantType.cauliflower,PlantStage.HARVESTED);
-        PlantManager.getInstance().addPlantDefault(new Vector2(194,65),PlantType.parsnip,PlantStage.HARVESTED);
-        PlantManager.getInstance().addPlantDefault(new Vector2(170,86),PlantType.cabbage,PlantStage.HARVESTED);
-        PlantManager.getInstance().addPlantDefault(new Vector2(156,104),PlantType.radish,PlantStage.HARVESTED);
-        PlantManager.getInstance().addPlantDefault(new Vector2(223,68),PlantType.beetroot,PlantStage.HARVESTED);
-        PlantManager.getInstance().addPlantDefault(new Vector2(159,70),PlantType.cabbage,PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(126,95), PlantType.cauliflower, PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(194,65), PlantType.parsnip, PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(170,86), PlantType.cabbage, PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(156,104), PlantType.radish, PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(223,68), PlantType.beetroot, PlantStage.HARVESTED);
+        PlantManager.getInstance().addPlantDefault(new Vector2(159,70), PlantType.kale, PlantStage.HARVESTED);
     }
 
     public void newInventoryData(){

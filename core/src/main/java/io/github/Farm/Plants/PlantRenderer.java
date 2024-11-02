@@ -5,7 +5,6 @@
     import com.badlogic.gdx.graphics.Texture;
     import com.badlogic.gdx.math.Rectangle;
     import com.badlogic.gdx.math.Vector2;
-    import com.badlogic.gdx.utils.Disposable;
     import com.badlogic.gdx.utils.TimeUtils;
     import io.github.Farm.Interface.RenderableEntity;
     import io.github.Farm.Interface.Collider;
@@ -27,13 +26,10 @@
 
         private static final long WATERING_DURATION = 20000;
         private static final long GROWTH_TIME = 12000;
-        private static final long NEED_WATER_TIME = 45000;
 
         private ExpressionManager expressionManager;
-
         private Texture currentTexture;
         private PlantImageManager imageManager;
-
         private Rectangle plantCollider;
 
         private float width = 16f;
@@ -61,7 +57,7 @@
 
         public void update(float deltaTime) {
            // if(isdie) return;
-            if(stage==PlantStage.HARVESTED){
+            if(stage== PlantStage.HARVESTED){
                 isHarvestable=true;
             }
 
@@ -82,13 +78,6 @@
             if(!isWatered){
                 expressionManager.setExpression(Expression.WORKING);
             }
-
-//            if(timeSinceLastWatered > NEED_WATER_TIME){
-//                isdie=true;
-//                expressionManager.setExpression(Expression.NULL);
-//                return;
-//            }
-
 
             currentTexture = imageManager.getTexture(stage);
 

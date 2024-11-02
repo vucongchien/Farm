@@ -46,10 +46,10 @@ public class MouseRener implements Collider, RenderableEntity {
 
     public void setPrey(){
         if (!PlantManager.getInstance().getListPlants().isEmpty()){
-            prey=PlantManager.getInstance().getListPlants().get(0).getPosition();
-            for(PlantRenderer plantRenderer:PlantManager.getInstance().getListPlants()){
+            prey= PlantManager.getInstance().getListPlants().get(0).getPosition();
+            for(PlantRenderer plantRenderer : PlantManager.getInstance().getListPlants()){
                 if(plantRenderer.getPosition().dst(location)<prey.dst(location)){
-                    prey =plantRenderer.getPosition();
+                    prey = plantRenderer.getPosition();
                 }
             }
         }

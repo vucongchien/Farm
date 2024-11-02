@@ -56,7 +56,7 @@ public class MapInteractionHandler {
         }
 
     }
-    public void plantSeed( PlantType plantType, PlayerController playerController){
+    public void plantSeed(PlantType plantType, PlayerController playerController){
         Inventory.getInstance().setOpened();
         if(PlantManager.getInstance().getPlantAt(playerController.getPositionInMap())!=null) return;
         String tileClass=mapManager.getTileClass(playerController.getPositionInMap());

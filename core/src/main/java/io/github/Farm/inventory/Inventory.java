@@ -28,20 +28,24 @@ public class Inventory {
         }
         return instance;
     }
+
+
     private final List<InventorySlot> slots = new ArrayList<>();
     private final BitmapFont font = new BitmapFont();
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private final int maxSlots=20;
-    private final float slotSize=60;
-    private final int columns=5;
-    private final int rows = (int) Math.ceil((double) maxSlots / columns);
-    private final float totalWidth = columns * slotSize;
-    private final float totalHeight = rows * slotSize;
     private final String link="inventoryData.json";
-    private Texture slotBorderTexture;      // Texture cho viền ô
+    private Texture slotBorderTexture;
     private Texture selectedSlotBorderTexture;
 
+
     private int selectedItemIndex = 0;
+    private final int maxSlots=20;
+    private final int columns=5;
+    private final int rows = (int) Math.ceil((double) maxSlots / columns);
+    private final float slotSize=60;
+    private final float totalWidth = columns * slotSize;
+    private final float totalHeight = rows * slotSize;
+
 
     private boolean isOpened=false;
 
@@ -88,15 +92,6 @@ public class Inventory {
             return slots.get(selectedItemIndex);
         }
         return null;
-    }
-
-    public boolean checkSoLuong(String name,int soluong){
-        for(InventorySlot slot:slots){
-            if(name.equals(slot.getFULL_NAME())){
-                return slot.getQuantity()==soluong;
-            }
-        }
-        return false;
     }
 
     public int getQuantitySlot(String name){

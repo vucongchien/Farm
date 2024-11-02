@@ -26,17 +26,17 @@
         },
         "Map.tmx": {
             "expandedGroupLayers": [
+                29,
+                31,
                 37,
                 16,
-                20,
-                29,
-                31
+                20
             ],
-            "scale": 3,
-            "selectedLayer": 15,
+            "scale": 1.5,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 3932.5,
-                "y": 1183.8333333333333
+                "x": 2581.6666666666665,
+                "y": 1316.3333333333333
             }
         },
         "Other.tsx": {
