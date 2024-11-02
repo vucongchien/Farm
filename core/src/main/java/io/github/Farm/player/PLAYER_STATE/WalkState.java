@@ -1,7 +1,5 @@
 package io.github.Farm.player.PLAYER_STATE;
 
-import com.badlogic.gdx.math.Vector2;
-import io.github.Farm.SoundManager;
 import io.github.Farm.player.PlayerController;
 
 public class WalkState implements InterfacePlayerState {

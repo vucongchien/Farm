@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.ui.Other.Task;
 import com.badlogic.gdx.utils.Array;
 
-public class ShipRender {
+public class ShipRender implements Disposable {
     private Ship ship;
     private Task task;
+
 
     private enum ShipState {
         IDLE_LEFT, IDLE_RIGHT, MOVE_LEFT, MOVE_RIGHT, DIE
@@ -61,5 +63,18 @@ public class ShipRender {
         }
         return new Animation<>(frameDuration, frames, Animation.PlayMode.LOOP);
     }
+
+    @Override
+    public void dispose() {
+        for (Animation<TextureRegion> animation : animations) {
+            if (animation != null) {
+                for (TextureRegion frame : animation.getKeyFrames()) {
+                    frame.getTexture().dispose();
+                }
+            }
+        }
+        task.dispose();
+    }
+
 
 }

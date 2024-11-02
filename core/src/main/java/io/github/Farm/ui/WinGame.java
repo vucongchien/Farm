@@ -8,16 +8,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import io.github.Farm.SoundManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.Disposable;
 
 
-
-public class WinGame {
+public class WinGame implements Disposable {
     private static WinGame instance;
     public static WinGame getInstance() {
         if (instance == null){
@@ -175,6 +174,7 @@ public class WinGame {
         System.out.println("Thoát khỏi màn hình Win Game.");
         Gdx.app.exit();
     }
+    @Override
     public void dispose() {
         for (TextureRegion frame : backgroundAnimation.getKeyFrames()) {
             if (frame.getTexture() != null) {

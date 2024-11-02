@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantRenderer;
-import io.github.Farm.SoundManager;
 import io.github.Farm.animal.Buffalo.Buffalo;
 import io.github.Farm.animal.Buffalo.BuffaloManager;
 import io.github.Farm.animal.Chicken.ChickenManager;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SettingGame {
+public class SettingGame implements Disposable {
     private static SettingGame instance;
     public static SettingGame getInstance() {
         if (instance == null) {
@@ -329,7 +329,7 @@ public class SettingGame {
     }
 
 
-
+    @Override
     public void dispose() {
         // Giải phóng tài nguyên font
         if (font != null) {

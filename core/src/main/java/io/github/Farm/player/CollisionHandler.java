@@ -7,7 +7,7 @@ import io.github.Farm.Interface.Collider;
 import io.github.Farm.Map.MapInteractionHandler;
 import io.github.Farm.Plants.PlantManager;
 import io.github.Farm.Plants.PlantType;
-import io.github.Farm.SoundManager;
+import io.github.Farm.ui.SoundManager;
 import io.github.Farm.animal.Pet;
 import io.github.Farm.animal.PetManager;
 import io.github.Farm.inventory.Item;
@@ -39,10 +39,6 @@ public class CollisionHandler implements Collider {
         checkPetCollisions();
 
         checkPlantCollisions();
-    }
-
-    private void checkTreeCollisions(){
-
     }
 
     private void checkItemCollisions() {
