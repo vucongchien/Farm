@@ -211,7 +211,7 @@ public class Main extends ApplicationAdapter {
                 PigManager.getPigmanager().update(playerControllerNew);
                 ChickenManager.getChickenmanager().update(playerControllerNew);
                 PetManager.getPetmanager().update(BuffaloManager.getbuffalomanager(),ChickenManager.getChickenmanager(),PigManager.getPigmanager());
-                //WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
+                WolfManager.getwolfmanage().update(PetManager.getPetmanager(),playerControllerNew);
                 playerControllerNew.update(deltaTime);
 
 

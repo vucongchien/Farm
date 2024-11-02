@@ -77,7 +77,6 @@ public class PigManager {
 
     public void update(PlayerController playerController){
         checkquantity();
-        checkHungry();
         for (int i = 0; i < pigManager.size(); i++) {
             PigReander pig = pigManager.get(i);
             for (int j = i + 1; j < pigManager.size(); j++) {
@@ -87,6 +86,7 @@ public class PigManager {
             pig.ativate(pig,2100,2200,1500,1600);
             pig.update(Gdx.graphics.getDeltaTime());
         }
+        checkHungry();
     }
 
 
