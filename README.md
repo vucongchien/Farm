@@ -11,6 +11,6 @@
 - **Cốt truyện**: Hoàn thành các nhiệm vụ để khám phá câu chuyện của game.
 
 ## 🎥 Video demo
-Xem video hướng dẫn chi tiết tại đây: [Link Video](https://studio.youtube.com/video/aLwVnaE0Y2c/edit)
+Xem video hướng dẫn chi tiết tại đây: [Link Video](https://youtu.be/aLwVnaE0Y2c)
 
 
