@@ -154,12 +154,8 @@ public class Inventory {
 
         float inventoryX = playerPosition.x - (totalWidth / 2);
         float inventoryY = playerPosition.y - (totalHeight / 2);
-
-        // Bắt đầu vẽ background cho inventory
         batch.begin();
-       // batch.draw(slotBackgroundTexture, inventoryX, inventoryY, totalWidth, totalHeight); // Vẽ nền inventory
 
-        // Vẽ viền cho các ô bằng cách dùng texture slotBorderTexture
         for (int i = 0; i < maxSlots ; i++) {
             float x = inventoryX + (i % columns) * slotSize;
             float y = inventoryY + totalHeight - ((i / columns + 1) * slotSize);
